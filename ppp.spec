@@ -19,10 +19,11 @@ Patch8: ppp-2.4.2-fix.patch
 Patch9: ppp-2.4.2-fix64.patch
 Patch10: ppp-2.4.2-signal.patch
 Patch11: ppp-2.4.2-change_resolv_conf.patch
+Patch12: ppp-2.4.2-pcap.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
-BuildPrereq: pam-devel, libpcap
-Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate
+BuildPrereq: pam-devel, libpcap >= 14:0.8.3-6
+Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate, libpcap >= 14:0.8.3-6
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon and
@@ -47,11 +48,13 @@ organization over a modem and phone line.
 %patch9 -p1 -b .fix64
 %patch10 -p1 -b .signal
 %patch11 -p1 -b .change_resolv_conf
+%patch12 -p1 -b .pcap
 
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
 ./configure
+find . -name 'Makefile*' -print0 | xargs -0 perl -pi -e "s: -s : :g"
 make RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC"
 
 %install
@@ -101,9 +104,13 @@ rm -rf $RPM_BUILD_ROOT
 %doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
 %changelog
-* Tue Sep 14 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-5
+* Wed Sep 15 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-5
 - example scripts are using change_resolv_conf to modify /etc/resolv.conf
   (#132482)
+- require new libpcap library (>= 0.8.3-6) with a fix for inbound/outbound
+  filter processing
+- not using internal libpcap structures anymore, fixes inbound/outbound
+  filter processing (#128053) 
 
 * Fri Aug  6 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-4
 - fixed signal handling (#29171)
