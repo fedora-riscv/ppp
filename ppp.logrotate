@@ -1,0 +1,9 @@
+# Logrotate file for ppp RPM
+ 
+/var/log/ppp/connect-errors {
+	compress
+	notifempty
+	daily
+	rotate 5
+	create 0600 root root
+}

@@ -1,22 +1,23 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
-Version: 2.4.1
-Release: 16
+Version: 2.4.2
+Release: 2
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
 Source1: ppp-2.3.5-pamd.conf
-Patch0: ppp-2.4.1-make.patch
+Source2: ppp.logrotate
+Patch0: ppp-2.4.2-make.patch
 Patch1: ppp-2.3.6-sample.patch
-Patch2: ppp-2.3.9-wtmp.patch
-Patch3: ppp-2.4.0-reap.patch
-Patch4: ppp-2.3.11-pam_session.patch
-Patch5: ppp-2.4.1-warnings.patch
-Patch6: ppp-2.4.1-varargs.patch
-Patch7: ppp-2.4.1-lib64.patch
+Patch2: ppp-2.4.2-libutil.patch
+Patch3: ppp-2.4.1-varargs.patch
+Patch4: ppp-2.4.2-lib64.patch
+Patch5: ppp-2.4.2-bpf.patch
+Patch6: ppp-2.4.2-dontwriteetc.patch
+
 BuildRoot: %{_tmppath}/%{name}-root
-BuildPrereq: pam-devel
-Requires: glibc >= 2.0.6, /etc/pam.d/system-auth
+BuildPrereq: pam-devel, libpcap
+Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon and
@@ -30,13 +31,12 @@ organization over a modem and phone line.
 %patch0 -p1 -b .make
 %patch1 -p1 -b .sample
 # patch 2 depends on the -lutil in patch 0
-%patch2 -p1 -b .wtmp
-%patch3 -p1 -b .reap
-%patch4 -p1 -b .pam_session
-%patch5 -p1 -b .warnings
-%patch6 -p1 -b .varargs
-# patch 7 depends on the -lutil in patch 0
-%patch7 -p1 -b .lib64
+%patch2 -p1 -b .libutil
+%patch3 -p1 -b .varargs
+# patch 4 depends on the -lutil in patch 0
+%patch4 -p1 -b .lib64
+%patch5 -p1 -b .bpf
+%patch6 -p1 -b .dontwriteetc
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
@@ -51,8 +51,18 @@ make install DESTDIR=$RPM_BUILD_ROOT MANDIR=$RPM_BUILD_ROOT%{_mandir} BINDIR=$RP
 #chmod 755 $RPM_BUILD_ROOT/usr/sbin/pppd
 
 chmod go+r scripts/*
+chmod ugo-x scripts/autopppd
+chmod 0755 $RPM_BUILD_ROOT/%{_libdir}/pppd/%{version}/*.so
 mkdir -p $RPM_BUILD_ROOT/etc/pam.d
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/ppp
+
+# Provide pointers for people who expect stuff in old places
+ln -s ../../var/log/ppp/connect-errors $RPM_BUILD_ROOT/etc/ppp/connect-errors
+ln -s ../../var/run/ppp/resolv.conf $RPM_BUILD_ROOT/etc/ppp/resolv.conf
+
+# Logrotate script
+mkdir -p $RPM_BUILD_ROOT/etc/logrotate.d
+install -m 644 %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/ppp
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -67,14 +77,25 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/pppd.8*
 %{_mandir}/man8/pppdump.8*
 %{_mandir}/man8/pppstats.8*
+%{_includedir}/pppd
+%{_libdir}/pppd
 %dir /etc/ppp
+%dir /var/run/ppp
+%attr(700, root, root) %dir /var/log/ppp
 %config /etc/ppp/chap-secrets
 %config /etc/ppp/options
 %config /etc/ppp/pap-secrets
 %config /etc/pam.d/ppp
-%doc README README.linux scripts sample
+%config /etc/logrotate.d/ppp
+%doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
 %changelog
+* Fri May 07 2004 Nils Philippsen <nphilipp@redhat.com> 2.4.2-2
+- don't write to /etc (#118837)
+
+* Wed Mar 10 2004 Nalin Dahyabhai <nalin@redhat.com> 2.4.2-1
+- update to 2.4.2
+
 * Fri Feb 13 2004 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 

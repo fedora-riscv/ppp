@@ -1,0 +1,89 @@
+Obey RPM_OPT_FLAGS, link with pppd with libutil to get logwtmp(), and enable
+PAM support.
+--- ppp-2.4.2/chat/Makefile.linux	2004-01-12 22:57:55.000000000 -0500
++++ ppp-2.4.2/chat/Makefile.linux	2004-03-10 18:32:39.000000000 -0500
+@@ -6,7 +6,7 @@
+ CDEF4=	-DFNDELAY=O_NDELAY		# Old name value
+ CDEFS=	$(CDEF1) $(CDEF2) $(CDEF3) $(CDEF4)
+ 
+-COPTS=	-O2 -g -pipe $(CDEFS)
++COPTS=	$(RPM_OPT_FLAGS) $(CDEFS)
+ CFLAGS=	$(COPTS) $(CDEFS)
+ 
+ INSTALL= install
+--- ppp-2.4.2/pppd/Makefile.linux	2003-11-27 16:55:19.000000000 -0500
++++ ppp-2.4.2/pppd/Makefile.linux	2004-03-10 18:32:46.000000000 -0500
+@@ -29,10 +29,10 @@
+ include .depend
+ endif
+ 
+-# CC = gcc
++CC = gcc
+ #
+-COPTS = -O2 -pipe -Wall -g
+-LIBS =
++COPTS = -Wall $(RPM_OPT_FLAGS)
++LIBS = -lutil
+ 
+ # Uncomment the next 2 lines to include support for Microsoft's
+ # MS-CHAP authentication protocol.  Also, edit plugins/radius/Makefile.linux.
+@@ -60,7 +60,7 @@
+ USE_TDB=y
+ 
+ HAS_SHADOW=y
+-#USE_PAM=y
++USE_PAM=y
+-#HAVE_INET6=y
++#HAVE_INET6=y
+ 
+ # Enable plugins
+--- ppp-2.4.2/pppdump/Makefile.linux	1999-07-26 07:09:29.000000000 -0400
++++ ppp-2.4.2/pppdump/Makefile.linux	2004-03-10 18:32:47.000000000 -0500
+@@ -1,4 +1,4 @@
+-CFLAGS= -O -I../include/net
++CFLAGS= $(RPM_OPT_FLAGS) -I../include/net
+ OBJS = pppdump.o bsd-comp.o deflate.o zlib.o
+ 
+ INSTALL= install
+--- ppp-2.4.2/pppstats/Makefile.linux	2002-11-09 06:24:43.000000000 -0500
++++ ppp-2.4.2/pppstats/Makefile.linux	2004-03-10 18:32:55.000000000 -0500
+@@ -7,7 +7,7 @@
+ PPPSTATOBJS = pppstats.o
+ 
+ #CC = gcc
+-COPTS = -O
++COPTS = $(RPM_OPT_FLAGS)
+ COMPILE_FLAGS = -I../include
+ LIBS =
+ 
+--- ppp-2.4.2/pppd/plugins/Makefile.linux	2004-01-12 22:56:24.000000000 -0500
++++ ppp-2.4.2/pppd/plugins/Makefile.linux	2004-03-10 18:41:20.000000000 -0500
+@@ -1,5 +1,5 @@
+ CC	= gcc
+-COPTS	= -O2 -g
++COPTS	= $(RPM_OPT_FLAGS)
+ CFLAGS	= $(COPTS) -I.. -I../../include -fPIC
+ LDFLAGS	= -shared
+ INSTALL	= install -o root
+--- ppp-2.4.2/pppd/plugins/radius/Makefile.linux	2004-03-10 18:46:36.000000000 -0500
++++ ppp-2.4.2/pppd/plugins/radius/Makefile.linux	2004-03-10 18:46:44.000000000 -0500
+@@ -5,7 +5,7 @@
+ 
+ MANDIR=/usr/man
+ PLUGIN=radius.so radattr.so radrealms.so
+-CFLAGS=-I../.. -I../../../include -Iradiusclient/include -O2
++CFLAGS=-I../.. -I../../../include -Iradiusclient/include $(RPM_OPT_FLAGS)
+ 
+ # Uncomment the next line to include support for Microsoft's
+ # MS-CHAP authentication protocol.
+--- ppp-2.4.2/pppd/plugins/rp-pppoe/Makefile.linux	2004-03-10 18:46:52.000000000 -0500
++++ ppp-2.4.2/pppd/plugins/rp-pppoe/Makefile.linux	2004-03-10 18:46:58.000000000 -0500
+@@ -16,7 +16,7 @@
+ # Version is set ONLY IN THE MAKEFILE!  Don't delete this!
+ VERSION=3.3
+ 
+-COPTS=-O2 -g
++COPTS=$(RPM_OPT_FLAGS)
+ CFLAGS=$(COPTS) -I../../../include/linux
+ all: rp-pppoe.so
+ 
