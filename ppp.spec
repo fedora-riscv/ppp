@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.2
-Release: 3
+Release: 3.1
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -15,6 +15,8 @@ Patch4: ppp-2.4.2-lib64.patch
 Patch5: ppp-2.4.2-bpf.patch
 Patch6: ppp-2.4.2-dontwriteetc.patch
 Patch7: ppp-2.4.2-pie.patch
+Patch8: ppp-2.4.2-fix.patch
+Patch9: ppp-2.4.2-fix64.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -38,12 +40,15 @@ organization over a modem and phone line.
 %patch4 -p1 -b .lib64
 %patch5 -p1 -b .bpf
 %patch6 -p1 -b .dontwriteetc
-#%patch7 -p1 -b .pie
+%patch7 -p1 -b .pie
+%patch8 -p1 -b .fix
+%patch9 -p1 -b .fix64
+
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
 ./configure
-make RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC"
+make RPM_OPT_FLAGS="$RPM_OPT_FLAGS -Werror -fPIC"
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
@@ -92,6 +97,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
 %changelog
+* Mon Jun 21 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-3.1
+- fixed compiler warnings
+- fixed 64bit problem with ms-chap (#125501)
+- enabled pie again
+
 * Tue Jun 15 2004 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
