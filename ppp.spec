@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.1
-Release: 3
+Release: 6
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -70,6 +70,15 @@ rm -rf $RPM_BUILD_ROOT
 %doc README README.linux scripts sample
 
 %changelog
+* Fri Jun 21 2002 Tim Powers <timp@redhat.com>
+- automated rebuild
+
+* Sun May 26 2002 Tim Powers <timp@redhat.com>
+- automated rebuild
+
+* Fri May 17 2002 Nalin Dahyabhai <nalin@redhat.com> 2.4.1-4
+- rebuild in new environment
+
 * Wed Feb 27 2002 Nalin Dahyabhai <nalin@redhat.com> 2.4.1-3
 - revert cbcp patch, it's wrong (#55367)
 
