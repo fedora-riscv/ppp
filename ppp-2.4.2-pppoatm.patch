@@ -1,6 +1,17 @@
---- ppp-2.4.2/pppd/plugins/Makefile.linux.pppoatm	2004-10-04 11:25:39.236617200 +0100
-+++ ppp-2.4.2/pppd/plugins/Makefile.linux	2004-10-04 11:26:31.945604216 +0100
-@@ -4,7 +4,7 @@
+--- ppp-2.4.2/configure.atm1	2002-11-09 11:24:41.000000000 +0000
++++ ppp-2.4.2/configure	2004-10-04 12:11:55.000000000 +0100
+@@ -141,7 +141,7 @@ if [ -d "$ksrc" ]; then
+   rm -f Makedefs.com
+   ln -s $ksrc/Makedefs$compiletype Makedefs.com
+   echo "  $ksrc/Makedefs$compiletype -> Makedefs.com"
+-  for dir in pppd pppstats chat pppdump pppd/plugins pppd/plugins/rp-pppoe pppd/plugins/radius; do
++  for dir in pppd pppstats chat pppdump pppd/plugins pppd/plugins/rp-pppoe pppd/plugins/radius pppd/plugins/pppoatm; do
+     rm -f $dir/Makefile
+     if [ -f $dir/Makefile.$makext ]; then
+       ln -s Makefile.$makext $dir/Makefile
+--- ppp-2.4.2/pppd/plugins/Makefile.linux.atm1	2004-10-04 12:11:55.000000000 +0100
++++ ppp-2.4.2/pppd/plugins/Makefile.linux	2004-10-04 12:11:55.000000000 +0100
+@@ -4,7 +4,7 @@ CFLAGS	= $(COPTS) -I.. -I../../include -
  LDFLAGS	= -shared
  INSTALL	= install -o root
  
@@ -9,8 +20,8 @@
  # Uncomment the next line to include the radius authentication plugin
  # SUBDIRS += radius
  PLUGINS := minconn.so passprompt.so passwordfd.so
---- /dev/null	2004-10-04 11:21:07.370511304 +0100
-+++ ppp-2.4.2/pppd/plugins/pppoatm/ans.c	2004-10-04 09:40:40.000000000 +0100
+--- ppp-2.4.2/pppd/plugins/pppoatm/ans.c.atm1	2004-10-04 12:11:55.000000000 +0100
++++ ppp-2.4.2/pppd/plugins/pppoatm/ans.c	2004-10-04 12:11:55.000000000 +0100
 @@ -0,0 +1,262 @@
 +/* ans.c - Interface for text2atm and atm2text to ANS */
 +
@@ -274,177 +285,9 @@
 +        return ans(tmp,T_PTR,buffer,length);
 +    }
 +}
---- /dev/null	2004-10-04 11:21:07.370511304 +0100
-+++ ppp-2.4.2/pppd/plugins/pppoatm/atm.h	2004-10-04 09:36:25.000000000 +0100
-@@ -0,0 +1,126 @@
-+/* atm.h - Functions useful for ATM applications */
-+ 
-+/* Written 1995-2000 by Werner Almesberger, EPFL-LRC/ICA */
-+ 
-+
-+#ifndef _ATM_H
-+#define _ATM_H
-+
-+#include <stdint.h>
-+#include <sys/socket.h>
-+#include <linux/atm.h>
-+
-+/* Some stuff omitted by Fedora glibc-kernheaders */
-+static __inline__ int atmsvc_addr_in_use(struct sockaddr_atmsvc addr)
-+{
-+	return *addr.sas_addr.prv || *addr.sas_addr.pub;
-+}
-+
-+static __inline__ int atmpvc_addr_in_use(struct sockaddr_atmpvc addr)
-+{
-+	return addr.sap_addr.itf || addr.sap_addr.vpi || addr.sap_addr.vci;
-+}
-+
-+struct atmif_sioc {
-+	int number;
-+	int length;
-+	void *arg;
-+};
-+
-+typedef unsigned short atm_backend_t;
-+
-+/*
-+ * For versions of glibc < 2.1
-+ */
-+
-+#ifndef AF_ATMPVC
-+#define AF_ATMPVC	8
-+#endif
-+
-+#ifndef AF_ATMSVC
-+#define AF_ATMSVC	20
-+#endif
-+
-+#ifndef PF_ATMPVC
-+#define PF_ATMPVC	AF_ATMPVC
-+#endif
-+
-+#ifndef PF_ATMSVC
-+#define PF_ATMSVC	AF_ATMSVC
-+#endif
-+
-+#ifndef SOL_ATM
-+#define SOL_ATM		264
-+#endif
-+
-+#ifndef SOL_AAL
-+#define SOL_AAL		265
-+#endif
-+
-+
-+#define HOSTS_ATM "/etc/hosts.atm"
-+
-+/* text2atm flags */
-+#define T2A_PVC		  1	/* address is PVC */
-+#define T2A_SVC		  2	/* address is SVC */
-+#define T2A_UNSPEC	  4	/* allow unspecified parts in PVC address */
-+#define T2A_WILDCARD	  8	/* allow wildcards in PVC or SVC address */
-+#define T2A_NNI		 16	/* allow NNI VPI range (PVC) */
-+#define T2A_NAME	 32	/* allow name resolution */
-+#define T2A_REMOTE	 64	/* OBSOLETE */
-+#define T2A_LOCAL	128	/* don't use ANS */
-+
-+/* atm2text flags */
-+#define A2T_PRETTY	 1	/* add syntactic sugar */
-+#define A2T_NAME	 2	/* attempt name lookup */
-+#define A2T_REMOTE	 4	/* OBSOLETE */
-+#define A2T_LOCAL	 8	/* don't use ANS */
-+
-+/* atm_equal flags */
-+#define AXE_WILDCARD	 1	/* allow wildcard match */
-+#define AXE_PRVOPT	 2	/* private part of SVC address is optional */
-+
-+/* text2qos flags */
-+#define T2Q_DEFAULTS	 1	/* structure contains default values */
-+
-+/* text2sap flags */
-+#define T2S_NAME	 1	/* attempt name lookup */
-+#define T2S_LOCAL	 2	/* we may support NIS or such in the future */
-+
-+/* sap2text flags */
-+#define S2T_NAME	 1	/* attempt name lookup */
-+#define S2T_LOCAL	 2	/* we may support NIS or such in the future */
-+
-+/* sap_equal flags */
-+#define SXE_COMPATIBLE	 1	/* check for compatibility instead of identity*/
-+#define SXE_NEGOTIATION	 2	/* allow negotiation; requires SXE_COMPATIBLE;
-+				   assumes "a" defines the available
-+				   capabilities */
-+#define SXE_RESULT	 4	/* return selected SAP */
-+
-+#define MAX_ATM_ADDR_LEN (2*ATM_ESA_LEN+ATM_E164_LEN+5)
-+				/* 4 dots, 1 plus */
-+#define MAX_ATM_NAME_LEN 256	/* wild guess */
-+#define MAX_ATM_QOS_LEN 116	/* 5+4+2*(3+3*(7+9)+2)+1 */
-+#define MAX_ATM_SAP_LEN	255	/* BHLI(27)+1+3*BLLI(L2=33,L3=41,+1)+2 */
-+
-+
-+int text2atm(const char *text,struct sockaddr *addr,int length,int flags);
-+int atm2text(char *buffer,int length,const struct sockaddr *addr,int flags);
-+int atm_equal(const struct sockaddr *a,const struct sockaddr *b,int len,
-+  int flags);
-+
-+int sdu2cell(int s,int sizes,const int *sdu_size,int *num_sdu);
-+
-+int text2qos(const char *text,struct atm_qos *qos,int flags);
-+int qos2text(char *buffer,int length,const struct atm_qos *qos,int flags);
-+int qos_equal(const struct atm_qos *a,const struct atm_qos *b);
-+
-+int text2sap(const char *text,struct atm_sap *sap,int flags);
-+int sap2text(char *buffer,int length,const struct atm_sap *sap,int flags);
-+int sap_equal(const struct atm_sap *a,const struct atm_sap *b,int flags,...);
-+
-+int __t2q_get_rate(const char **text,int up);
-+int __atmlib_fetch(const char **pos,...); /* internal use only */
-+
-+#endif
---- /dev/null	2004-10-04 11:21:07.370511304 +0100
-+++ ppp-2.4.2/pppd/plugins/pppoatm/atmres.h	2004-10-04 09:36:46.000000000 +0100
-@@ -0,0 +1,36 @@
-+/* atmres.h - Common definitions and prototypes for resolver functions */
-+
-+/* Written 1996,1998 by Werner Almesberger, EPFL-LRC/ICA */
-+
-+
-+#ifndef _ATMRES_H
-+#define _ATMRES_H
-+
-+#include <arpa/nameser.h>
-+#include <linux/atm.h>
-+
-+
-+/* Some #defines that may be needed if ANS isn't installed on that system */
-+
-+#ifndef T_ATMA
-+#define T_ATMA		34
-+#endif
-+#ifndef ATMA_AESA
-+#define ATMA_AESA	0
-+#endif
-+#ifndef ATMA_E164
-+#define ATMA_E164	1
-+#endif
-+
-+/* Return codes for text2atm and atm2text */
-+
-+#define TRY_OTHER -2
-+#define FATAL	  -1 /* must be -1 */
-+
-+
-+int ans_byname(const char *text,struct sockaddr_atmsvc *addr,int length,
-+  int flags);
-+int ans_byaddr(char *buffer,int length,const struct sockaddr_atmsvc *addr,
-+  int flags);
-+
-+#endif
---- /dev/null	2004-10-04 11:21:07.370511304 +0100
-+++ ppp-2.4.2/pppd/plugins/pppoatm/Makefile.linux	2004-10-04 11:32:03.221242664 +0100
-@@ -0,0 +1,40 @@
+--- ppp-2.4.2/pppd/plugins/pppoatm/Makefile.linux.atm1	2004-10-04 12:11:55.000000000 +0100
++++ ppp-2.4.2/pppd/plugins/pppoatm/Makefile.linux	2004-10-05 17:32:17.462042440 +0100
+@@ -0,0 +1,41 @@
 +CC	= gcc
 +COPTS	= -O2 -g
 +CFLAGS	= $(COPTS) -I../.. -I../../../include -fPIC
@@ -464,17 +307,18 @@
 +#HAVE_LIBATM=yes
 +
 +ifdef HAVE_LIBATM
-+LIBATM := -latm
++LIBS := -latm
 +else
 +CFLAGS += -I.
 +PLUGIN_OBJS += text2qos.o text2atm.o misc.o ans.o
++LIBS := -lresolv
 +endif
 +
 +#*********
 +all: $(PLUGIN)
 +
 +$(PLUGIN): $(PLUGIN_OBJS)
-+	$(CC) $(CFLAGS) -o $@ -shared $^ $(LIBATM)
++	$(CC) $(CFLAGS) -o $@ -shared $^ $(LIBS)
 +
 +install: all
 +	$(INSTALL) -d -m 755 $(LIBDIR)
@@ -485,289 +329,8 @@
 +
 +%.o: %.c
 +	$(CC) $(CFLAGS) -c -o $@ $<
---- /dev/null	2004-10-04 11:21:07.370511304 +0100
-+++ ppp-2.4.2/pppd/plugins/pppoatm/misc.c	2004-10-04 09:25:39.000000000 +0100
-@@ -0,0 +1,51 @@
-+/* misc.c - Miscellaneous library functions */
-+
-+/* Written 1997-2000 by Werner Almesberger, EPFL-ICA/ICA */
-+
-+#if HAVE_CONFIG_H
-+#include <config.h>
-+#endif
-+
-+#include <stdint.h>
-+#include <stdarg.h>
-+#include <string.h>
-+#include <sys/socket.h>
-+#include <sys/ioctl.h>
-+#include <netinet/in.h> /* for htons */
-+
-+#include <atm.h>
-+#include <atmsap.h>
-+
-+
-+int __atmlib_fetch(const char **pos,...)
-+{
-+    const char *value;
-+    int ref_len,best_len,len;
-+    int i,best;
-+    va_list ap;
-+
-+    va_start(ap,pos);
-+    ref_len = strlen(*pos);
-+    best_len = 0;
-+    best = -1;
-+    for (i = 0; (value = va_arg(ap,const char *)); i++) {
-+	len = strlen(value);
-+	if (*value != '!' && len <= ref_len && len > best_len &&
-+	  !strncasecmp(*pos,value,len)) {
-+	    best = i;
-+	    best_len = len;
-+	}
-+    }
-+    va_end(ap);
-+    if (best > -1) (*pos) += best_len;
-+    return best;
-+}
-+
-+
-+void atm_tcpip_port_mapping(char *vs_id,uint8_t protocol,uint16_t port)
-+{
-+    memcpy(vs_id,ATM_FORUM_OUI "\x01",4);
-+    vs_id[4] = protocol; /* e.g. IP_TCP or IP_UDP; from netinet/protocols.h */
-+    vs_id[5] = (htons(port) >> 8) & 255;
-+    vs_id[6] = htons(port) & 255;
-+}
---- /dev/null	2004-10-04 11:21:07.370511304 +0100
-+++ ppp-2.4.2/pppd/plugins/pppoatm/pppoatm.c	2004-10-04 09:26:01.000000000 +0100
-@@ -0,0 +1,224 @@
-+/* pppoatm.c - pppd plugin to implement PPPoATM protocol.
-+ *
-+ * Copyright 2000 Mitchell Blank Jr.
-+ * Based in part on work from Jens Axboe and Paul Mackerras.
-+ * Updated to ppp-2.4.1 by Bernhard Kaindl
-+ *
-+ * Updated to ppp-2.4.2 by David Woodhouse 2004.
-+ *  - disconnect method added
-+ *  - remove_options() abuse removed.
-+ *
-+ *  This program is free software; you can redistribute it and/or
-+ *  modify it under the terms of the GNU General Public License
-+ *  as published by the Free Software Foundation; either version
-+ *  2 of the License, or (at your option) any later version.
-+ */
-+#include <unistd.h>
-+#include <string.h>
-+#include <stdlib.h>
-+#include "pppd.h"
-+#include "pathnames.h"
-+#include "fsm.h" /* Needed for lcp.h to include cleanly */
-+#include "lcp.h"
-+#include <atm.h>
-+#include <linux/atmdev.h>
-+#include <linux/atmppp.h>
-+#include <sys/stat.h>
-+#include <net/if.h>
-+#include <sys/ioctl.h>
-+
-+const char pppd_version[] = VERSION;
-+
-+static struct sockaddr_atmpvc pvcaddr;
-+static char *qosstr = NULL;
-+static bool llc_encaps = 0;
-+static bool vc_encaps = 0;
-+static int device_got_set = 0;
-+static int pppoatm_max_mtu, pppoatm_max_mru;
-+static int setdevname_pppoatm(const char *cp, const char **argv, int doit);
-+struct channel pppoa_channel;
-+static int pppoa_fd = -1;
-+
-+static option_t pppoa_options[] = {
-+	{ "device name", o_wild, (void *) &setdevname_pppoatm,
-+	  "ATM service provider IDs: VPI.VCI",
-+	  OPT_DEVNAM | OPT_PRIVFIX | OPT_NOARG  | OPT_A2STRVAL | OPT_STATIC,
-+	  devnam},
-+	{ "llc-encaps", o_bool, &llc_encaps,
-+	  "use LLC encapsulation for PPPoATM", 1},
-+	{ "vc-encaps", o_bool, &vc_encaps,
-+	  "use VC multiplexing for PPPoATM (default)", 1},
-+	{ "qos", o_string, &qosstr,
-+	  "set QoS for PPPoATM connection", 1},
-+	{ NULL }
-+};
-+
-+/* returns:
-+ *  -1 if there's a problem with setting the device
-+ *   0 if we can't parse "cp" as a valid name of a device
-+ *   1 if "cp" is a reasonable thing to name a device
-+ * Note that we don't actually open the device at this point
-+ * We do need to fill in:
-+ *   devnam: a string representation of the device
-+ *   devstat: a stat structure of the device.  In this case
-+ *     we're not opening a device, so we just make sure
-+ *     to set up S_ISCHR(devstat.st_mode) != 1, so we
-+ *     don't get confused that we're on stdin.
-+ */
-+int (*old_setdevname_hook)(const char* cp) = NULL;
-+static int setdevname_pppoatm(const char *cp, const char **argv, int doit)
-+{
-+	struct sockaddr_atmpvc addr;
-+	extern struct stat devstat;
-+	if (device_got_set)
-+		return 0;
-+	//info("PPPoATM setdevname_pppoatm: '%s'", cp);
-+	memset(&addr, 0, sizeof addr);
-+	if (text2atm(cp, (struct sockaddr *) &addr, sizeof(addr),
-+	    T2A_PVC | T2A_NAME) < 0) {
-+               if(doit)
-+                   info("atm does not recognize: %s", cp);
-+		return 0;
-+           }
-+	if (!doit) return 1;
-+	//if (!dev_set_ok()) return -1;
-+	memcpy(&pvcaddr, &addr, sizeof pvcaddr);
-+	strlcpy(devnam, cp, sizeof devnam);
-+	devstat.st_mode = S_IFSOCK;
-+	if (the_channel != &pppoa_channel) {
-+		the_channel = &pppoa_channel;
-+		lcp_wantoptions[0].neg_accompression = 0;
-+		lcp_allowoptions[0].neg_accompression = 0;
-+		lcp_wantoptions[0].neg_asyncmap = 0;
-+		lcp_allowoptions[0].neg_asyncmap = 0;
-+		lcp_wantoptions[0].neg_pcompression = 0;
-+	}
-+	info("PPPoATM setdevname_pppoatm - SUCCESS:%s", cp);
-+	device_got_set = 1;
-+	return 1;
-+}
-+
-+#define pppoatm_overhead() (llc_encaps ? 6 : 2)
-+
-+static void no_device_given_pppoatm(void)
-+{
-+	fatal("No vpi.vci specified");
-+}
-+
-+static void set_line_discipline_pppoatm(int fd)
-+{
-+	struct atm_backend_ppp be;
-+	be.backend_num = ATM_BACKEND_PPP;
-+	if (!llc_encaps)
-+		be.encaps = PPPOATM_ENCAPS_VC;
-+	else if (!vc_encaps)
-+		be.encaps = PPPOATM_ENCAPS_LLC;
-+	else
-+		be.encaps = PPPOATM_ENCAPS_AUTODETECT;
-+	if (ioctl(fd, ATM_SETBACKEND, &be) < 0)
-+		fatal("ioctl(ATM_SETBACKEND): %m");
-+}
-+
-+#if 0
-+static void reset_line_discipline_pppoatm(int fd)
-+{
-+	atm_backend_t be = ATM_BACKEND_RAW;
-+	/* 2.4 doesn't support this yet */
-+	(void) ioctl(fd, ATM_SETBACKEND, &be);
-+}
-+#endif
-+
-+static int connect_pppoatm(void)
-+{
-+	int fd;
-+	struct atm_qos qos;
-+
-+	system ("/sbin/modprobe pppoatm");
-+
-+	if (!device_got_set)
-+		no_device_given_pppoatm();
-+	fd = socket(AF_ATMPVC, SOCK_DGRAM, 0);
-+	if (fd < 0)
-+		fatal("failed to create socket: %m");
-+	memset(&qos, 0, sizeof qos);
-+	qos.txtp.traffic_class = qos.rxtp.traffic_class = ATM_UBR;
-+	/* TODO: support simplified QoS setting */
-+	if (qosstr != NULL)
-+		if (text2qos(qosstr, &qos, 0))
-+			fatal("Can't parse QoS: \"%s\"");
-+	qos.txtp.max_sdu = lcp_allowoptions[0].mru + pppoatm_overhead();
-+	qos.rxtp.max_sdu = lcp_wantoptions[0].mru + pppoatm_overhead();
-+	qos.aal = ATM_AAL5;
-+	if (setsockopt(fd, SOL_ATM, SO_ATMQOS, &qos, sizeof(qos)) < 0)
-+		fatal("setsockopt(SO_ATMQOS): %m");
-+	/* TODO: accept on SVCs... */
-+	if (connect(fd, (struct sockaddr *) &pvcaddr,
-+	    sizeof(struct sockaddr_atmpvc)))
-+		fatal("connect(%s): %m", devnam);
-+	pppoatm_max_mtu = lcp_allowoptions[0].mru;
-+	pppoatm_max_mru = lcp_wantoptions[0].mru;
-+	set_line_discipline_pppoatm(fd);
-+	strlcpy(ppp_devnam, devnam, sizeof(ppp_devnam));
-+	pppoa_fd = fd;
-+	return fd;
-+}
-+
-+static void disconnect_pppoatm(void)
-+{
-+	close(pppoa_fd);
-+}
-+
-+static void send_config_pppoa(int mtu,
-+			      u_int32_t asyncmap,
-+			      int pcomp,
-+			      int accomp)
-+{
-+	int sock;
-+	struct ifreq ifr;
-+	if (mtu > pppoatm_max_mtu)
-+		error("Couldn't increase MTU to %d", mtu);
-+	sock = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (sock < 0)
-+		fatal("Couldn't create IP socket: %m");
-+	strlcpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
-+	ifr.ifr_mtu = mtu;
-+	if (ioctl(sock, SIOCSIFMTU, (caddr_t) &ifr) < 0)
-+		fatal("ioctl(SIOCSIFMTU): %m");
-+	(void) close (sock);
-+}
-+
-+static void recv_config_pppoa(int mru,
-+			      u_int32_t asyncmap,
-+			      int pcomp,
-+			      int accomp)
-+{
-+	if (mru > pppoatm_max_mru)
-+		error("Couldn't increase MRU to %d", mru);
-+}
-+
-+void plugin_init(void)
-+{
-+#if defined(__linux__)
-+	extern int new_style_driver;	/* From sys-linux.c */
-+	if (!ppp_available() && !new_style_driver)
-+		fatal("Kernel doesn't support ppp_generic - "
-+		    "needed for PPPoATM");
-+#else
-+	fatal("No PPPoATM support on this OS");
-+#endif
-+	info("PPPoATM plugin_init");
-+	add_options(pppoa_options);
-+}
-+struct channel pppoa_channel = {
-+    options: pppoa_options,
-+    process_extra_options: NULL,
-+    check_options: NULL,
-+    connect: &connect_pppoatm,
-+    disconnect: &disconnect_pppoatm,
-+    establish_ppp: &generic_establish_ppp,
-+    disestablish_ppp: &generic_disestablish_ppp,
-+    send_config: &send_config_pppoa,
-+    recv_config: &recv_config_pppoa,
-+    close: NULL,
-+    cleanup: NULL
-+};
---- /dev/null	2004-10-04 11:21:07.370511304 +0100
-+++ ppp-2.4.2/pppd/plugins/pppoatm/text2atm.c	2004-10-04 09:25:50.000000000 +0100
+--- ppp-2.4.2/pppd/plugins/pppoatm/text2atm.c.atm1	2004-10-04 12:11:55.000000000 +0100
++++ ppp-2.4.2/pppd/plugins/pppoatm/text2atm.c	2004-10-04 12:11:55.000000000 +0100
 @@ -0,0 +1,249 @@
 +/* text2atm.c - Converts textual representation of ATM address to binary
 +		encoding */
@@ -1018,8 +581,8 @@
 +    if (result != TRY_OTHER) return result;
 +    return -1;
 +}
---- /dev/null	2004-10-04 11:21:07.370511304 +0100
-+++ ppp-2.4.2/pppd/plugins/pppoatm/text2qos.c	2004-10-04 09:25:46.000000000 +0100
+--- ppp-2.4.2/pppd/plugins/pppoatm/text2qos.c.atm1	2004-10-04 12:11:55.000000000 +0100
++++ ppp-2.4.2/pppd/plugins/pppoatm/text2qos.c	2004-10-04 12:11:55.000000000 +0100
 @@ -0,0 +1,180 @@
 +/* text2qos.c - Converts textual representation of QOS parameters to binary
 +		encoding */
@@ -1201,20 +764,347 @@
 +    else if (params(&text,qos ? &qos->rxtp : NULL,NULL)) return -1;
 +    return *text ? -1 : 0;
 +}
---- ppp-2.4.2/configure.pppoatm	2004-10-04 11:44:37.925510176 +0100
-+++ ppp-2.4.2/configure	2004-10-04 11:45:03.575610768 +0100
-@@ -141,7 +141,7 @@
-   rm -f Makedefs.com
-   ln -s $ksrc/Makedefs$compiletype Makedefs.com
-   echo "  $ksrc/Makedefs$compiletype -> Makedefs.com"
--  for dir in pppd pppstats chat pppdump pppd/plugins pppd/plugins/rp-pppoe pppd/plugins/radius; do
-+  for dir in pppd pppstats chat pppdump pppd/plugins pppd/plugins/rp-pppoe pppd/plugins/radius pppd/plugins/pppoatm; do
-     rm -f $dir/Makefile
-     if [ -f $dir/Makefile.$makext ]; then
-       ln -s Makefile.$makext $dir/Makefile
---- /dev/null	2004-10-04 11:21:07.370511304 +0100
-+++ ppp-2.4.2/pppd/plugins/pppoatm/atmsap.h	2004-10-04 12:13:23.675156352 +0100
-@@ -0,0 +1,50 @@
+--- ppp-2.4.2/pppd/plugins/pppoatm/atm.h.atm1	2004-10-04 12:11:55.000000000 +0100
++++ ppp-2.4.2/pppd/plugins/pppoatm/atm.h	2004-10-05 17:25:10.825900992 +0100
+@@ -0,0 +1,108 @@
++/* atm.h - Functions useful for ATM applications */
++ 
++/* Written 1995-2000 by Werner Almesberger, EPFL-LRC/ICA */
++ 
++
++#ifndef _ATM_H
++#define _ATM_H
++
++#include <stdint.h>
++#include <sys/socket.h>
++#include <linux/atm.h>
++
++
++/*
++ * For versions of glibc < 2.1
++ */
++
++#ifndef AF_ATMPVC
++#define AF_ATMPVC	8
++#endif
++
++#ifndef AF_ATMSVC
++#define AF_ATMSVC	20
++#endif
++
++#ifndef PF_ATMPVC
++#define PF_ATMPVC	AF_ATMPVC
++#endif
++
++#ifndef PF_ATMSVC
++#define PF_ATMSVC	AF_ATMSVC
++#endif
++
++#ifndef SOL_ATM
++#define SOL_ATM		264
++#endif
++
++#ifndef SOL_AAL
++#define SOL_AAL		265
++#endif
++
++
++#define HOSTS_ATM "/etc/hosts.atm"
++
++/* text2atm flags */
++#define T2A_PVC		  1	/* address is PVC */
++#define T2A_SVC		  2	/* address is SVC */
++#define T2A_UNSPEC	  4	/* allow unspecified parts in PVC address */
++#define T2A_WILDCARD	  8	/* allow wildcards in PVC or SVC address */
++#define T2A_NNI		 16	/* allow NNI VPI range (PVC) */
++#define T2A_NAME	 32	/* allow name resolution */
++#define T2A_REMOTE	 64	/* OBSOLETE */
++#define T2A_LOCAL	128	/* don't use ANS */
++
++/* atm2text flags */
++#define A2T_PRETTY	 1	/* add syntactic sugar */
++#define A2T_NAME	 2	/* attempt name lookup */
++#define A2T_REMOTE	 4	/* OBSOLETE */
++#define A2T_LOCAL	 8	/* don't use ANS */
++
++/* atm_equal flags */
++#define AXE_WILDCARD	 1	/* allow wildcard match */
++#define AXE_PRVOPT	 2	/* private part of SVC address is optional */
++
++/* text2qos flags */
++#define T2Q_DEFAULTS	 1	/* structure contains default values */
++
++/* text2sap flags */
++#define T2S_NAME	 1	/* attempt name lookup */
++#define T2S_LOCAL	 2	/* we may support NIS or such in the future */
++
++/* sap2text flags */
++#define S2T_NAME	 1	/* attempt name lookup */
++#define S2T_LOCAL	 2	/* we may support NIS or such in the future */
++
++/* sap_equal flags */
++#define SXE_COMPATIBLE	 1	/* check for compatibility instead of identity*/
++#define SXE_NEGOTIATION	 2	/* allow negotiation; requires SXE_COMPATIBLE;
++				   assumes "a" defines the available
++				   capabilities */
++#define SXE_RESULT	 4	/* return selected SAP */
++
++#define MAX_ATM_ADDR_LEN (2*ATM_ESA_LEN+ATM_E164_LEN+5)
++				/* 4 dots, 1 plus */
++#define MAX_ATM_NAME_LEN 256	/* wild guess */
++#define MAX_ATM_QOS_LEN 116	/* 5+4+2*(3+3*(7+9)+2)+1 */
++#define MAX_ATM_SAP_LEN	255	/* BHLI(27)+1+3*BLLI(L2=33,L3=41,+1)+2 */
++
++
++int text2atm(const char *text,struct sockaddr *addr,int length,int flags);
++int atm2text(char *buffer,int length,const struct sockaddr *addr,int flags);
++int atm_equal(const struct sockaddr *a,const struct sockaddr *b,int len,
++  int flags);
++
++int sdu2cell(int s,int sizes,const int *sdu_size,int *num_sdu);
++
++int text2qos(const char *text,struct atm_qos *qos,int flags);
++int qos2text(char *buffer,int length,const struct atm_qos *qos,int flags);
++int qos_equal(const struct atm_qos *a,const struct atm_qos *b);
++
++int text2sap(const char *text,struct atm_sap *sap,int flags);
++int sap2text(char *buffer,int length,const struct atm_sap *sap,int flags);
++int sap_equal(const struct atm_sap *a,const struct atm_sap *b,int flags,...);
++
++int __t2q_get_rate(const char **text,int up);
++int __atmlib_fetch(const char **pos,...); /* internal use only */
++
++#endif
+--- ppp-2.4.2/pppd/plugins/pppoatm/pppoatm.c.atm1	2004-10-04 12:11:55.000000000 +0100
++++ ppp-2.4.2/pppd/plugins/pppoatm/pppoatm.c	2004-10-04 12:11:55.000000000 +0100
+@@ -0,0 +1,224 @@
++/* pppoatm.c - pppd plugin to implement PPPoATM protocol.
++ *
++ * Copyright 2000 Mitchell Blank Jr.
++ * Based in part on work from Jens Axboe and Paul Mackerras.
++ * Updated to ppp-2.4.1 by Bernhard Kaindl
++ *
++ * Updated to ppp-2.4.2 by David Woodhouse 2004.
++ *  - disconnect method added
++ *  - remove_options() abuse removed.
++ *
++ *  This program is free software; you can redistribute it and/or
++ *  modify it under the terms of the GNU General Public License
++ *  as published by the Free Software Foundation; either version
++ *  2 of the License, or (at your option) any later version.
++ */
++#include <unistd.h>
++#include <string.h>
++#include <stdlib.h>
++#include "pppd.h"
++#include "pathnames.h"
++#include "fsm.h" /* Needed for lcp.h to include cleanly */
++#include "lcp.h"
++#include <atm.h>
++#include <linux/atmdev.h>
++#include <linux/atmppp.h>
++#include <sys/stat.h>
++#include <net/if.h>
++#include <sys/ioctl.h>
++
++const char pppd_version[] = VERSION;
++
++static struct sockaddr_atmpvc pvcaddr;
++static char *qosstr = NULL;
++static bool llc_encaps = 0;
++static bool vc_encaps = 0;
++static int device_got_set = 0;
++static int pppoatm_max_mtu, pppoatm_max_mru;
++static int setdevname_pppoatm(const char *cp, const char **argv, int doit);
++struct channel pppoa_channel;
++static int pppoa_fd = -1;
++
++static option_t pppoa_options[] = {
++	{ "device name", o_wild, (void *) &setdevname_pppoatm,
++	  "ATM service provider IDs: VPI.VCI",
++	  OPT_DEVNAM | OPT_PRIVFIX | OPT_NOARG  | OPT_A2STRVAL | OPT_STATIC,
++	  devnam},
++	{ "llc-encaps", o_bool, &llc_encaps,
++	  "use LLC encapsulation for PPPoATM", 1},
++	{ "vc-encaps", o_bool, &vc_encaps,
++	  "use VC multiplexing for PPPoATM (default)", 1},
++	{ "qos", o_string, &qosstr,
++	  "set QoS for PPPoATM connection", 1},
++	{ NULL }
++};
++
++/* returns:
++ *  -1 if there's a problem with setting the device
++ *   0 if we can't parse "cp" as a valid name of a device
++ *   1 if "cp" is a reasonable thing to name a device
++ * Note that we don't actually open the device at this point
++ * We do need to fill in:
++ *   devnam: a string representation of the device
++ *   devstat: a stat structure of the device.  In this case
++ *     we're not opening a device, so we just make sure
++ *     to set up S_ISCHR(devstat.st_mode) != 1, so we
++ *     don't get confused that we're on stdin.
++ */
++int (*old_setdevname_hook)(const char* cp) = NULL;
++static int setdevname_pppoatm(const char *cp, const char **argv, int doit)
++{
++	struct sockaddr_atmpvc addr;
++	extern struct stat devstat;
++	if (device_got_set)
++		return 0;
++	//info("PPPoATM setdevname_pppoatm: '%s'", cp);
++	memset(&addr, 0, sizeof addr);
++	if (text2atm(cp, (struct sockaddr *) &addr, sizeof(addr),
++	    T2A_PVC | T2A_NAME) < 0) {
++               if(doit)
++                   info("atm does not recognize: %s", cp);
++		return 0;
++           }
++	if (!doit) return 1;
++	//if (!dev_set_ok()) return -1;
++	memcpy(&pvcaddr, &addr, sizeof pvcaddr);
++	strlcpy(devnam, cp, sizeof devnam);
++	devstat.st_mode = S_IFSOCK;
++	if (the_channel != &pppoa_channel) {
++		the_channel = &pppoa_channel;
++		lcp_wantoptions[0].neg_accompression = 0;
++		lcp_allowoptions[0].neg_accompression = 0;
++		lcp_wantoptions[0].neg_asyncmap = 0;
++		lcp_allowoptions[0].neg_asyncmap = 0;
++		lcp_wantoptions[0].neg_pcompression = 0;
++	}
++	info("PPPoATM setdevname_pppoatm - SUCCESS:%s", cp);
++	device_got_set = 1;
++	return 1;
++}
++
++#define pppoatm_overhead() (llc_encaps ? 6 : 2)
++
++static void no_device_given_pppoatm(void)
++{
++	fatal("No vpi.vci specified");
++}
++
++static void set_line_discipline_pppoatm(int fd)
++{
++	struct atm_backend_ppp be;
++	be.backend_num = ATM_BACKEND_PPP;
++	if (!llc_encaps)
++		be.encaps = PPPOATM_ENCAPS_VC;
++	else if (!vc_encaps)
++		be.encaps = PPPOATM_ENCAPS_LLC;
++	else
++		be.encaps = PPPOATM_ENCAPS_AUTODETECT;
++	if (ioctl(fd, ATM_SETBACKEND, &be) < 0)
++		fatal("ioctl(ATM_SETBACKEND): %m");
++}
++
++#if 0
++static void reset_line_discipline_pppoatm(int fd)
++{
++	atm_backend_t be = ATM_BACKEND_RAW;
++	/* 2.4 doesn't support this yet */
++	(void) ioctl(fd, ATM_SETBACKEND, &be);
++}
++#endif
++
++static int connect_pppoatm(void)
++{
++	int fd;
++	struct atm_qos qos;
++
++	system ("/sbin/modprobe pppoatm");
++
++	if (!device_got_set)
++		no_device_given_pppoatm();
++	fd = socket(AF_ATMPVC, SOCK_DGRAM, 0);
++	if (fd < 0)
++		fatal("failed to create socket: %m");
++	memset(&qos, 0, sizeof qos);
++	qos.txtp.traffic_class = qos.rxtp.traffic_class = ATM_UBR;
++	/* TODO: support simplified QoS setting */
++	if (qosstr != NULL)
++		if (text2qos(qosstr, &qos, 0))
++			fatal("Can't parse QoS: \"%s\"");
++	qos.txtp.max_sdu = lcp_allowoptions[0].mru + pppoatm_overhead();
++	qos.rxtp.max_sdu = lcp_wantoptions[0].mru + pppoatm_overhead();
++	qos.aal = ATM_AAL5;
++	if (setsockopt(fd, SOL_ATM, SO_ATMQOS, &qos, sizeof(qos)) < 0)
++		fatal("setsockopt(SO_ATMQOS): %m");
++	/* TODO: accept on SVCs... */
++	if (connect(fd, (struct sockaddr *) &pvcaddr,
++	    sizeof(struct sockaddr_atmpvc)))
++		fatal("connect(%s): %m", devnam);
++	pppoatm_max_mtu = lcp_allowoptions[0].mru;
++	pppoatm_max_mru = lcp_wantoptions[0].mru;
++	set_line_discipline_pppoatm(fd);
++	strlcpy(ppp_devnam, devnam, sizeof(ppp_devnam));
++	pppoa_fd = fd;
++	return fd;
++}
++
++static void disconnect_pppoatm(void)
++{
++	close(pppoa_fd);
++}
++
++static void send_config_pppoa(int mtu,
++			      u_int32_t asyncmap,
++			      int pcomp,
++			      int accomp)
++{
++	int sock;
++	struct ifreq ifr;
++	if (mtu > pppoatm_max_mtu)
++		error("Couldn't increase MTU to %d", mtu);
++	sock = socket(AF_INET, SOCK_DGRAM, 0);
++	if (sock < 0)
++		fatal("Couldn't create IP socket: %m");
++	strlcpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
++	ifr.ifr_mtu = mtu;
++	if (ioctl(sock, SIOCSIFMTU, (caddr_t) &ifr) < 0)
++		fatal("ioctl(SIOCSIFMTU): %m");
++	(void) close (sock);
++}
++
++static void recv_config_pppoa(int mru,
++			      u_int32_t asyncmap,
++			      int pcomp,
++			      int accomp)
++{
++	if (mru > pppoatm_max_mru)
++		error("Couldn't increase MRU to %d", mru);
++}
++
++void plugin_init(void)
++{
++#if defined(__linux__)
++	extern int new_style_driver;	/* From sys-linux.c */
++	if (!ppp_available() && !new_style_driver)
++		fatal("Kernel doesn't support ppp_generic - "
++		    "needed for PPPoATM");
++#else
++	fatal("No PPPoATM support on this OS");
++#endif
++	info("PPPoATM plugin_init");
++	add_options(pppoa_options);
++}
++struct channel pppoa_channel = {
++    options: pppoa_options,
++    process_extra_options: NULL,
++    check_options: NULL,
++    connect: &connect_pppoatm,
++    disconnect: &disconnect_pppoatm,
++    establish_ppp: &generic_establish_ppp,
++    disestablish_ppp: &generic_disestablish_ppp,
++    send_config: &send_config_pppoa,
++    recv_config: &recv_config_pppoa,
++    close: NULL,
++    cleanup: NULL
++};
+--- ppp-2.4.2/pppd/plugins/pppoatm/atmsap.h.atm1	2004-10-05 17:35:56.772702152 +0100
++++ ppp-2.4.2/pppd/plugins/pppoatm/atmsap.h	2004-10-05 17:25:10.826900840 +0100
+@@ -0,0 +1,45 @@
 +/* atmsap.h - ATM Service Access Point addressing definitions */
 +
 +/* Written 1996-1998 by Werner Almesberger, EPFL LRC/ICA */
@@ -1226,11 +1116,6 @@
 +#include <stdint.h>
 +#include <linux/atmsap.h>
 +
-+/* Some stuff omitted by Fedora glibc-kernheaders */
-+static __inline__ int blli_in_use(struct atm_blli blli)
-+{
-+	return blli.l2_proto || blli.l3_proto;
-+}
 +
 +/*
 + * Selected ISO/IEC TR 9577 Network Layer Protocol Identifiers (NLPID)
@@ -1265,3 +1150,96 @@
 +void atm_tcpip_port_mapping(char *vs_id,uint8_t protocol,uint16_t port);
 +
 +#endif
+--- ppp-2.4.2/pppd/plugins/pppoatm/atmres.h.atm1	2004-10-04 12:11:55.000000000 +0100
++++ ppp-2.4.2/pppd/plugins/pppoatm/atmres.h	2004-10-04 12:11:55.000000000 +0100
+@@ -0,0 +1,36 @@
++/* atmres.h - Common definitions and prototypes for resolver functions */
++
++/* Written 1996,1998 by Werner Almesberger, EPFL-LRC/ICA */
++
++
++#ifndef _ATMRES_H
++#define _ATMRES_H
++
++#include <arpa/nameser.h>
++#include <linux/atm.h>
++
++
++/* Some #defines that may be needed if ANS isn't installed on that system */
++
++#ifndef T_ATMA
++#define T_ATMA		34
++#endif
++#ifndef ATMA_AESA
++#define ATMA_AESA	0
++#endif
++#ifndef ATMA_E164
++#define ATMA_E164	1
++#endif
++
++/* Return codes for text2atm and atm2text */
++
++#define TRY_OTHER -2
++#define FATAL	  -1 /* must be -1 */
++
++
++int ans_byname(const char *text,struct sockaddr_atmsvc *addr,int length,
++  int flags);
++int ans_byaddr(char *buffer,int length,const struct sockaddr_atmsvc *addr,
++  int flags);
++
++#endif
+--- ppp-2.4.2/pppd/plugins/pppoatm/misc.c.atm1	2004-10-04 12:11:55.000000000 +0100
++++ ppp-2.4.2/pppd/plugins/pppoatm/misc.c	2004-10-04 12:11:55.000000000 +0100
+@@ -0,0 +1,51 @@
++/* misc.c - Miscellaneous library functions */
++
++/* Written 1997-2000 by Werner Almesberger, EPFL-ICA/ICA */
++
++#if HAVE_CONFIG_H
++#include <config.h>
++#endif
++
++#include <stdint.h>
++#include <stdarg.h>
++#include <string.h>
++#include <sys/socket.h>
++#include <sys/ioctl.h>
++#include <netinet/in.h> /* for htons */
++
++#include <atm.h>
++#include <atmsap.h>
++
++
++int __atmlib_fetch(const char **pos,...)
++{
++    const char *value;
++    int ref_len,best_len,len;
++    int i,best;
++    va_list ap;
++
++    va_start(ap,pos);
++    ref_len = strlen(*pos);
++    best_len = 0;
++    best = -1;
++    for (i = 0; (value = va_arg(ap,const char *)); i++) {
++	len = strlen(value);
++	if (*value != '!' && len <= ref_len && len > best_len &&
++	  !strncasecmp(*pos,value,len)) {
++	    best = i;
++	    best_len = len;
++	}
++    }
++    va_end(ap);
++    if (best > -1) (*pos) += best_len;
++    return best;
++}
++
++
++void atm_tcpip_port_mapping(char *vs_id,uint8_t protocol,uint16_t port)
++{
++    memcpy(vs_id,ATM_FORUM_OUI "\x01",4);
++    vs_id[4] = protocol; /* e.g. IP_TCP or IP_UDP; from netinet/protocols.h */
++    vs_id[5] = (htons(port) >> 8) & 255;
++    vs_id[6] = htons(port) & 255;
++}
