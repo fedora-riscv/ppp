@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.2
-Release: 5
+Release: 5.1
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -20,6 +20,8 @@ Patch9: ppp-2.4.2-fix64.patch
 Patch10: ppp-2.4.2-signal.patch
 Patch11: ppp-2.4.2-change_resolv_conf.patch
 Patch12: ppp-2.4.2-pcap.patch
+Patch13: ppp-2.4.2-no_strip.patch
+Patch14: ppp-2.4.2-argv.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -49,13 +51,16 @@ organization over a modem and phone line.
 %patch10 -p1 -b .signal
 %patch11 -p1 -b .change_resolv_conf
 %patch12 -p1 -b .pcap
+%patch13 -p1 -b .no_strip
+%patch14 -p1 -b .argv
 
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
+#find . -name 'Makefile*' -print0 | xargs -0 perl -pi.no_strip -e "s: -s : :g"
+RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall"
 ./configure
-find . -name 'Makefile*' -print0 | xargs -0 perl -pi -e "s: -s : :g"
-make RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC"
+make
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
@@ -104,6 +109,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
 %changelog
+* Thu Sep 16 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-5.1
+- fixed subscript out of range (#132677)
+
 * Wed Sep 15 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-5
 - example scripts are using change_resolv_conf to modify /etc/resolv.conf
   (#132482)
