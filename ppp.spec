@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.2
-Release: 6.2
+Release: 6.3
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -23,7 +23,8 @@ Patch12: ppp-2.4.2-pcap.patch
 Patch13: ppp-2.4.2-no_strip.patch
 Patch14: ppp-2.4.2-argv.patch
 Patch15: ppp-2.4.2-pppoatm.patch
-Patch16: ppp-2.4.2-pppoatm-make.patch
+Patch16: ppp-2.4.2-pppoatm-mtu.patch
+Patch17: ppp-2.4.2-pppoatm-make.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -55,8 +56,9 @@ organization over a modem and phone line.
 %patch12 -p1 -b .pcap
 %patch13 -p1 -b .no_strip
 %patch14 -p1 -b .argv
-%patch15 -p1 -b .atm1
-%patch16 -p1 -b .atm2
+%patch15 -p1 -b .atm
+%patch16 -p1 -b .atm-mtu
+%patch17 -p1 -b .atm-make
 
 
 find . -type f -name "*.sample" | xargs rm -f 
@@ -115,6 +117,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Thu Oct  7 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-6.3
+- Fix use of 'demand' without explicit MTU/MRU with pppoatm
+
 * Tue Oct  5 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-6.2
 - Link pppoatm plugin against libresolv.
 - Revert to linux-atm headers without the workaround for #127098
