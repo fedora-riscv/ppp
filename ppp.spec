@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.1
-Release: 7
+Release: 10
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -72,6 +72,16 @@ rm -rf $RPM_BUILD_ROOT
 %doc README README.linux scripts sample
 
 %changelog
+* Wed Jan 22 2003 Tim Powers <timp@redhat.com>
+- rebuilt
+
+* Thu Dec 12 2002 Elliot Lee <sopwith@redhat.com> 2.4.1-9
+- Fix build failure by rebuilding
+
+* Tue Nov 19 2002 Nalin Dahyabhai <nalin@redhat.com> 2.4.1-8
+- rebuild
+- set x86_64 to use varargs the way s390 does
+
 * Mon Jul 22 2002 Florian La Roche <Florian.LaRoche@redhat.de>
 - add patch:
 	* Thu Jun 06 2002 Phil Knirsch <pknirsch@redhat.com>

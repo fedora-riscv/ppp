@@ -1,11 +1,11 @@
---- ppp-2.4.1/pppd/utils.c.varargs	Thu Jun  6 16:22:58 2002
+--- ppp-2.4.1/pppd/utils.c	Thu Jun  6 16:22:58 2002
 +++ ppp-2.4.1/pppd/utils.c	Thu Jun  6 16:22:00 2002
 @@ -254,7 +254,7 @@
  	    break;
  	case 'r':
  	    f = va_arg(args, char *);
 -#ifndef __powerpc__
-+#if !defined(__powerpc__) && !defined(__s390__) && !defined(__s390x__)
++#if !defined(__powerpc__) && !defined(__s390__) && !defined(__s390x__) && !defined(__x86_64__)
  	    n = vslprintf(buf, buflen + 1, f, va_arg(args, va_list));
  #else
  	    /* On the powerpc, a va_list is an array of 1 structure */
