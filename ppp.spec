@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.1
-Release: 6
+Release: 7
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -12,6 +12,7 @@ Patch2: ppp-2.3.9-wtmp.patch
 Patch3: ppp-2.4.0-reap.patch
 Patch4: ppp-2.3.11-pam_session.patch
 Patch5: ppp-2.4.1-warnings.patch
+Patch6: ppp-2.4.1-varargs.patch
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth
@@ -32,6 +33,7 @@ organization over a modem and phone line.
 %patch3 -p1 -b .reap
 %patch4 -p1 -b .pam_session
 %patch5 -p1 -b .warnings
+%patch6 -p1 -b .varargs
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
@@ -70,6 +72,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc README README.linux scripts sample
 
 %changelog
+* Mon Jul 22 2002 Florian La Roche <Florian.LaRoche@redhat.de>
+- add patch:
+	* Thu Jun 06 2002 Phil Knirsch <pknirsch@redhat.com>
+	- Fixed varargs problem for s390/s390x.
+
 * Fri Jun 21 2002 Tim Powers <timp@redhat.com>
 - automated rebuild
 
