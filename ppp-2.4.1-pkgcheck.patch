@@ -1,0 +1,142 @@
+--- ppp-2.4.1/pppd/cbcp.c.pkgcheck	2004-11-02 14:19:23.000000000 +0100
++++ ppp-2.4.1/pppd/cbcp.c	2004-11-02 15:04:06.000000000 +0100
+@@ -150,7 +150,8 @@
+     inp = inpacket;
+ 
+     if (pktlen < CBCP_MINLEN) {
+-        error("CBCP packet is too small");
++        if (debug)
++	    dbglog("CBCP packet is too small");
+ 	return;
+     }
+ 
+@@ -158,12 +159,11 @@
+     GETCHAR(id, inp);
+     GETSHORT(len, inp);
+ 
+-#if 0
+-    if (len > pktlen) {
+-        error("CBCP packet: invalid length");
++    if (len > pktlen || len < CBCP_MINLEN) {
++        if (debug)
++	    dbglog("CBCP packet: invalid length %d", len);
+         return;
+     }
+-#endif
+ 
+     len -= CBCP_MINLEN;
+  
+@@ -174,11 +174,12 @@
+ 	break;
+ 
+     case CBCP_RESP:
+-	dbglog("CBCP_RESP received");
++        if (debug)
++	    dbglog("CBCP_RESP received");
+ 	break;
+ 
+     case CBCP_ACK:
+-	if (id != us->us_id)
++	if (debug && id != us->us_id)
+ 	    dbglog("id doesn't match: expected %d recv %d",
+ 		   us->us_id, id);
+ 
+@@ -297,11 +298,13 @@
+ 
+     address[0] = 0;
+ 
+-    while (len) {
++    while (len >= 2) {
+         dbglog("length: %d", len);
+ 
+ 	GETCHAR(type, pckt);
+ 	GETCHAR(opt_len, pckt);
++	if (opt_len < 2 || opt_len > len)
++	    break;
+ 
+ 	if (opt_len > 2)
+ 	    GETCHAR(delay, pckt);
+@@ -333,6 +336,11 @@
+ 	}
+ 	len -= opt_len;
+     }
++    if (len != 0) {
++	if (debug)
++	    dbglog("cbcp_recvreq: malformed packet (%d bytes left)", len);
++	return;
++    }
+ 
+     cbcp_resp(us);
+ }
+@@ -345,6 +353,7 @@
+     u_char buf[256];
+     u_char *bufp = buf;
+     int len = 0;
++    int slen;
+ 
+     cb_type = us->us_allowed & us->us_type;
+     dbglog("cbcp_resp cb_type=%d", cb_type);
+@@ -356,12 +365,17 @@
+ 
+     if (cb_type & ( 1 << CB_CONF_USER ) ) {
+ 	dbglog("cbcp_resp CONF_USER");
++	slen = strlen(us->us_number);
++	if (slen > 250) {
++	    warn("callback number truncated to 250 characters");
++	    slen = 250;
++	}
+ 	PUTCHAR(CB_CONF_USER, bufp);
+-	len = 3 + 1 + strlen(us->us_number) + 1;
++	len = 3 + 1 + slen + 1;
+ 	PUTCHAR(len , bufp);
+ 	PUTCHAR(5, bufp); /* delay */
+ 	PUTCHAR(1, bufp);
+-	BCOPY(us->us_number, bufp, strlen(us->us_number) + 1);
++	BCOPY(us->us_number, bufp, slen + 1);
+ 	cbcp_send(us, CBCP_RESP, buf, len);
+ 	return;
+     }
+@@ -424,25 +438,29 @@
+     int opt_len;
+     char address[256];
+ 
+-    if (len) {
++    if (len >= 2) {
+         GETCHAR(type, pckt);
+ 	GETCHAR(opt_len, pckt);
+      
+-	if (opt_len > 2)
+-	    GETCHAR(delay, pckt);
++	if (opt_len >= 2 && opt_len <= len) {
++	    if (opt_len > 2)
++		GETCHAR(delay, pckt);
+ 
+-	if (opt_len > 4) {
+-	    GETCHAR(addr_type, pckt);
+-	    memcpy(address, pckt, opt_len - 4);
+-	    address[opt_len - 4] = 0;
+-	    if (address[0])
+-	        dbglog("peer will call: %s", address);
+-	}
+-	if (type == CB_CONF_NO)
+-	    return;
+-    }
++	    if (opt_len > 4) {
++		GETCHAR(addr_type, pckt);
++		memcpy(address, pckt, opt_len - 4);
++		address[opt_len - 4] = 0;
++		if (address[0])
++		    dbglog("peer will call: %s", address);
++	    }
++	    if (type == CB_CONF_NO)
++		return;
+ 
+-    cbcp_up(us);
++	    cbcp_up(us);
++
++	} else if (debug)
++	    dbglog("cbcp_recvack: malformed packet");
++    }
+ }
+ 
+ /* ok peer will do callback */
