@@ -22,7 +22,7 @@ Patch11: ppp-2.4.2-change_resolv_conf.patch
 Patch12: ppp-2.4.2-pcap.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
-BuildPrereq: pam-devel, libpcap >= 14:0.8.3-6
+BuildPrereq: pam-devel, libpcap
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate, libpcap >= 14:0.8.3-6
 
 %description
