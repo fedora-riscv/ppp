@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.2
-Release: 5.1
+Release: 6
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -22,6 +22,8 @@ Patch11: ppp-2.4.2-change_resolv_conf.patch
 Patch12: ppp-2.4.2-pcap.patch
 Patch13: ppp-2.4.2-no_strip.patch
 Patch14: ppp-2.4.2-argv.patch
+Patch15: ppp-2.4.2-pppoatm.patch
+Patch16: ppp-2.4.2-pppoatm-make.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -53,6 +55,9 @@ organization over a modem and phone line.
 %patch12 -p1 -b .pcap
 %patch13 -p1 -b .no_strip
 %patch14 -p1 -b .argv
+%patch15 -p1 -b .atm1
+%patch16 -p1 -b .atm2
+
 
 find . -type f -name "*.sample" | xargs rm -f 
 
@@ -108,7 +113,11 @@ rm -rf $RPM_BUILD_ROOT
 %config /etc/logrotate.d/ppp
 %doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
+
 %changelog
+* Mon Oct  4 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-6
+- Add pppoatm plugin (#131555)
+
 * Thu Sep 16 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-5.1
 - fixed subscript out of range (#132677)
 
