@@ -34,7 +34,7 @@ PAM support.
 -#USE_PAM=y
 +USE_PAM=y
 -#HAVE_INET6=y
-+#HAVE_INET6=y
++HAVE_INET6=y
  
  # Enable plugins
 --- ppp-2.4.2/pppdump/Makefile.linux	1999-07-26 07:09:29.000000000 -0400

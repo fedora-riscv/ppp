@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.2
-Release: 2.2
+Release: 2.3
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -38,7 +38,7 @@ organization over a modem and phone line.
 %patch4 -p1 -b .lib64
 %patch5 -p1 -b .bpf
 %patch6 -p1 -b .dontwriteetc
-%patch7 -p1 -b .pie
+#%patch7 -p1 -b .pie
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
@@ -92,6 +92,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
 %changelog
+* Wed May 24 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-2.3
+- Enable IPv6 support. Disable PIE to avoid bogus Provides:
+
 * Fri May 14 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-2.2
 - compiled pppd and chat PIE
 
