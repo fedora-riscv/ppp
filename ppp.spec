@@ -1,10 +1,10 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.1
-Release: 1
-Copyright: distributable
+Release: 2
+License: distributable
 Group: System Environment/Daemons
-Source0: ftp://ftp.linuxcare.com.au/pub/ppp/ppp-%{version}.tar.gz
+Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
 Source1: ppp-2.3.5-pamd.conf
 Patch0: ppp-2.4.1-make.patch
 Patch1: ppp-2.3.6-sample.patch
@@ -12,12 +12,15 @@ Patch2: ppp-2.3.9-wtmp.patch
 Patch3: ppp-2.4.0-reap.patch
 Patch4: ppp-2.3.11-pam_session.patch
 Patch5: ppp-2.4.1-warnings.patch
+Patch6: ppp-2.4.1-enable-cbcp.patch
+Patch7: ppp-2.4.1-cbcp.patch
 BuildRoot: %{_tmppath}/%{name}-root
+BuildPrereq: pam-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon and
-documentation for PPP support.  The PPP protocol provides a method for
+documentation for PPP support. The PPP protocol provides a method for
 transmitting datagrams over serial point-to-point links. PPP is
 usually used to dial in to an ISP (Internet Service Provider) or other
 organization over a modem and phone line.
@@ -31,6 +34,8 @@ organization over a modem and phone line.
 %patch3 -p1 -b .reap
 %patch4 -p1 -b .pam_session
 %patch5 -p1 -b .warnings
+%patch6 -p1 -b .enable-cbcp
+%patch7 -p1 -b .cbcp
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
@@ -69,6 +74,12 @@ rm -rf $RPM_BUILD_ROOT
 %doc README README.linux scripts sample
 
 %changelog
+* Thu Aug  9 2001 Nalin Dahyabhai <nalin@redhat.com>
+- add buildprereq on pam-devel (#49559)
+- add patch to respond to CBCP LCP requests (#15738)
+- enable cbcp support at build-time
+- change the Copyright: tag to a License: tag
+
 * Wed May 23 2001 Nalin Dahyabhai <nalin@redhat.com>
 - update to 2.4.1
 
