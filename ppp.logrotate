@@ -1,6 +1,7 @@
 # Logrotate file for ppp RPM
  
 /var/log/ppp/connect-errors {
+	missingok
 	compress
 	notifempty
 	daily

@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.2
-Release: 2
+Release: 2.1
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -90,6 +90,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
 %changelog
+* Thu May 13 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-2.1
+- added 'missingok' to ppp.logrotate (#122911)
+
 * Fri May 07 2004 Nils Philippsen <nphilipp@redhat.com> 2.4.2-2
 - don't write to /etc (#118837)
 
