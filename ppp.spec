@@ -1,15 +1,15 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
-Version: 2.3.11
-Release: 7
+Version: 2.4.0
+Release: 2
 Copyright: distributable
 Group: System Environment/Daemons
-Source0: ftp://cs.anu.edu.au/pub/software/ppp/ppp-%{version}.tar.gz
+Source0: ftp://ftp.linuxcare.com.au/pub/ppp/ppp-%{version}.tar.gz
 Source1: ppp-2.3.5-pamd.conf
 Patch0: ppp-2.3.11-make.patch
 Patch1: ppp-2.3.6-sample.patch
 Patch2: ppp-2.3.9-wtmp.patch
-Patch3: ppp-2.3.11-reap.patch
+Patch3: ppp-2.4.0-reap.patch
 Patch4: ppp-2.3.11-pam_session.patch
 BuildRoot: %{_tmppath}/%{name}-root
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth
@@ -67,6 +67,12 @@ rm -rf $RPM_BUILD_ROOT
 %doc README README.linux scripts sample
 
 %changelog
+* Fri Dec  1 2000 Nalin Dahyabhai <nalin@redhat.com>
+- rebuild in new environment
+
+* Thu Nov  9 2000 Nalin Dahyabhai <nalin@redhat.com>
+- update to 2.4.0
+
 * Wed Jul 12 2000 Prospector <bugzilla@redhat.com>
 - automatic rebuild
 
