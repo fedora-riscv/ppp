@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.2
-Release: 6
+Release: 6.1
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -115,6 +115,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Oct  4 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-6.1
+- Include atmsap.h for pppoatm plugin.
+
 * Mon Oct  4 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-6
 - Add pppoatm plugin (#131555)
 
