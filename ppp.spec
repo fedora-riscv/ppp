@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.2
-Release: 2.1
+Release: 2.2
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -14,6 +14,7 @@ Patch3: ppp-2.4.1-varargs.patch
 Patch4: ppp-2.4.2-lib64.patch
 Patch5: ppp-2.4.2-bpf.patch
 Patch6: ppp-2.4.2-dontwriteetc.patch
+Patch7: ppp-2.4.2-pie.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -37,11 +38,12 @@ organization over a modem and phone line.
 %patch4 -p1 -b .lib64
 %patch5 -p1 -b .bpf
 %patch6 -p1 -b .dontwriteetc
+%patch7 -p1 -b .pie
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
 ./configure
-make RPM_OPT_FLAGS="$RPM_OPT_FLAGS"
+make RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC"
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
@@ -90,6 +92,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
 %changelog
+* Fri May 14 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-2.2
+- compiled pppd and chat PIE
+
 * Thu May 13 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-2.1
 - added 'missingok' to ppp.logrotate (#122911)
 
