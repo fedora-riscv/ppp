@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.2
-Release: 4
+Release: 5
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -18,6 +18,7 @@ Patch7: ppp-2.4.2-pie.patch
 Patch8: ppp-2.4.2-fix.patch
 Patch9: ppp-2.4.2-fix64.patch
 Patch10: ppp-2.4.2-signal.patch
+Patch11: ppp-2.4.2-change_resolv_conf.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -45,6 +46,7 @@ organization over a modem and phone line.
 %patch8 -p1 -b .fix
 %patch9 -p1 -b .fix64
 %patch10 -p1 -b .signal
+%patch11 -p1 -b .change_resolv_conf
 
 find . -type f -name "*.sample" | xargs rm -f 
 
@@ -99,6 +101,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
 %changelog
+* Tue Sep 14 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-5
+- example scripts are using change_resolv_conf to modify /etc/resolv.conf
+  (#132482)
+
 * Fri Aug  6 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-4
 - fixed signal handling (#29171)
 
