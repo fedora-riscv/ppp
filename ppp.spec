@@ -52,7 +52,7 @@ find . -type f -name "*.sample" | xargs rm -f
 
 %build
 ./configure
-make RPM_OPT_FLAGS="$RPM_OPT_FLAGS -Werror -fPIC"
+make RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC"
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
