@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.1
-Release: 10
+Release: 15
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -13,6 +13,7 @@ Patch3: ppp-2.4.0-reap.patch
 Patch4: ppp-2.3.11-pam_session.patch
 Patch5: ppp-2.4.1-warnings.patch
 Patch6: ppp-2.4.1-varargs.patch
+Patch7: ppp-2.4.1-lib64.patch
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth
@@ -34,6 +35,8 @@ organization over a modem and phone line.
 %patch4 -p1 -b .pam_session
 %patch5 -p1 -b .warnings
 %patch6 -p1 -b .varargs
+# patch 7 depends on the -lutil in patch 0
+%patch7 -p1 -b .lib64
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
@@ -72,6 +75,21 @@ rm -rf $RPM_BUILD_ROOT
 %doc README README.linux scripts sample
 
 %changelog
+* Fri Sep  5 2003 Nalin Dahyabhai <nalin@redhat.com> 2.4.1-15
+- rebuild
+
+* Fri Sep  5 2003 Nalin Dahyabhai <nalin@redhat.com> 2.4.1-14
+- apply the patch from -11
+
+* Wed Jun 04 2003 Elliot Lee <sopwith@redhat.com>
+- rebuilt
+
+* Tue Jun  3 2003 Nalin Dahyabhai <nalin@redhat.com> 2.4.1-12
+- rebuild
+
+* Tue Jun  3 2003 Nalin Dahyabhai <nalin@redhat.com> 2.4.1-11
+- check for libcrypt in the right directory at compile-time
+
 * Wed Jan 22 2003 Tim Powers <timp@redhat.com>
 - rebuilt
 
