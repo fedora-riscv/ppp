@@ -1,31 +1,27 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
-Version: 2.4.2
-Release: 7
+Version: 2.4.3
+Release: 1
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
 Source1: ppp-2.3.5-pamd.conf
 Source2: ppp.logrotate
-Patch0: ppp-2.4.2-make.patch
+Patch0: ppp-2.4.3-make.patch
 Patch1: ppp-2.3.6-sample.patch
 Patch2: ppp-2.4.2-libutil.patch
 Patch3: ppp-2.4.1-varargs.patch
-Patch4: ppp-2.4.2-lib64.patch
-Patch5: ppp-2.4.2-bpf.patch
-Patch6: ppp-2.4.2-dontwriteetc.patch
+Patch4: ppp-2.4.3-lib64.patch
+Patch6: ppp-2.4.3-dontwriteetc.patch
 Patch7: ppp-2.4.2-pie.patch
-Patch8: ppp-2.4.2-fix.patch
-Patch9: ppp-2.4.2-fix64.patch
-Patch10: ppp-2.4.2-signal.patch
+Patch8: ppp-2.4.3-fix.patch
+Patch9: ppp-2.4.3-fix64.patch
 Patch11: ppp-2.4.2-change_resolv_conf.patch
-Patch12: ppp-2.4.2-pcap.patch
-Patch13: ppp-2.4.2-no_strip.patch
+Patch13: ppp-2.4.3-no_strip.patch
 Patch14: ppp-2.4.2-argv.patch
-Patch15: ppp-2.4.2-pppoatm.patch
 Patch16: ppp-2.4.2-pppoatm-mtu.patch
 Patch17: ppp-2.4.2-pppoatm-make.patch
-Patch18: ppp-2.4.1-pkgcheck.patch
+Patch18: ppp-2.4.3-radiusplugin.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -47,20 +43,16 @@ organization over a modem and phone line.
 %patch3 -p1 -b .varargs
 # patch 4 depends on the -lutil in patch 0
 %patch4 -p1 -b .lib64
-%patch5 -p1 -b .bpf
 %patch6 -p1 -b .dontwriteetc
 %patch7 -p1 -b .pie
 %patch8 -p1 -b .fix
 %patch9 -p1 -b .fix64
-%patch10 -p1 -b .signal
 %patch11 -p1 -b .change_resolv_conf
-%patch12 -p1 -b .pcap
 %patch13 -p1 -b .no_strip
 %patch14 -p1 -b .argv
-%patch15 -p1 -b .atm
 %patch16 -p1 -b .atm-mtu
 %patch17 -p1 -b .atm-make
-%patch18 -p1 -b .pkgcheck
+%patch18 -p1 -b .radiusplugin
 
 
 find . -type f -name "*.sample" | xargs rm -f 
@@ -73,7 +65,7 @@ make
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT MANDIR=$RPM_BUILD_ROOT%{_mandir} BINDIR=$RPM_BUILD_ROOT%{_sbindir}
+make install DESTDIR=$RPM_BUILD_ROOT MANDIR=$RPM_BUILD_ROOT%{_mandir}/man8 BINDIR=$RPM_BUILD_ROOT%{_sbindir} LIBDIR=$RPM_BUILD_ROOT%{_libdir}/pppd/%{version}/
 
 ## it shouldn't be SUID root be default
 #chmod 755 $RPM_BUILD_ROOT/usr/sbin/pppd
@@ -85,8 +77,8 @@ mkdir -p $RPM_BUILD_ROOT/etc/pam.d
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/ppp
 
 # Provide pointers for people who expect stuff in old places
-ln -s ../../var/log/ppp/connect-errors $RPM_BUILD_ROOT/etc/ppp/connect-errors
-ln -s ../../var/run/ppp/resolv.conf $RPM_BUILD_ROOT/etc/ppp/resolv.conf
+mkdir -p $RPM_BUILD_ROOT/var/log/ppp
+mkdir -p $RPM_BUILD_ROOT/var/run/ppp
 
 # Logrotate script
 mkdir -p $RPM_BUILD_ROOT/etc/logrotate.d
@@ -100,10 +92,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/chat
 %{_sbindir}/pppd
 %{_sbindir}/pppdump
+%{_sbindir}/pppoe-discovery
 %{_sbindir}/pppstats
 %{_mandir}/man8/chat.8*
 %{_mandir}/man8/pppd.8*
 %{_mandir}/man8/pppdump.8*
+%{_mandir}/man8/pppd-radattr.8*
+%{_mandir}/man8/pppd-radius.8*
 %{_mandir}/man8/pppstats.8*
 %{_includedir}/pppd
 %{_libdir}/pppd
@@ -119,6 +114,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul 18 2005 Thomas Woerner <twoerner@redhat.com> 2.4.3-1
+- new version 2.4.3
+  - updated patches: make, lib64, dontwriteetc, fix, fix64, no_strip,
+    radiusplugin
+  - dropped patches: bpf, signal, pcap, pppoatm, pkgcheck
+
 * Tue Nov  2 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-7
 - fixed out of bounds memory access, possible DOS
 
