@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.3
-Release: 1
+Release: 2
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -70,8 +70,8 @@ make install DESTDIR=$RPM_BUILD_ROOT MANDIR=$RPM_BUILD_ROOT%{_mandir}/man8 BINDI
 ## it shouldn't be SUID root be default
 #chmod 755 $RPM_BUILD_ROOT/usr/sbin/pppd
 
-chmod go+r scripts/*
-chmod ugo-x scripts/autopppd
+chmod -R a+rX scripts
+find scripts -type f | xargs chmod a-x
 chmod 0755 $RPM_BUILD_ROOT/%{_libdir}/pppd/%{version}/*.so
 mkdir -p $RPM_BUILD_ROOT/etc/pam.d
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/ppp
@@ -114,6 +114,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul 19 2005 Thomas Woerner <twoerner@redhat.com> 2.4.3-2
+- dropped all executable bits in scripts directory to prevent rpm requiring
+  programs used in there
+
 * Mon Jul 18 2005 Thomas Woerner <twoerner@redhat.com> 2.4.3-1
 - new version 2.4.3
   - updated patches: make, lib64, dontwriteetc, fix, fix64, no_strip,
