@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.3
-Release: 2
+Release: 2.1
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -22,6 +22,7 @@ Patch14: ppp-2.4.2-argv.patch
 Patch16: ppp-2.4.2-pppoatm-mtu.patch
 Patch17: ppp-2.4.2-pppoatm-make.patch
 Patch18: ppp-2.4.3-radiusplugin.patch
+Patch19: ppp-2.4.3-local.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -53,6 +54,7 @@ organization over a modem and phone line.
 %patch16 -p1 -b .atm-mtu
 %patch17 -p1 -b .atm-make
 %patch18 -p1 -b .radiusplugin
+%patch19 -p1 -b .local
 
 
 find . -type f -name "*.sample" | xargs rm -f 
@@ -114,6 +116,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul 19 2005 Thomas Woerner <twoerner@redhat.com> 2.4.3-2.1
+- additional patch for the scripts, thanks to Sammy (#163621)
+
 * Tue Jul 19 2005 Thomas Woerner <twoerner@redhat.com> 2.4.3-2
 - dropped all executable bits in scripts directory to prevent rpm requiring
   programs used in there
