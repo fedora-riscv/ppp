@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.3
-Release: 2.1
+Release: 3
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -116,6 +116,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Jul 31 2005 Florian La Roche <laroche@redhat.com>
+- rebuild for libpcap of the day
+
 * Tue Jul 19 2005 Thomas Woerner <twoerner@redhat.com> 2.4.3-2.1
 - additional patch for the scripts, thanks to Sammy (#163621)
 
