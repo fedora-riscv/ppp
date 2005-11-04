@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.3
-Release: 4
+Release: 5
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -23,6 +23,7 @@ Patch16: ppp-2.4.2-pppoatm-mtu.patch
 Patch17: ppp-2.4.2-pppoatm-make.patch
 Patch18: ppp-2.4.3-radiusplugin.patch
 Patch19: ppp-2.4.3-local.patch
+Patch20: ppp-2.4.3-ipv6-accept-remote.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -55,6 +56,7 @@ organization over a modem and phone line.
 %patch17 -p1 -b .atm-make
 %patch18 -p1 -b .radiusplugin
 %patch19 -p1 -b .local
+%patch20 -p1 -b .ipv6cp
 
 
 find . -type f -name "*.sample" | xargs rm -f 
@@ -116,6 +118,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Nov  4 2005 David Woodhouse <dwmw2@redhat.com> 2.4.3-5
+- Implement ipv6cp-accept-remote option
+
 * Fri Oct  7 2005 Tomas Mraz <tmraz@redhat.com> 2.4.3-4
 - use include instead of pam_stack in pam config
 
