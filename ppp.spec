@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.3
-Release: 5
+Release: 6
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -118,6 +118,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Nov 12 2005 Florian La Roche <laroche@redhat.com>
+- rebuild
+
 * Fri Nov  4 2005 David Woodhouse <dwmw2@redhat.com> 2.4.3-5
 - Implement ipv6cp-accept-remote option
 
