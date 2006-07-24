@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
-Version: 2.4.3
-Release: 6.2.2
+Version: 2.4.4
+Release: 1
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -11,19 +11,18 @@ Patch0: ppp-2.4.3-make.patch
 Patch1: ppp-2.3.6-sample.patch
 Patch2: ppp-2.4.2-libutil.patch
 Patch3: ppp-2.4.1-varargs.patch
-Patch4: ppp-2.4.3-lib64.patch
-Patch6: ppp-2.4.3-dontwriteetc.patch
+Patch4: ppp-2.4.4-lib64.patch
 Patch7: ppp-2.4.2-pie.patch
 Patch8: ppp-2.4.3-fix.patch
 Patch9: ppp-2.4.3-fix64.patch
 Patch11: ppp-2.4.2-change_resolv_conf.patch
-Patch13: ppp-2.4.3-no_strip.patch
-Patch14: ppp-2.4.2-argv.patch
+Patch13: ppp-2.4.4-no_strip.patch
 Patch16: ppp-2.4.2-pppoatm-mtu.patch
 Patch17: ppp-2.4.2-pppoatm-make.patch
-Patch18: ppp-2.4.3-radiusplugin.patch
 Patch19: ppp-2.4.3-local.patch
 Patch20: ppp-2.4.3-ipv6-accept-remote.patch
+Patch21: ppp-2.4.3-usepeerdns-var_run_ppp_resolv.conf.patch
+Patch22: ppp-2.4.4-cbcp.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap
@@ -45,19 +44,17 @@ organization over a modem and phone line.
 %patch3 -p1 -b .varargs
 # patch 4 depends on the -lutil in patch 0
 %patch4 -p1 -b .lib64
-%patch6 -p1 -b .dontwriteetc
 %patch7 -p1 -b .pie
 %patch8 -p1 -b .fix
 %patch9 -p1 -b .fix64
 %patch11 -p1 -b .change_resolv_conf
 %patch13 -p1 -b .no_strip
-%patch14 -p1 -b .argv
 %patch16 -p1 -b .atm-mtu
 %patch17 -p1 -b .atm-make
-%patch18 -p1 -b .radiusplugin
 %patch19 -p1 -b .local
 %patch20 -p1 -b .ipv6cp
-
+%patch21 -p1 -b .usepeerdns-var_run_ppp_resolv
+%patch22 -p1 -b .cbcp
 
 find . -type f -name "*.sample" | xargs rm -f 
 
@@ -69,10 +66,8 @@ make
 
 %install
 [ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT MANDIR=$RPM_BUILD_ROOT%{_mandir}/man8 BINDIR=$RPM_BUILD_ROOT%{_sbindir} LIBDIR=$RPM_BUILD_ROOT%{_libdir}/pppd/%{version}/
-
-## it shouldn't be SUID root be default
-#chmod 755 $RPM_BUILD_ROOT/usr/sbin/pppd
+export INSTROOT=$RPM_BUILD_ROOT
+make install install-etcppp
 
 chmod -R a+rX scripts
 find scripts -type f | xargs chmod a-x
@@ -118,6 +113,12 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jul 19 2006 Thomas Woerner <twoerner@redhat.com> 2.4.4-1
+- new version 2.4.4 with lots of fixes
+- fixed reesolv.conf docs (#165072)
+  Thanks to Matt Domsch for the initial patch 
+- enabled CBCP (#199278)
+
 * Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - 2.4.3-6.2.2
 - rebuild
 
