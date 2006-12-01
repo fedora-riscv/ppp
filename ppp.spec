@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 1
+Release: 2
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -25,7 +25,7 @@ Patch21: ppp-2.4.3-usepeerdns-var_run_ppp_resolv.conf.patch
 Patch22: ppp-2.4.4-cbcp.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
-BuildPrereq: pam-devel, libpcap
+BuildPrereq: pam-devel, libpcap-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate, libpcap >= 14:0.8.3-6
 
 %description
@@ -113,6 +113,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Dec  1 2006 Thomas Woerner <twoerner@redhat.com> 2.4.4-2
+- fixed build requirement for libpcap (#217661)
+
 * Wed Jul 19 2006 Thomas Woerner <twoerner@redhat.com> 2.4.4-1
 - new version 2.4.4 with lots of fixes
 - fixed reesolv.conf docs (#165072)
