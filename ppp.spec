@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 2
+Release: 3
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -56,6 +56,9 @@ organization over a modem and phone line.
 %patch21 -p1 -b .usepeerdns-var_run_ppp_resolv
 %patch22 -p1 -b .cbcp
 
+rm -f scripts/*.local
+rm -f scripts/*.change_resolv_conf
+rm -f scripts/*.usepeerdns-var_run_ppp_resolv
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
@@ -113,6 +116,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Nov 09 2007 Martin Nagy <mnagy@redhat.com> 2.4.4-3
+- removed undesired files from the package (#241753)
+
 * Fri Dec  1 2006 Thomas Woerner <twoerner@redhat.com> 2.4.4-2
 - fixed build requirement for libpcap (#217661)
 
