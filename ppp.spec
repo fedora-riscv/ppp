@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -23,6 +23,7 @@ Patch19: ppp-2.4.3-local.patch
 Patch20: ppp-2.4.3-ipv6-accept-remote.patch
 Patch21: ppp-2.4.3-usepeerdns-var_run_ppp_resolv.conf.patch
 Patch22: ppp-2.4.4-cbcp.patch
+Patch23: ppp-2.4.2-dontwriteetc.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap-devel
@@ -55,6 +56,7 @@ organization over a modem and phone line.
 %patch20 -p1 -b .ipv6cp
 %patch21 -p1 -b .usepeerdns-var_run_ppp_resolv
 %patch22 -p1 -b .cbcp
+%patch23 -p1 -b .dontwriteetc
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -116,6 +118,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Mar 03 2008 Martin Nagy <mnagy@redhat.com> 2.4.4-5
+- put logs into /var/log/ppp (#118837)
+
 * Mon Feb 11 2008 Martin Nagy <mnagy@redhat.com> 2.4.4-4
 - rebuild for gcc-4.3
 
