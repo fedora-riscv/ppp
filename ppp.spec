@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -24,6 +24,8 @@ Patch20: ppp-2.4.3-ipv6-accept-remote.patch
 Patch21: ppp-2.4.3-usepeerdns-var_run_ppp_resolv.conf.patch
 Patch22: ppp-2.4.4-cbcp.patch
 Patch23: ppp-2.4.2-dontwriteetc.patch
+Patch24: ppp-2.4.4-closelog.patch
+Patch25: ppp-2.4.4-response_len.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap-devel
@@ -35,6 +37,13 @@ documentation for PPP support. The PPP protocol provides a method for
 transmitting datagrams over serial point-to-point links. PPP is
 usually used to dial in to an ISP (Internet Service Provider) or other
 organization over a modem and phone line.
+
+%package devel
+Summary: Headers for ppp plugin development
+Group: Development/Libraries
+
+%description devel
+This package contains the header files for building plugins for ppp.
 
 %prep
 %setup  -q
@@ -57,6 +66,8 @@ organization over a modem and phone line.
 %patch21 -p1 -b .usepeerdns-var_run_ppp_resolv
 %patch22 -p1 -b .cbcp
 %patch23 -p1 -b .dontwriteetc
+%patch24 -p1 -b .closelog
+%patch25 -p1 -b .response_len
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -104,7 +115,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/pppd-radattr.8*
 %{_mandir}/man8/pppd-radius.8*
 %{_mandir}/man8/pppstats.8*
-%{_includedir}/pppd
 %{_libdir}/pppd
 %dir /etc/ppp
 %dir /var/run/ppp
@@ -114,10 +124,19 @@ rm -rf $RPM_BUILD_ROOT
 %config /etc/ppp/pap-secrets
 %config /etc/pam.d/ppp
 %config /etc/logrotate.d/ppp
-%doc FAQ PLUGINS README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
+%doc FAQ README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
+%files devel
+%defattr(-,root,root)
+%{_includedir}/pppd
+%doc PLUGINS
 
 %changelog
+* Thu Mar 06 2008 Martin Nagy <mnagy@redhat.com> 2.4.4-6
+- call closelog earlier (#222295)
+- fix ChapMS2 (#217076)
+- moving header files to new -devel package (#203542)
+
 * Mon Mar 03 2008 Martin Nagy <mnagy@redhat.com> 2.4.4-5
 - put logs into /var/log/ppp (#118837)
 
