@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: distributable
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -26,6 +26,7 @@ Patch22: ppp-2.4.4-cbcp.patch
 Patch23: ppp-2.4.2-dontwriteetc.patch
 Patch24: ppp-2.4.4-closelog.patch
 Patch25: ppp-2.4.4-response_len.patch
+Patch26: ppp-2.4.4-new_speeds.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap-devel
@@ -68,6 +69,7 @@ This package contains the header files for building plugins for ppp.
 %patch23 -p1 -b .dontwriteetc
 %patch24 -p1 -b .closelog
 %patch25 -p1 -b .response_len
+%patch26 -p1 -b .new_speeds
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -132,6 +134,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Tue May 13 2008 Martin Nagy <mnagy@redhat.com> 2.4.4-7
+- add new speeds, patch by Jason Vas Dias (#446132)
+
 * Thu Mar 06 2008 Martin Nagy <mnagy@redhat.com> 2.4.4-6
 - call closelog earlier (#222295)
 - fix ChapMS2 (#217076)
