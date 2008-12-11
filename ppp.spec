@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -27,6 +27,7 @@ Patch23: ppp-2.4.2-dontwriteetc.patch
 Patch24: ppp-2.4.4-closelog.patch
 Patch25: ppp-2.4.4-response_len.patch
 Patch26: ppp-2.4.4-new_speeds.patch
+Patch27: ppp-2.4.4-bogus_dns_addr.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap-devel
@@ -70,6 +71,7 @@ This package contains the header files for building plugins for ppp.
 %patch24 -p1 -b .closelog
 %patch25 -p1 -b .response_len
 %patch26 -p1 -b .new_speeds
+%patch27 -p1 -b .bogus_dns_addr
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -134,6 +136,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Thu Dec 11 2008 Jiri Skala <jskala@redhat.com> 2.4.4.-9
+- fixed #467004 PPP sometimes gets incorrect DNS servers for mobile broadband connections
+
 * Thu Aug 28 2008 Tom "spot" Callaway <tcallawa@redhat.com> 2.4.4-8
 - fix license tag
 
