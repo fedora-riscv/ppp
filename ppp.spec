@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -136,6 +136,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.4-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+
 * Thu Dec 11 2008 Jiri Skala <jskala@redhat.com> 2.4.4.-9
 - fixed #467004 PPP sometimes gets incorrect DNS servers for mobile broadband connections
 
