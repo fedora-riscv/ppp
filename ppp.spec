@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -123,11 +123,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir /etc/ppp
 %dir /var/run/ppp
 %attr(700, root, root) %dir /var/log/ppp
-%config /etc/ppp/chap-secrets
-%config /etc/ppp/options
-%config /etc/ppp/pap-secrets
-%config /etc/pam.d/ppp
-%config /etc/logrotate.d/ppp
+%config(noreplace) /etc/ppp/chap-secrets
+%config(noreplace) /etc/ppp/options
+%config(noreplace) /etc/ppp/pap-secrets
+%config(noreplace) /etc/pam.d/ppp
+%config(noreplace) /etc/logrotate.d/ppp
 %doc FAQ README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
 
 %files devel
@@ -136,6 +136,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Fri Mar 06 2009 - Jiri Skala <jskala@redhat.com> 2.4.4-11
+- fixed #488764 - package upgrade should not replace configuration files
+
 * Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.4-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
