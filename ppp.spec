@@ -1,9 +1,10 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 13%{?dist}
+Release: 14%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
+URL: http://www.samba.org/ppp
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
 Source1: ppp-2.3.5-pamd.conf
 Source2: ppp.logrotate
@@ -136,6 +137,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Thu Oct 08 2009 Jiri Skala <jskala@redhat.com>  - 2.4.4-14
+- fixed #519042 - ppp package is missing URL in spec
+- fixed #524575 - ppp: no_strip patch modifies backup files created by previous patches
+
 * Wed Sep 16 2009 Tomas Mraz <tmraz@redhat.com> 2.4.4-13
 - use password-auth common PAM configuration instead of system-auth
 
