@@ -68,23 +68,9 @@
  	$(INSTALL) -c -m 444 pppd-radius.8 $(MANDIR)
  	$(INSTALL) -c -m 444 pppd-radattr.8 $(MANDIR)
  
---- ppp-2.4.4/pppd/plugins/rp-pppoe/Makefile.linux.make.no_strip	2006-06-04 07:07:46.000000000 +0200
-+++ ppp-2.4.4/pppd/plugins/rp-pppoe/Makefile.linux.make	2006-07-19 14:29:41.000000000 +0200
-@@ -39,9 +39,9 @@
- 
- install: all
- 	$(INSTALL) -d -m 755 $(LIBDIR)
--	$(INSTALL) -s -c -m 4550 rp-pppoe.so $(LIBDIR)
-+	$(INSTALL) -c -m 4550 rp-pppoe.so $(LIBDIR)
- 	$(INSTALL) -d -m 755 $(BINDIR)
--	$(INSTALL) -s -c -m 555 pppoe-discovery $(BINDIR)
-+	$(INSTALL) -c -m 555 pppoe-discovery $(BINDIR)
- 
- clean:
- 	rm -f *.o *.so
 --- ppp-2.4.4/pppd/plugins/rp-pppoe/Makefile.linux.no_strip	2006-07-19 14:29:41.000000000 +0200
 +++ ppp-2.4.4/pppd/plugins/rp-pppoe/Makefile.linux	2006-07-19 14:29:41.000000000 +0200
-@@ -39,9 +39,9 @@
+@@ -43,9 +43,9 @@
  
  install: all
  	$(INSTALL) -d -m 755 $(LIBDIR)
@@ -95,7 +81,7 @@
 +	$(INSTALL) -c -m 555 pppoe-discovery $(BINDIR)
  
  clean:
- 	rm -f *.o *.so
+ 	rm -f *.o *.so pppoe-discovery
 --- ppp-2.4.4/pppd/Makefile.linux.lib64.no_strip	2006-07-19 14:29:41.000000000 +0200
 +++ ppp-2.4.4/pppd/Makefile.linux.lib64	2006-07-19 14:29:41.000000000 +0200
 @@ -99,7 +99,7 @@

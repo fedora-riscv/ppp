@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -127,6 +127,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Sun Nov 22 2009 Jiri Skala <jskala@redhat.com>  - 2.4.5-2
+- updated patches (make local succeeded, koji failed)
+
 * Fri Nov 20 2009 Jiri Skala <jskala@redhat.com>  - 2.4.5-1
 - updated to latest upstream sources (#538058)
 
