@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
-Version: 2.4.4
-Release: 14%{?dist}
+Version: 2.4.5
+Release: 1%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -18,17 +18,12 @@ Patch8: ppp-2.4.3-fix.patch
 Patch9: ppp-2.4.3-fix64.patch
 Patch11: ppp-2.4.2-change_resolv_conf.patch
 Patch13: ppp-2.4.4-no_strip.patch
-Patch16: ppp-2.4.2-pppoatm-mtu.patch
 Patch17: ppp-2.4.2-pppoatm-make.patch
 Patch19: ppp-2.4.3-local.patch
 Patch20: ppp-2.4.3-ipv6-accept-remote.patch
 Patch21: ppp-2.4.3-usepeerdns-var_run_ppp_resolv.conf.patch
 Patch22: ppp-2.4.4-cbcp.patch
 Patch23: ppp-2.4.2-dontwriteetc.patch
-Patch24: ppp-2.4.4-closelog.patch
-Patch25: ppp-2.4.4-response_len.patch
-Patch26: ppp-2.4.4-new_speeds.patch
-Patch27: ppp-2.4.4-bogus_dns_addr.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap-devel
@@ -62,17 +57,12 @@ This package contains the header files for building plugins for ppp.
 %patch9 -p1 -b .fix64
 %patch11 -p1 -b .change_resolv_conf
 %patch13 -p1 -b .no_strip
-%patch16 -p1 -b .atm-mtu
 %patch17 -p1 -b .atm-make
 %patch19 -p1 -b .local
 %patch20 -p1 -b .ipv6cp
 %patch21 -p1 -b .usepeerdns-var_run_ppp_resolv
 %patch22 -p1 -b .cbcp
 %patch23 -p1 -b .dontwriteetc
-%patch24 -p1 -b .closelog
-%patch25 -p1 -b .response_len
-%patch26 -p1 -b .new_speeds
-%patch27 -p1 -b .bogus_dns_addr
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -137,6 +127,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Fri Nov 20 2009 Jiri Skala <jskala@redhat.com>  - 2.4.5-1
+- updated to latest upstream sources (#538058)
+
 * Thu Oct 08 2009 Jiri Skala <jskala@redhat.com>  - 2.4.4-14
 - fixed #519042 - ppp package is missing URL in spec
 - fixed #524575 - ppp: no_strip patch modifies backup files created by previous patches
