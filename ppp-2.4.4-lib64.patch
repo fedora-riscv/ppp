@@ -26,7 +26,7 @@
  
  #***********************************************************************
  
--DESTDIR = @DESTDIR@
+-DESTDIR = $(INSTROOT)@DESTDIR@
 -LIBDIR = $(DESTDIR)/lib/pppd/$(VERSION)
 +DESTDIR = $(INSTROOT)@DESTDIR@
 +LIBDIR = $(DESTDIR)/lib/$(shell gcc -print-multi-os-directory 2> /dev/null)/pppd/$(VERSION)
@@ -42,7 +42,7 @@
 -LIBDIR = $(DESTDIR)/lib/pppd/$(VERSION)
 +LIBDIR = $(DESTDIR)/lib/$(shell $(CC) -print-multi-os-directory 2> /dev/null)/pppd/$(VERSION)
  
- SUBDIRS := rp-pppoe pppoatm
+ SUBDIRS := rp-pppoe pppoatm pppol2tp
  # Uncomment the next line to include the radius authentication plugin
 --- ppp-2.4.4/pppd/Makefile.linux.lib64	2006-07-24 20:43:40.000000000 +0200
 +++ ppp-2.4.4/pppd/Makefile.linux	2006-07-24 20:43:40.000000000 +0200
