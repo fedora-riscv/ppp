@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 11%{?dist}
+Release: 12%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -28,6 +28,7 @@ Patch24: ppp-2.4.4-closelog.patch
 Patch25: ppp-2.4.4-response_len.patch
 Patch26: ppp-2.4.4-new_speeds.patch
 Patch27: ppp-2.4.4-bogus_dns_addr.patch
+Patch28: ppp-2.4.4-fd_leak.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap-devel
@@ -72,6 +73,7 @@ This package contains the header files for building plugins for ppp.
 %patch25 -p1 -b .response_len
 %patch26 -p1 -b .new_speeds
 %patch27 -p1 -b .bogus_dns_addr
+%patch28 -p1 -b .fd_leak
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -136,6 +138,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Wed Jan 06 2010 - Jiri Skala <jskala@redhat.com> 2.4.4-12
+- fixed #467004 - PPP sometimes gets incorrect DNS servers for mobile connection
+- added close-on-exec due to #498789
+
 * Fri Mar 06 2009 - Jiri Skala <jskala@redhat.com> 2.4.4-11
 - fixed #488764 - package upgrade should not replace configuration files
 
