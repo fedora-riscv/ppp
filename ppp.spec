@@ -1,7 +1,7 @@
-Summary: The PPP (Point-to-Point Protocol) daemon.
+Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -25,8 +25,8 @@ Patch21: ppp-2.4.3-usepeerdns-var_run_ppp_resolv.conf.patch
 Patch22: ppp-2.4.4-cbcp.patch
 Patch23: ppp-2.4.2-dontwriteetc.patch
 
-BuildRoot: %{_tmppath}/%{name}-root
-BuildPrereq: pam-devel, libpcap-devel
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRequires: pam-devel, libpcap-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate, libpcap >= 14:0.8.3-6
 
 %description
@@ -72,7 +72,7 @@ find . -type f -name "*.sample" | xargs rm -f
 %build
 #find . -name 'Makefile*' -print0 | xargs -0 perl -pi.no_strip -e "s: -s : :g"
 RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall"
-./configure
+%configure
 make
 
 %install
@@ -127,6 +127,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Fri Jan 22 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-3
+- fixed some rpmlint complains
+
 * Sun Nov 22 2009 Jiri Skala <jskala@redhat.com>  - 2.4.5-2
 - updated patches (make local succeeded, koji failed)
 
