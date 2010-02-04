@@ -219,7 +219,7 @@ diff -up ppp-2.4.4/pppd/main.c.fd_leak ppp-2.4.4/pppd/main.c
 +    FILE *f;
 +
 +#if defined(O_CLOEXEC) && defined(SOCK_CLOEXEC)
-+    if (cloexec_exec != -1) {
++    if (cloexec_works != -1) {
 +        f = fopen(path, "re");
 +        if (f != NULL) {
 +            check_cloexec(fileno(f));
