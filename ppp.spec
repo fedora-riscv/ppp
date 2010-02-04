@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.5
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -128,6 +128,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Thu Feb 04 2010 Jiri Skala <jskala@redhat.com> 2.4.5-4
+- fixed one line in fd_leak patch
+
 * Wed Feb 03 2010 Jiri Skala <jskala@redhat.com> 2.4.5-3
 - fixes #541107 fd_leak patch 
 
