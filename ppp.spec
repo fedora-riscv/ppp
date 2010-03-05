@@ -21,7 +21,6 @@ Patch13: ppp-2.4.4-no_strip.patch
 Patch17: ppp-2.4.2-pppoatm-make.patch
 Patch19: ppp-2.4.3-local.patch
 Patch20: ppp-2.4.3-ipv6-accept-remote.patch
-Patch21: ppp-2.4.3-usepeerdns-var_run_ppp_resolv.conf.patch
 Patch22: ppp-2.4.4-cbcp.patch
 Patch23: ppp-2.4.2-dontwriteetc.patch
 Patch24: ppp-2.4.4-fd_leak.patch
@@ -62,7 +61,6 @@ This package contains the header files for building plugins for ppp.
 %patch17 -p1 -b .atm-make
 %patch19 -p1 -b .local
 %patch20 -p1 -b .ipv6cp
-%patch21 -p1 -b .usepeerdns-var_run_ppp_resolv
 %patch22 -p1 -b .cbcp
 %patch23 -p1 -b .dontwriteetc
 %patch24 -p1 -b .fd_leak
