@@ -1,0 +1,12 @@
+diff -up ppp-2.4.5/pppd/plugins/pppol2tp/Makefile.linux.instroot ppp-2.4.5/pppd/plugins/pppol2tp/Makefile.linux
+--- ppp-2.4.5/pppd/plugins/pppol2tp/Makefile.linux.instroot	2010-03-15 13:35:54.521597076 +0100
++++ ppp-2.4.5/pppd/plugins/pppol2tp/Makefile.linux	2010-03-15 13:36:18.707597787 +0100
+@@ -6,7 +6,7 @@ INSTALL	= install
+ 
+ #***********************************************************************
+ 
+-DESTDIR = @DESTDIR@
++DESTDIR = $(INSTROOT)@DESTDIR@
+ LIBDIR = $(DESTDIR)/lib/pppd/$(VERSION)
+ 
+ VERSION = $(shell awk -F '"' '/VERSION/ { print $$2; }' ../../patchlevel.h)

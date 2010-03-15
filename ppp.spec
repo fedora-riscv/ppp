@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.5
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -20,11 +20,11 @@ Patch13: ppp-2.4.4-no_strip.patch
 Patch17: ppp-2.4.2-pppoatm-make.patch
 Patch19: ppp-2.4.3-local.patch
 Patch20: ppp-2.4.3-ipv6-accept-remote.patch
-Patch21: ppp-2.4.3-usepeerdns-var_run_ppp_resolv.conf.patch
 Patch22: ppp-2.4.4-cbcp.patch
 Patch23: ppp-2.4.2-dontwriteetc.patch
 Patch24: ppp-2.4.4-fd_leak.patch
 Patch25: ppp-2.4.5-var_run_ppp.patch
+Patch26: ppp-2.4.5-instroot.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap-devel
@@ -61,11 +61,11 @@ This package contains the header files for building plugins for ppp.
 %patch17 -p1 -b .atm-make
 %patch19 -p1 -b .local
 %patch20 -p1 -b .ipv6cp
-%patch21 -p1 -b .usepeerdns-var_run_ppp_resolv
 %patch22 -p1 -b .cbcp
 %patch23 -p1 -b .dontwriteetc
 %patch24 -p1 -b .fd_leak
 %patch25 -p1 -b .var_run_ppp
+%patch26 -p1 -b .instroot
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -130,6 +130,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Mon Mar 15 2010 Jiri Skala <jskala@redhat.com> 2.4.5-6
+- fixes #572174 - pppol2tp plugins not installed
+- merged resolv.conf patches
+
 * Fri Feb 12 2010 Jiri Skala <jskala@redhat.com> 2.4.5-5
 - fixes #560014 - SELinux is preventing /usr/sbin/pppd "read write" access on pppd2.tdb
 
