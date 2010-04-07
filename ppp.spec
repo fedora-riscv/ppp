@@ -114,6 +114,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/pppd-radattr.8*
 %{_mandir}/man8/pppd-radius.8*
 %{_mandir}/man8/pppstats.8*
+%{_mandir}/man8/pppoe-discovery.8*
 %{_libdir}/pppd
 %dir /etc/ppp
 %dir /var/run/ppp
@@ -130,7 +131,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/pppd
 %doc PLUGINS
 
-%changeloga
+%changelog
 * Wed Apr 07 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-8
 - added pppoe-discovery(8)
 
