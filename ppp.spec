@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -26,6 +26,7 @@ Patch22: ppp-2.4.4-cbcp.patch
 Patch23: ppp-2.4.2-dontwriteetc.patch
 Patch24: ppp-2.4.4-fd_leak.patch
 Patch25: ppp-2.4.5-var_run_ppp.patch
+Patch26: ppp-2.4.5-manpg.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel
@@ -67,6 +68,7 @@ This package contains the header files for building plugins for ppp.
 %patch23 -p1 -b .dontwriteetc
 %patch24 -p1 -b .fd_leak
 %patch25 -p1 -b .var_run_ppp
+%patch26 -p1 -b .manpg
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -114,6 +116,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/pppd-radattr.8*
 %{_mandir}/man8/pppd-radius.8*
 %{_mandir}/man8/pppstats.8*
+%{_mandir}/man8/pppoe-discovery.8*
 %{_libdir}/pppd
 %dir /etc/ppp
 %dir /var/run/ppp
@@ -131,6 +134,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Wed Apr 07 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-7
+- added pppoe-discovery(8)
+
 * Fri Feb 12 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-6
 - fixes #560014 - SELinux is preventing /usr/sbin/pppd "read write" access on pppd2.tdb
 
