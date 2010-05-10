@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.4
-Release: 12%{?dist}
+Release: 13%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -29,6 +29,7 @@ Patch25: ppp-2.4.4-response_len.patch
 Patch26: ppp-2.4.4-new_speeds.patch
 Patch27: ppp-2.4.4-bogus_dns_addr.patch
 Patch28: ppp-2.4.4-fd_leak.patch
+Patch29: ppp-2.4.4-gigaword.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap-devel
@@ -74,6 +75,7 @@ This package contains the header files for building plugins for ppp.
 %patch26 -p1 -b .new_speeds
 %patch27 -p1 -b .bogus_dns_addr
 %patch28 -p1 -b .fd_leak
+%patch29 -p1 -b .gigaword
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -138,6 +140,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Mon May 10 2010 - Jiri Skala <jskala@redhat.com> 2.4.4-13
+- removed ppp-2.4.3 from sources
+- fixes #521167 - RFE: Gigawords support in ppp
+
 * Wed Jan 06 2010 - Jiri Skala <jskala@redhat.com> 2.4.4-12
 - fixed #467004 - PPP sometimes gets incorrect DNS servers for mobile connection
 - added close-on-exec due to #498789
