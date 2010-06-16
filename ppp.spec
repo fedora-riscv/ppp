@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -26,9 +26,10 @@ Patch23: ppp-2.4.2-dontwriteetc.patch
 Patch24: ppp-2.4.4-fd_leak.patch
 Patch25: ppp-2.4.5-var_run_ppp.patch
 Patch26: ppp-2.4.5-manpg.patch
+Patch27: ppp-2.4.5-eaptls-mppe-0.98.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: pam-devel, libpcap-devel
+BuildRequires: pam-devel, libpcap-devel, openssl-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate, libpcap >= 14:0.8.3-6
 
 %description
@@ -67,6 +68,7 @@ This package contains the header files for building plugins for ppp.
 %patch24 -p1 -b .fd_leak
 %patch25 -p1 -b .var_run_ppp
 %patch26 -p1 -b .manpg
+%patch27 -p1 -b .eaptls
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -119,6 +121,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir /etc/ppp
 %dir /var/run/ppp
 %attr(700, root, root) %dir /var/log/ppp
+%config(noreplace) /etc/ppp/eaptls-client
+%config(noreplace) /etc/ppp/eaptls-server
 %config(noreplace) /etc/ppp/chap-secrets
 %config(noreplace) /etc/ppp/options
 %config(noreplace) /etc/ppp/pap-secrets
@@ -132,6 +136,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Wed Jun 16 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-9
+- included eap-tls patch
+
 * Wed Apr 07 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-8
 - added pppoe-discovery(8)
 
