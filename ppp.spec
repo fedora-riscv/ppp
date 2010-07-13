@@ -1,7 +1,7 @@
 Summary: The PPP (Point-to-Point Protocol) daemon.
 Name: ppp
 Version: 2.4.5
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
@@ -26,6 +26,7 @@ Patch24: ppp-2.4.4-fd_leak.patch
 Patch25: ppp-2.4.5-var_run_ppp.patch
 Patch26: ppp-2.4.5-instroot.patch
 Patch27: ppp-2.4.5-manpg.patch
+Patch28: ppp-2.4.5-ppp_resolv.patch
 
 BuildRoot: %{_tmppath}/%{name}-root
 BuildPrereq: pam-devel, libpcap-devel
@@ -68,10 +69,12 @@ This package contains the header files for building plugins for ppp.
 %patch25 -p1 -b .var_run_ppp
 %patch26 -p1 -b .instroot
 %patch27 -p1 -b .manpg
+%patch28 -p1 -b .ppp_resolv
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
 rm -f scripts/*.usepeerdns-var_run_ppp_resolv
+rm -f scripts/*.ppp_resolv
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
@@ -133,6 +136,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Tue Jul 13 2010 Jiri Skala <jskala@redhat.com> 2.4.5-9
+- fixes #613717
+
 * Wed Apr 07 2010 Jiri Skala <jskala@redhat.com> 2.4.5-8
 - added man page of pppoe-discovery
 
