@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -27,6 +27,7 @@ Patch24: ppp-2.4.4-fd_leak.patch
 Patch25: ppp-2.4.5-var_run_ppp.patch
 Patch26: ppp-2.4.5-manpg.patch
 Patch27: ppp-2.4.5-eaptls-mppe-0.98.patch
+Patch28: ppp-2.4.5-ppp_resolv.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
@@ -69,10 +70,12 @@ This package contains the header files for building plugins for ppp.
 %patch25 -p1 -b .var_run_ppp
 %patch26 -p1 -b .manpg
 %patch27 -p1 -b .eaptls
+%patch28 -p1 -b .ppp_resolv
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
 rm -f scripts/*.usepeerdns-var_run_ppp_resolv
+rm -f scripts/*.ppp_resolv
 find . -type f -name "*.sample" | xargs rm -f 
 
 %build
@@ -136,6 +139,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Tue Jul 13 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-10
+- fixes #613717 - Missing line in example script ip-up.local.add
+- removed /usr/kerberos/include from eaptls patch
+
 * Wed Jun 16 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-9
 - included eap-tls patch
 

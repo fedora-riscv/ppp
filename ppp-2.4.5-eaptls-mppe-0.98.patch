@@ -278,7 +278,7 @@ diff -Naur ppp-2.4.5/pppd/Makefile.linux ppp-2.4.5-eaptls-mppe-0.98/pppd/Makefil
  
 +# EAP-TLS
 +ifdef USE_EAPTLS
-+CFLAGS += -DUSE_EAPTLS=1 -I/usr/kerberos/include
++CFLAGS += -DUSE_EAPTLS=1
 +LIBS += -lssl -lcrypto
 +PPPDSRC += eap-tls.c
 +HEADERS += eap-tls.h
