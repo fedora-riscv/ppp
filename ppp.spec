@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -78,6 +78,8 @@ rm -f scripts/*.usepeerdns-var_run_ppp_resolv
 rm -f scripts/*.ppp_resolv
 find . -type f -name "*.sample" | xargs rm -f 
 
+rm -f include/linux/if_pppol2tp.h
+
 %build
 #find . -name 'Makefile*' -print0 | xargs -0 perl -pi.no_strip -e "s: -s : :g"
 RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall"
@@ -139,6 +141,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Thu Aug 05 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-11
+- fixes #617625 - FTBFS in ppp due to change in kernel-headers
+- fixes pppol2tp Makefile
+
 * Tue Jul 13 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-10
 - fixes #613717 - Missing line in example script ip-up.local.add
 - removed /usr/kerberos/include from eaptls patch
