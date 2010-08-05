@@ -74,3 +74,16 @@
  #else /* __STDC__ */
  #define _PATH_PLUGIN	"/usr/lib/pppd"
  #endif /* __STDC__ */
+--- ppp-2.4.5/pppd/plugins/pppol2tp/Makefile.linux.lib64	2009-11-16 23:26:07.000000000 +0100
++++ ppp-2.4.5/pppd/plugins/pppol2tp/Makefile.linux	2010-08-05 16:33:53.964898629 +0200
+@@ -6,8 +6,8 @@
+ 
+ #***********************************************************************
+ 
+-DESTDIR = @DESTDIR@
+-LIBDIR = $(DESTDIR)/lib/pppd/$(VERSION)
++DESTDIR = $(INSTROOT)@DESTDIR@
++LIBDIR = $(DESTDIR)/lib/$(shell gcc -print-multi-os-directory 2> /dev/null)/pppd/$(VERSION)
+ 
+ VERSION = $(shell awk -F '"' '/VERSION/ { print $$2; }' ../../patchlevel.h)
+ 

@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -78,6 +78,8 @@ rm -f scripts/*.usepeerdns-var_run_ppp_resolv
 rm -f scripts/*.ppp_resolv
 find . -type f -name "*.sample" | xargs rm -f 
 
+rm -f include/linux/if_pppol2tp.h
+
 %build
 #find . -name 'Makefile*' -print0 | xargs -0 perl -pi.no_strip -e "s: -s : :g"
 RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall"
@@ -137,6 +139,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Thu Aug 05 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-10
+- fixes #572174 - pppol2tp plugins not installed
+- removed proprietary if_pppol2tp.h
+
 * Tue Jul 13 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-9
 - fixes #613717 - Missing line in example script ip-up.local.add
 
