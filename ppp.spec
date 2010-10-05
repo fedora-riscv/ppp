@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 11%{?dist}
+Release: 12%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -26,7 +26,7 @@ Patch23: ppp-2.4.2-dontwriteetc.patch
 Patch24: ppp-2.4.4-fd_leak.patch
 Patch25: ppp-2.4.5-var_run_ppp.patch
 Patch26: ppp-2.4.5-manpg.patch
-Patch27: ppp-2.4.5-eaptls-mppe-0.98.patch
+Patch27: ppp-2.4.5-eaptls-mppe-0.99.patch
 Patch28: ppp-2.4.5-ppp_resolv.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -133,7 +133,7 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) /etc/ppp/pap-secrets
 %config(noreplace) /etc/pam.d/ppp
 %config(noreplace) /etc/logrotate.d/ppp
-%doc FAQ README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample
+%doc FAQ README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample README.eap-tls
 
 %files devel
 %defattr(-,root,root)
@@ -141,6 +141,11 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Wed Sep 29 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-12
+- fixes #637513 - Missing: README.eap-tls
+- updated to latest eaptls upstream
+- fixes #637886 - EAP-TLS not working with enabled PPP Multilink Framing option
+
 * Thu Aug 05 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-11
 - fixes #617625 - FTBFS in ppp due to change in kernel-headers
 - fixes pppol2tp Makefile
