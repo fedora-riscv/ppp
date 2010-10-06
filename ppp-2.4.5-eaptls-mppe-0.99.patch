@@ -244,15 +244,6 @@ diff -Naur ppp-2.4.5/linux/Makefile.top ppp-2.4.5-eaptls-mppe-0.99/linux/Makefil
 diff -Naur ppp-2.4.5/pppd/Makefile.linux ppp-2.4.5-eaptls-mppe-0.99/pppd/Makefile.linux
 --- ppp-2.4.5/pppd/Makefile.linux	2009-11-16 23:26:07.000000000 +0100
 +++ ppp-2.4.5-eaptls-mppe-0.99/pppd/Makefile.linux	2010-10-01 15:17:54.207272272 +0200
-@@ -33,7 +33,7 @@
- # CC = gcc
- #
- COPTS = -O2 -pipe -Wall -g
--LIBS =
-+LIBS = 
- 
- # Uncomment the next 2 lines to include support for Microsoft's
- # MS-CHAP authentication protocol.  Also, edit plugins/radius/Makefile.linux.
 @@ -73,6 +73,9 @@
  # Enable EAP SRP-SHA1 authentication (requires libsrp)
  #USE_SRP=y
@@ -270,7 +261,7 @@ diff -Naur ppp-2.4.5/pppd/Makefile.linux ppp-2.4.5-eaptls-mppe-0.99/pppd/Makefil
 +# EAP-TLS
 +ifdef USE_EAPTLS
 +CFLAGS += -DUSE_EAPTLS=1 -I/usr/kerberos/include
-+LIBS += -lssl
++LIBS += -lssl -lcrypto
 +PPPDSRC += eap-tls.c
 +HEADERS += eap-tls.h
 +PPPDOBJS += eap-tls.o
