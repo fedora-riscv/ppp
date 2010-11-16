@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 12%{?dist}
+Release: 13%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -141,6 +141,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Tue Nov 16 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-13
+- fixes #565294 - SELinux is preventing /sbin/consoletype access to a leaked packet_socket fd
+
 * Wed Sep 29 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-12
 - fixes #637513 - Missing: README.eap-tls
 - updated to latest eaptls upstream
