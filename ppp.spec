@@ -1,13 +1,14 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 13%{?dist}
+Release: 14%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
 Source1: ppp-2.3.5-pamd.conf
 Source2: ppp.logrotate
+Source3: ppp-tmpfs.conf
 Patch0: ppp-2.4.3-make.patch
 Patch1: ppp-2.3.6-sample.patch
 Patch2: ppp-2.4.2-libutil.patch
@@ -32,6 +33,7 @@ Patch28: ppp-2.4.5-ppp_resolv.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate, libpcap >= 14:0.8.3-6
+Requires: systemd-units
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon and
@@ -95,15 +97,18 @@ chmod -R a+rX scripts
 find scripts -type f | xargs chmod a-x
 chmod 0755 $RPM_BUILD_ROOT/%{_libdir}/pppd/%{version}/*.so
 mkdir -p $RPM_BUILD_ROOT/etc/pam.d
-install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/etc/pam.d/ppp
+install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pam.d/ppp
 
 # Provide pointers for people who expect stuff in old places
-mkdir -p $RPM_BUILD_ROOT/var/log/ppp
-mkdir -p $RPM_BUILD_ROOT/var/run/ppp
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/log/ppp
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/ppp
+
+install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d
+install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d/ppp.conf
 
 # Logrotate script
-mkdir -p $RPM_BUILD_ROOT/etc/logrotate.d
-install -m 644 %{SOURCE2} $RPM_BUILD_ROOT/etc/logrotate.d/ppp
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
+install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -124,15 +129,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/pppoe-discovery.8*
 %{_libdir}/pppd
 %dir /etc/ppp
-%dir /var/run/ppp
-%attr(700, root, root) %dir /var/log/ppp
-%config(noreplace) /etc/ppp/eaptls-client
-%config(noreplace) /etc/ppp/eaptls-server
-%config(noreplace) /etc/ppp/chap-secrets
-%config(noreplace) /etc/ppp/options
-%config(noreplace) /etc/ppp/pap-secrets
-%config(noreplace) /etc/pam.d/ppp
-%config(noreplace) /etc/logrotate.d/ppp
+%dir %{_localstatedir}/run/ppp
+%attr(700, root, root) %dir %{_localstatedir}/log/ppp
+%config %{_sysconfdir}/tmpfiles.d/ppp.conf
+%config(noreplace) %{_sysconfdir}/ppp/eaptls-client
+%config(noreplace) %{_sysconfdir}/ppp/eaptls-server
+%config(noreplace) %{_sysconfdir}/ppp/chap-secrets
+%config(noreplace) %{_sysconfdir}/ppp/options
+%config(noreplace) %{_sysconfdir}/ppp/pap-secrets
+%config(noreplace) %{_sysconfdir}/pam.d/ppp
+%config(noreplace) %{_sysconfdir}/logrotate.d/ppp
 %doc FAQ README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample README.eap-tls
 
 %files devel
@@ -141,6 +147,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Tue Nov 30 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-14
+- fixes #656671 - /var/run and /var/lock on tmpfs
+- replaced paths /var /etc by macros
+
 * Tue Nov 16 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-13
 - fixes #565294 - SELinux is preventing /sbin/consoletype access to a leaked packet_socket fd
 
