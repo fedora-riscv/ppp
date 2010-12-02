@@ -96,7 +96,7 @@ make install install-etcppp
 chmod -R a+rX scripts
 find scripts -type f | xargs chmod a-x
 chmod 0755 $RPM_BUILD_ROOT/%{_libdir}/pppd/%{version}/*.so
-mkdir -p $RPM_BUILD_ROOT/etc/pam.d
+mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/pam.d
 install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pam.d/ppp
 
 # Provide pointers for people who expect stuff in old places
@@ -128,7 +128,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/pppstats.8*
 %{_mandir}/man8/pppoe-discovery.8*
 %{_libdir}/pppd
-%dir /etc/ppp
+%dir %{_sysconfdir}/ppp
 %dir %{_localstatedir}/run/ppp
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
 %config %{_sysconfdir}/tmpfiles.d/ppp.conf
@@ -147,6 +147,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Thu Dec 02 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-15
+- corrected tmpfiles.d conf
+- replaced remaining /etc by macros
+
 * Tue Nov 30 2010 Jiri Skala <jskala@redhat.com> - 2.4.5-14
 - fixes #656671 - /var/run and /var/lock on tmpfs
 - replaced paths /var /etc by macros
