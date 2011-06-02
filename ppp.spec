@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 17%{?dist}
+Release: 18%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -30,6 +30,8 @@ Patch26: ppp-2.4.5-manpg.patch
 Patch27: ppp-2.4.5-eaptls-mppe-0.99.patch
 Patch28: ppp-2.4.5-ppp_resolv.patch
 Patch29: ppp-2.4.5-man.patch
+Patch30: ppp-2.4.5-eth.patch
+Patch31: ppp-2.4.5-lock.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
@@ -75,6 +77,10 @@ This package contains the header files for building plugins for ppp.
 %patch27 -p1 -b .eaptls
 %patch28 -p1 -b .ppp_resolv
 %patch29 -p1 -b .man
+# fixes bz#682381 - hardcodes eth0
+%patch30 -p1 -b .eth
+# fixes bz#708260 - SELinux is preventing access on the file LCK..ttyUSB3
+%patch31 -p1 -b .lock
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -104,6 +110,7 @@ install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pam.d/ppp
 # Provide pointers for people who expect stuff in old places
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/log/ppp
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/ppp
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lock/ppp
 
 install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d
 install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d/ppp.conf
@@ -132,6 +139,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pppd
 %dir %{_sysconfdir}/ppp
 %dir %{_localstatedir}/run/ppp
+%dir %{_localstatedir}/lock/ppp
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
 %config %{_sysconfdir}/tmpfiles.d/ppp.conf
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
@@ -149,6 +157,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Mon May 30 2011 Jiri Skala <jskala@redhat.com> - 2.4.5-18
+- fixes #682381 - hardcodes eth0
+- fixes #708260 - SELinux is preventing access on the file LCK..ttyUSB3
+
 * Mon Apr 04 2011 Jiri Skala <jskala@redhat.com> - 2.4.5-17
 - fixes #664282 and #664868 - man page fixes
 
