@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 16%{?dist}
+Release: 17%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -29,6 +29,8 @@ Patch25: ppp-2.4.5-var_run_ppp.patch
 Patch26: ppp-2.4.5-manpg.patch
 Patch27: ppp-2.4.5-eaptls-mppe-0.99.patch
 Patch28: ppp-2.4.5-ppp_resolv.patch
+Patch29: ppp-2.4.5-eth.patch
+Patch30: ppp-2.4.5-lock.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
@@ -73,6 +75,10 @@ This package contains the header files for building plugins for ppp.
 %patch26 -p1 -b .manpg
 %patch27 -p1 -b .eaptls
 %patch28 -p1 -b .ppp_resolv
+# fixes bz#682381 - hardcodes eth0
+%patch29 -p1 -b .eth
+# fixes bz#708260 - SELinux is preventing access on the file LCK..ttyUSB3
+%patch30 -p1 -b .lock
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -102,6 +108,7 @@ install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pam.d/ppp
 # Provide pointers for people who expect stuff in old places
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/log/ppp
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/ppp
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lock/ppp
 
 install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d
 install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d/ppp.conf
@@ -130,6 +137,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/pppd
 %dir %{_sysconfdir}/ppp
 %dir %{_localstatedir}/run/ppp
+%dir %{_localstatedir}/lock/ppp
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
 %config %{_sysconfdir}/tmpfiles.d/ppp.conf
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
@@ -147,6 +155,10 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Thu Jun 02 2011 Jiri Skala <jskala@redhat.com> - 2.4.5-17
+- fixes #682381 - hardcodes eth0
+- fixes #708260 - SELinux is preventing access on the file LCK..ttyUSB3
+
 * Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.5-16
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
 
