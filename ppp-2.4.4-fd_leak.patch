@@ -513,3 +513,103 @@ diff -up ppp-2.4.4/pppd/utils.c.fd_leak ppp-2.4.4/pppd/utils.c
      if (fd < 0) {
  	error("Couldn't reopen lock file %s: %m", lock_file);
  	lock_file[0] = 0;
+diff -up ppp-2.4.5/pppd/plugins/pppoatm/pppoatm.c.test ppp-2.4.5/pppd/plugins/pppoatm/pppoatm.c
+--- ppp-2.4.5/pppd/plugins/pppoatm/pppoatm.c.test	2010-11-16 09:56:56.083707000 +0100
++++ ppp-2.4.5/pppd/plugins/pppoatm/pppoatm.c	2010-11-16 09:56:59.382707272 +0100
+@@ -137,7 +137,11 @@ static int connect_pppoatm(void)
+ 
+ 	if (!device_got_set)
+ 		no_device_given_pppoatm();
++#ifdef SOCK_CLOEXEC
++	fd = socket(AF_ATMPVC, SOCK_DGRAM | SOCK_CLOEXEC, 0);
++#else
+ 	fd = socket(AF_ATMPVC, SOCK_DGRAM, 0);
++#endif
+ 	if (fd < 0)
+ 		fatal("failed to create socket: %m");
+ 	memset(&qos, 0, sizeof qos);
+diff -up ppp-2.4.5/pppd/plugins/pppol2tp/openl2tp.c.test ppp-2.4.5/pppd/plugins/pppol2tp/openl2tp.c
+--- ppp-2.4.5/pppd/plugins/pppol2tp/openl2tp.c.test	2010-11-16 09:58:17.499711288 +0100
++++ ppp-2.4.5/pppd/plugins/pppol2tp/openl2tp.c	2010-11-16 10:00:15.791706960 +0100
+@@ -83,7 +83,11 @@ static int openl2tp_client_create(void)
+ 	int result;
+ 
+ 	if (openl2tp_fd < 0) {
++#ifdef SOCK_CLOEXEC
++		openl2tp_fd = socket(PF_UNIX, SOCK_DGRAM | SOCK_CLOEXEC, 0);
++#else
+ 		openl2tp_fd = socket(PF_UNIX, SOCK_DGRAM, 0);
++#endif
+ 		if (openl2tp_fd < 0) {
+ 			error("openl2tp connection create: %m");
+ 			return -ENOTCONN;
+diff -up ppp-2.4.5/pppd/plugins/pppol2tp/pppol2tp.c.test ppp-2.4.5/pppd/plugins/pppol2tp/pppol2tp.c
+--- ppp-2.4.5/pppd/plugins/pppol2tp/pppol2tp.c.test	2010-11-16 09:57:44.448709467 +0100
++++ ppp-2.4.5/pppd/plugins/pppol2tp/pppol2tp.c	2010-11-16 09:59:32.877707001 +0100
+@@ -208,7 +208,11 @@ static void send_config_pppol2tp(int mtu
+ 		struct ifreq ifr;
+ 		int fd;
+ 
++#ifdef SOCK_CLOEXEC
++		fd = socket(AF_INET, SOCK_DGRAM | SOCK_CLOEXEC, 0);
++#else
+ 		fd = socket(AF_INET, SOCK_DGRAM, 0);
++#endif
+ 		if (fd >= 0) {
+ 			memset (&ifr, '\0', sizeof (ifr));
+ 			strlcpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
+diff -up ppp-2.4.5/pppd/plugins/rp-pppoe/if.c.test ppp-2.4.5/pppd/plugins/rp-pppoe/if.c
+--- ppp-2.4.5/pppd/plugins/rp-pppoe/if.c.test	2009-11-16 23:26:07.000000000 +0100
++++ ppp-2.4.5/pppd/plugins/rp-pppoe/if.c	2010-11-16 09:54:03.973706239 +0100
+@@ -116,6 +116,10 @@ openInterface(char const *ifname, UINT16
+     stype = SOCK_PACKET;
+ #endif
+ 
++#ifdef SOCK_CLOEXEC
++    stype |= SOCK_CLOEXEC;
++#endif
++
+     if ((fd = socket(domain, stype, htons(type))) < 0) {
+ 	/* Give a more helpful message for the common error case */
+ 	if (errno == EPERM) {
+diff -up ppp-2.4.5/pppd/plugins/rp-pppoe/plugin.c.test ppp-2.4.5/pppd/plugins/rp-pppoe/plugin.c
+--- ppp-2.4.5/pppd/plugins/rp-pppoe/plugin.c.test	2009-11-16 23:26:07.000000000 +0100
++++ ppp-2.4.5/pppd/plugins/rp-pppoe/plugin.c	2010-11-16 09:40:23.355707001 +0100
+@@ -158,7 +158,11 @@ PPPOEConnectDevice(void)
+     ppp_session_number = ntohs(conn->session);
+ 
+     /* Make the session socket */
++#ifdef SOCK_CLOEXEC
++    conn->sessionSocket = socket(AF_PPPOX, SOCK_STREAM | SOCK_CLOEXEC, PX_PROTO_OE);
++#else
+     conn->sessionSocket = socket(AF_PPPOX, SOCK_STREAM, PX_PROTO_OE);
++#endif
+     if (conn->sessionSocket < 0) {
+ 	error("Failed to create PPPoE socket: %m");
+ 	goto errout;
+@@ -289,7 +293,11 @@ PPPoEDevnameHook(char *cmd, char **argv,
+     }
+ 
+     /* Open a socket */
++#ifdef SOCK_CLOEXEC
++    if ((fd = socket(PF_PACKET, SOCK_RAW | SOCK_CLOEXEC, 0)) < 0) {
++#else
+     if ((fd = socket(PF_PACKET, SOCK_RAW, 0)) < 0) {
++#endif
+ 	r = 0;
+     }
+ 
+diff -up ppp-2.4.5/pppd/plugins/rp-pppoe/pppoe-discovery.c.test ppp-2.4.5/pppd/plugins/rp-pppoe/pppoe-discovery.c
+--- ppp-2.4.5/pppd/plugins/rp-pppoe/pppoe-discovery.c.test	2009-11-16 23:26:07.000000000 +0100
++++ ppp-2.4.5/pppd/plugins/rp-pppoe/pppoe-discovery.c	2010-11-16 09:55:08.726707003 +0100
+@@ -121,6 +121,10 @@ openInterface(char const *ifname, UINT16
+     stype = SOCK_PACKET;
+ #endif
+ 
++#ifdef SOCK_CLOEXEC
++    stype |= SOCK_CLOEXEC;
++#endif
++
+     if ((fd = socket(domain, stype, htons(type))) < 0) {
+ 	/* Give a more helpful message for the common error case */
+ 	if (errno == EPERM) {
