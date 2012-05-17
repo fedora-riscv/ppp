@@ -400,9 +400,9 @@ diff -Naur ppp-2.4.5/pppd/auth.c ppp-2.4.5-eaptls-mppe-0.99/pppd/auth.c
 -	have_srp_secret(user, (explicit_remote? remote_name: NULL), 0, NULL));
 +	have_srp_secret(user, (explicit_remote? remote_name: NULL), 0, NULL)
 +#ifdef USE_EAPTLS
-+		|| have_eaptls_secret_client(user, (explicit_remote? remote_name: NULL)))
++		|| have_eaptls_secret_client(user, (explicit_remote? remote_name: NULL))
 +#endif
-+	;
++	);
  
      hadchap = -1;
      if (go->neg_upap && !uselogin && !have_pap_secret(NULL))
