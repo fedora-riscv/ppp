@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 20%{?dist}
+Release: 21%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -32,6 +32,7 @@ Patch28: ppp-2.4.5-ppp_resolv.patch
 Patch29: ppp-2.4.5-man.patch
 Patch30: ppp-2.4.5-eth.patch
 Patch31: ppp-2.4.5-lock.patch
+Patch32: ppp-2.4.5-l2tp-multilink.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
@@ -81,6 +82,7 @@ This package contains the header files for building plugins for ppp.
 %patch30 -p1 -b .eth
 # fixes bz#708260 - SELinux is preventing access on the file LCK..ttyUSB3
 %patch31 -p1 -b .lock
+%patch32 -p1 -b .l2tp-multilink
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -157,6 +159,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Mon May 21 2012 Michal Sekletar <msekleta@redhat.com>
+- Resolves: #817013 - fixed support for multilink channels in pppol2tp plugin
+
 * Thu May 17 2012 Michal Sekletar <msekleta@redhat.com>
 - Resolves: #771340 - fixed compilation of pppd without USE_EAPTLS
 
