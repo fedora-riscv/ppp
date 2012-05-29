@@ -283,13 +283,14 @@ diff -Naur ppp-2.4.5/pppd/auth.c ppp-2.4.5-eaptls-mppe-0.99/pppd/auth.c
  #ifdef CBCP_SUPPORT
  #include "cbcp.h"
  #endif
-@@ -183,6 +186,11 @@
+@@ -183,6 +186,12 @@
  /* Hook for a plugin to get the CHAP password for authenticating us */
  int (*chap_passwd_hook) __P((char *user, char *passwd)) = NULL;
  
 +#ifdef USE_EAPTLS
 +/* Hook for a plugin to get the EAP-TLS password for authenticating us */
 +int (*eaptls_passwd_hook) __P((char *user, char *passwd)) = NULL;
+++int (*eaptls_check_hook) __P((void)) = NULL;
 +#endif
 +
  /* Hook for a plugin to say whether it is OK if the peer

@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 20%{?dist}
+Release: 21%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -58,7 +58,6 @@ This package contains the header files for building plugins for ppp.
 %patch0 -p1 -b .make
 %patch1 -p1 -b .sample
 # patch 2 depends on the -lutil in patch 0
-%patch2 -p1 -b .libutil
 %patch3 -p1 -b .varargs
 # patch 4 depends on the -lutil in patch 0
 %patch4 -p1 -b .lib64
@@ -159,6 +158,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Tue May 29 2012 Michal Sekletar <msekleta@redhat.com>
+- Resolves: #817011 - fixed ppp-2.4.5-eaptls-mppe-0.99 patch, added variable definition
+
 * Mon May 21 2012 Michal Sekletar <msekleta@redhat.com>
 - Resolves: #817013 - fixed support for multilink channels in pppol2tp plugin
 
