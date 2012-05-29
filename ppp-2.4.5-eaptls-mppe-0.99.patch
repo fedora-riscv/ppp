@@ -290,7 +290,7 @@ diff -Naur ppp-2.4.5/pppd/auth.c ppp-2.4.5-eaptls-mppe-0.99/pppd/auth.c
 +#ifdef USE_EAPTLS
 +/* Hook for a plugin to get the EAP-TLS password for authenticating us */
 +int (*eaptls_passwd_hook) __P((char *user, char *passwd)) = NULL;
-++int (*eaptls_check_hook) __P((void)) = NULL;
++int (*eaptls_check_hook) __P((void)) = NULL;
 +#endif
 +
  /* Hook for a plugin to say whether it is OK if the peer
