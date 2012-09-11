@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 23%{?dist}
+Release: 24%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -37,7 +37,6 @@ Patch32: ppp-2.4.5-l2tp-multilink.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate, libpcap >= 14:0.8.3-6
-Requires: systemd-units
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon and
@@ -159,6 +158,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Tue Sep 11 2012 Michal Sekletar <msekleta@redhat.com> - 2.4.5-24
+- Removed unnecessary dependency on systemd-unit
+
 * Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.5-23
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
