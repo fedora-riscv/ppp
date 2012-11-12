@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 24%{?dist}
+Release: 25%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -36,7 +36,7 @@ Patch32: ppp-2.4.5-l2tp-multilink.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
-Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate, libpcap >= 14:0.8.3-6
+Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, logrotate, libpcap >= 14:0.8.3-6 systemd-units
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon and
@@ -113,8 +113,8 @@ mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/log/ppp
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/ppp
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lock/ppp
 
-install -d -m 755 $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d
-install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_sysconfdir}/tmpfiles.d/ppp.conf
+install -d -m 755 $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d
+install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d/ppp.conf
 
 # Logrotate script
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
@@ -142,7 +142,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_localstatedir}/run/ppp
 %dir %{_localstatedir}/lock/ppp
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
-%config %{_sysconfdir}/tmpfiles.d/ppp.conf
+%config %{_prefix}/lib/tmpfiles.d/ppp.conf
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-server
 %config(noreplace) %{_sysconfdir}/ppp/chap-secrets
@@ -158,6 +158,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc PLUGINS
 
 %changelog
+* Mon Nov 12 2012 Michal Sekletar <msekleta@redhat.com> - 2.4.5-25
+- Resolves: #840190 - install configuration file in /usr/lib/tmpfiles.d
+
 * Tue Sep 11 2012 Michal Sekletar <msekleta@redhat.com> - 2.4.5-24
 - Removed unnecessary dependency on systemd-unit
 
