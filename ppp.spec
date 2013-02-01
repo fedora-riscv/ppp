@@ -87,7 +87,7 @@ rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
 rm -f scripts/*.usepeerdns-var_run_ppp_resolv
 rm -f scripts/*.ppp_resolv
-find . -type f -name "*.sample" | xargs rm -f 
+find . -type f -name "*.sample" | xargs rm -f
 
 rm -f include/linux/if_pppol2tp.h
 
@@ -288,7 +288,7 @@ rm -rf $RPM_BUILD_ROOT
 * Wed Jul 19 2006 Thomas Woerner <twoerner@redhat.com> 2.4.4-1
 - new version 2.4.4 with lots of fixes
 - fixed reesolv.conf docs (#165072)
-  Thanks to Matt Domsch for the initial patch 
+  Thanks to Matt Domsch for the initial patch
 - enabled CBCP (#199278)
 
 * Wed Jul 12 2006 Jesse Keating <jkeating@redhat.com> - 2.4.3-6.2.2
@@ -353,7 +353,7 @@ rm -rf $RPM_BUILD_ROOT
 - require new libpcap library (>= 0.8.3-6) with a fix for inbound/outbound
   filter processing
 - not using internal libpcap structures anymore, fixes inbound/outbound
-  filter processing (#128053) 
+  filter processing (#128053)
 
 * Fri Aug  6 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-4
 - fixed signal handling (#29171)
@@ -497,7 +497,7 @@ rm -rf $RPM_BUILD_ROOT
 * Mon Mar 22 1999 Michael Johnson <johnsonm@redhat.com>
 - auth patch
 
-* Sun Mar 21 1999 Cristian Gafton <gafton@redhat.com> 
+* Sun Mar 21 1999 Cristian Gafton <gafton@redhat.com>
 - auto rebuild in the new build environment (release 3)
 
 * Thu Jan 07 1999 Cristian Gafton <gafton@redhat.com>
@@ -535,7 +535,7 @@ rm -rf $RPM_BUILD_ROOT
 - added a samples patch; updated glibc patch
 
 * Thu Dec 18 1997 Erik Troan <ewt@redhat.com>
-- added a patch to use our own route.h, rather then glibc's (which has 
+- added a patch to use our own route.h, rather then glibc's (which has
   alignment problems on Alpha's) -- I only applied this patch on the Alpha,
   though it should be safe everywhere
 
