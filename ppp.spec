@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 27%{?dist}
+Release: 28%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -138,6 +138,7 @@ install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
 %dir %{_sysconfdir}/ppp
 %dir %{_localstatedir}/run/ppp
 %dir %{_localstatedir}/lock/ppp
+%dir %{_sysconfdir}/logrotate.d
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
 %config %{_prefix}/lib/tmpfiles.d/ppp.conf
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
@@ -155,6 +156,9 @@ install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
 %doc PLUGINS
 
 %changelog
+* Wed Mar 20 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-28
+- Add /etc/logrotate.d to files section since we no longer hard depend on logrotate
+
 * Wed Mar 20 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-27
 - Don't hard depend on logrotate
 
