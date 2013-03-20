@@ -37,6 +37,8 @@ Patch32: ppp-2.4.5-l2tp-multilink.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6 systemd-units
+Requires(pre): /usr/bin/getent
+Requires(pre): /usr/sbin/groupadd
 
 %description
 The ppp package contains the PPP (Point-to-Point Protocol) daemon and
@@ -119,6 +121,9 @@ install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d/ppp.conf
 # Logrotate script
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
 install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
+
+%pre
+getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 
 %files
 %defattr(-,root,root)
