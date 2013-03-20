@@ -120,9 +120,6 @@ install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d/ppp.conf
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
 install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
 
-%clean
-rm -rf $RPM_BUILD_ROOT
-
 %files
 %defattr(-,root,root)
 %{_sbindir}/chat
