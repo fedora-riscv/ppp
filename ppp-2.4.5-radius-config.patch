@@ -1,0 +1,14 @@
+diff -up ppp-2.4.5/pppd/plugins/radius/config.c.radius ppp-2.4.5/pppd/plugins/radius/config.c
+--- ppp-2.4.5/pppd/plugins/radius/config.c.radius	2009-11-16 23:26:07.000000000 +0100
++++ ppp-2.4.5/pppd/plugins/radius/config.c	2013-03-22 16:18:58.374665717 +0100
+@@ -216,8 +216,8 @@ int rc_read_config(char *filename)
+ 		p[pos] = '\0';
+ 
+ 		if ((option = find_option(p, OT_ANY)) == NULL) {
+-			error("%s: line %d: unrecognized keyword: %s", filename, line, p);
+-			return (-1);
++			warn("%s: line %d: unrecognized keyword: %s", filename, line, p);
++			continue;
+ 		}
+ 
+ 		if (option->status != ST_UNDEF) {
