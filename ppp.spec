@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 29%{?dist}
+Release: 30%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -33,6 +33,7 @@ Patch29: ppp-2.4.5-man.patch
 Patch30: ppp-2.4.5-eth.patch
 Patch31: ppp-2.4.5-lock.patch
 Patch32: ppp-2.4.5-l2tp-multilink.patch
+Patch33: ppp-2.4.5-radius-config.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
@@ -84,6 +85,7 @@ This package contains the header files for building plugins for ppp.
 # fixes bz#708260 - SELinux is preventing access on the file LCK..ttyUSB3
 %patch31 -p1 -b .lock
 %patch32 -p1 -b .l2tp-multilink
+%patch33 -p1 -b .radius
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -161,6 +163,10 @@ getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 %doc PLUGINS
 
 %changelog
+* Wed May 29 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-30
+- make radius plugin config parser less strict
+- resolves : #906913
+
 * Wed Mar 20 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-29
 - Add creation of dip system group
 
