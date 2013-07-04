@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 29%{?dist}
+Release: 30%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -34,6 +34,7 @@ Patch30: ppp-2.4.5-eth.patch
 Patch31: ppp-2.4.5-lock.patch
 Patch32: ppp-2.4.5-l2tp-multilink.patch
 Patch33: ppp-2.4.5-radius-config.patch
+Patch34: ppp-2.4.5-crypt.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
@@ -84,6 +85,7 @@ This package contains the header files for building plugins for ppp.
 %patch31 -p1 -b .lock
 %patch32 -p1 -b .l2tp-multilink
 %patch33 -p1 -b .radius
+%patch34 -p1 -b .crypt
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -158,6 +160,9 @@ install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
 %doc PLUGINS
 
 %changelog
+* Thu Jul 04 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-30
+- fix possible NULL pointer dereferencing
+
 * Wed May 29 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-29
 - make radius plugin config parser less strict
 - resolves : #906913, #918296

@@ -1,0 +1,47 @@
+diff -up ppp-2.4.5/pppd/auth.c.crypt ppp-2.4.5/pppd/auth.c
+--- ppp-2.4.5/pppd/auth.c.crypt	2013-07-04 16:10:27.338463397 +0200
++++ ppp-2.4.5/pppd/auth.c	2013-07-04 16:15:00.204471203 +0200
+@@ -1515,11 +1515,19 @@ check_passwd(unit, auser, userlen, apass
+ 		    ret = UPAP_AUTHNAK;
+ 		}
+ 	    }
++
+ 	    if (secret[0] != 0 && !login_secret) {
+-		/* password given in pap-secrets - must match */
+-		if ((cryptpap || strcmp(passwd, secret) != 0)
+-		    && strcmp(crypt(passwd, secret), secret) != 0)
+-		    ret = UPAP_AUTHNAK;
++		    /* password given in pap-secrets - must match */
++		    char *cryptbuf = NULL;
++		    cryptbuf = crypt(passwd, secret);
++
++		    if (cryptpap) {
++			    if ((cryptbuf == NULL) || (strcmp(cryptbuf, secret) != 0))
++				    ret = UPAP_AUTHNAK;
++		    } else {
++			    if ((strcmp(passwd, secret) != 0) && (cryptbuf == NULL || strcmp(cryptbuf, secret) != 0))
++				    ret = UPAP_AUTHNAK;
++		    }
+ 	    }
+ 	}
+ 	fclose(f);
+diff -up ppp-2.4.5/pppd/session.c.crypt ppp-2.4.5/pppd/session.c
+--- ppp-2.4.5/pppd/session.c.crypt	2009-11-16 23:26:07.000000000 +0100
++++ ppp-2.4.5/pppd/session.c	2013-07-04 16:10:27.354463397 +0200
+@@ -348,9 +348,14 @@ session_start(flags, user, passwd, ttyNa
+ 	/*
+ 	 * If no passwd, don't let them login if we're authenticating.
+ 	 */
+-        if (pw->pw_passwd == NULL || strlen(pw->pw_passwd) < 2
+-            || strcmp(crypt(passwd, pw->pw_passwd), pw->pw_passwd) != 0)
++        if (pw->pw_passwd == NULL || strlen(pw->pw_passwd) < 2) {
+             return SESSION_FAILED;
++        } else {
++            char *cryptbuf = NULL;
++            cryptbuf = crypt(passwd, pw->pw_passwd);
++            if ((cryptbuf == NULL) || (strcmp(cryptbuf, pw->pw_passwd) != 0))
++                return SESSION_FAILED;
++        }
+     }
+ 
+ #endif /* #ifdef USE_PAM */
