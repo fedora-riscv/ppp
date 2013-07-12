@@ -119,8 +119,8 @@ mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/log/ppp
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/ppp
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lock/ppp
 
-install -d -m 755 $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d
-install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d/ppp.conf
+install -d -m 755 $RPM_BUILD_ROOT%{_tmpfilesdir}
+install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_tmpfilesdir}/ppp.conf
 
 # Logrotate script
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
@@ -152,7 +152,6 @@ mkdir -p %{_localstatedir}/lock/ppp
 %ghost %dir %{_localstatedir}/lock/ppp
 %dir %{_sysconfdir}/logrotate.d
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
-%config %{_prefix}/lib/tmpfiles.d/ppp.conf
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-server
 %config(noreplace) %{_sysconfdir}/ppp/chap-secrets
@@ -160,6 +159,7 @@ mkdir -p %{_localstatedir}/lock/ppp
 %config(noreplace) %{_sysconfdir}/ppp/pap-secrets
 %config(noreplace) %{_sysconfdir}/pam.d/ppp
 %config(noreplace) %{_sysconfdir}/logrotate.d/ppp
+%{_tmpfilesdir}/ppp.conf
 %doc FAQ README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample README.eap-tls
 
 %files devel
@@ -170,6 +170,7 @@ mkdir -p %{_localstatedir}/lock/ppp
 %changelog
 * Fri Jul 12 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-32
 - don't ship /var/lock/ppp in rpm payload and create it in %post instead
+- fix installation of tmpfiles.d configuration
 
 * Thu Jul 04 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-31
 - fix possible NULL pointer dereferencing
