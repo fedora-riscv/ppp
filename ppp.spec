@@ -1,7 +1,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 31%{?dist}
+Release: 32%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -129,6 +129,9 @@ install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
 %pre
 getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 
+%post
+mkdir -p %{_localstatedir}/lock/ppp
+
 %files
 %defattr(-,root,root)
 %{_sbindir}/chat
@@ -146,7 +149,7 @@ getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 %{_libdir}/pppd
 %dir %{_sysconfdir}/ppp
 %dir %{_localstatedir}/run/ppp
-%dir %{_localstatedir}/lock/ppp
+%ghost %dir %{_localstatedir}/lock/ppp
 %dir %{_sysconfdir}/logrotate.d
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
 %config %{_prefix}/lib/tmpfiles.d/ppp.conf
@@ -165,6 +168,9 @@ getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 %doc PLUGINS
 
 %changelog
+* Fri Jul 12 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-32
+- don't ship /var/lock/ppp in rpm payload and create it in %post instead
+
 * Thu Jul 04 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-31
 - fix possible NULL pointer dereferencing
 
