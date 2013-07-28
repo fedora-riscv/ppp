@@ -1,3 +1,5 @@
+%global _hardened_build 1
+
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
@@ -171,6 +173,7 @@ mkdir -p %{_localstatedir}/lock/ppp
 * Fri Jul 12 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-32
 - don't ship /var/lock/ppp in rpm payload and create it in %post instead
 - fix installation of tmpfiles.d configuration
+- enable hardened build
 
 * Thu Jul 04 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-31
 - fix possible NULL pointer dereferencing
