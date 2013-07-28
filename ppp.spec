@@ -174,6 +174,7 @@ mkdir -p %{_localstatedir}/lock/ppp
 - don't ship /var/lock/ppp in rpm payload and create it in %post instead
 - fix installation of tmpfiles.d configuration
 - enable hardened build
+- fix bogus dates in changelog
 
 * Thu Jul 04 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-31
 - fix possible NULL pointer dereferencing
@@ -399,7 +400,7 @@ mkdir -p %{_localstatedir}/lock/ppp
 * Tue Jun 15 2004 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
-* Wed May 24 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-2.3
+* Mon May 24 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-2.3
 - Enable IPv6 support. Disable PIE to avoid bogus Provides:
 
 * Fri May 14 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-2.2
@@ -521,7 +522,7 @@ mkdir -p %{_localstatedir}/lock/ppp
 * Fri Apr 09 1999 Cristian Gafton <gafton@redhat.com>
 - force pppd use the glibc's logwtmp instead of implementing its own
 
-* Wed Apr 01 1999 Preston Brown <pbrown@redhat.com>
+* Thu Apr 01 1999 Preston Brown <pbrown@redhat.com>
 - version 2.3.7 bugfix release
 
 * Tue Mar 23 1999 Cristian Gafton <gafton@redhat.com>
