@@ -37,6 +37,7 @@ Patch31: ppp-2.4.5-lock.patch
 Patch32: ppp-2.4.5-l2tp-multilink.patch
 Patch33: ppp-2.4.5-radius-config.patch
 Patch34: ppp-2.4.5-crypt.patch
+Patch35: ppp-2.4.5-hardened.patch
 
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: pam-devel, libpcap-devel, openssl-devel
@@ -90,6 +91,7 @@ This package contains the header files for building plugins for ppp.
 %patch32 -p1 -b .l2tp-multilink
 %patch33 -p1 -b .radius
 %patch34 -p1 -b .crypt
+%patch35 -p1 -b .hardened
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -175,6 +177,7 @@ mkdir -p %{_localstatedir}/lock/ppp
 - fix installation of tmpfiles.d configuration
 - enable hardened build
 - fix bogus dates in changelog
+- compile all binaries with hardening flags
 
 * Thu Jul 04 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-31
 - fix possible NULL pointer dereferencing
