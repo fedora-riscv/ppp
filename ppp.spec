@@ -39,8 +39,8 @@ Patch33: ppp-2.4.5-radius-config.patch
 Patch34: ppp-2.4.5-crypt.patch
 Patch35: ppp-2.4.5-hardened.patch
 
-BuildRequires: pam-devel, libpcap-devel, openssl-devel
-Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6 systemd-units
+BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd
+Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
 
