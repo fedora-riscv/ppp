@@ -1,0 +1,80 @@
+diff -up ppp-2.4.5/chat/Makefile.linux.hardened ppp-2.4.5/chat/Makefile.linux
+--- ppp-2.4.5/chat/Makefile.linux.hardened	2013-07-28 16:36:54.379766667 +0200
++++ ppp-2.4.5/chat/Makefile.linux	2013-07-28 16:37:25.816760232 +0200
+@@ -10,7 +10,7 @@ CDEF3=	-UNO_SLEEP			# Use the usleep fun
+ CDEF4=	-DFNDELAY=O_NDELAY		# Old name value
+ CDEFS=	$(CDEF1) $(CDEF2) $(CDEF3) $(CDEF4)
+ 
+-COPTS=	$(RPM_OPT_FLAGS)
++COPTS=	$(RPM_OPT_FLAGS) -fPIE
+ CFLAGS=	$(COPTS) $(CDEFS)
+ 
+ INSTALL= install
+@@ -18,7 +18,7 @@ INSTALL= install
+ all:	chat
+ 
+ chat:	chat.o
+-	$(CC) -pie -o chat chat.o
++	$(CC) -z now -pie -o chat chat.o
+ 
+ chat.o:	chat.c
+ 	$(CC) -c $(CFLAGS) -o chat.o chat.c
+diff -up ppp-2.4.5/pppd/plugins/rp-pppoe/Makefile.linux.hardened ppp-2.4.5/pppd/plugins/rp-pppoe/Makefile.linux
+--- ppp-2.4.5/pppd/plugins/rp-pppoe/Makefile.linux.hardened	2013-07-28 16:38:50.454744701 +0200
++++ ppp-2.4.5/pppd/plugins/rp-pppoe/Makefile.linux	2013-07-28 16:39:30.297737993 +0200
+@@ -27,11 +27,11 @@ INSTALL	= install
+ RP_VERSION=3.8p
+ 
+ COPTS=$(RPM_OPT_FLAGS)
+-CFLAGS=$(COPTS) -I../../../include '-DRP_VERSION="$(RP_VERSION)"'
++CFLAGS=$(COPTS) -I../../../include '-DRP_VERSION="$(RP_VERSION)"' -fPIE
+ all: rp-pppoe.so pppoe-discovery
+ 
+ pppoe-discovery: pppoe-discovery.o debug.o
+-	$(CC) -o pppoe-discovery pppoe-discovery.o debug.o
++	$(CC) -z now -pie -o pppoe-discovery pppoe-discovery.o debug.o
+ 
+ pppoe-discovery.o: pppoe-discovery.c
+ 	$(CC) $(CFLAGS) -c -o pppoe-discovery.o pppoe-discovery.c
+diff -up ppp-2.4.5/pppdump/Makefile.linux.hardened ppp-2.4.5/pppdump/Makefile.linux
+--- ppp-2.4.5/pppdump/Makefile.linux.hardened	2013-07-28 16:38:09.270751992 +0200
++++ ppp-2.4.5/pppdump/Makefile.linux	2013-07-28 16:38:34.296747511 +0200
+@@ -2,7 +2,7 @@ DESTDIR = $(INSTROOT)@DESTDIR@
+ BINDIR = $(DESTDIR)/sbin
+ MANDIR = $(DESTDIR)/share/man/man8
+ 
+-CFLAGS= $(RPM_OPT_FLAGS) -I../include/net
++CFLAGS= $(RPM_OPT_FLAGS) -I../include/net -fPIE
+ OBJS = pppdump.o bsd-comp.o deflate.o zlib.o
+ 
+ INSTALL= install
+@@ -10,7 +10,7 @@ INSTALL= install
+ all:	pppdump
+ 
+ pppdump: $(OBJS)
+-	$(CC) -o pppdump $(OBJS)
++	$(CC) -z now -pie -o pppdump $(OBJS)
+ 
+ clean:
+ 	rm -f pppdump $(OBJS) *~
+diff -up ppp-2.4.5/pppstats/Makefile.linux.hardened ppp-2.4.5/pppstats/Makefile.linux
+--- ppp-2.4.5/pppstats/Makefile.linux.hardened	2013-07-28 16:40:28.737728584 +0200
++++ ppp-2.4.5/pppstats/Makefile.linux	2013-07-28 16:40:49.130725389 +0200
+@@ -11,7 +11,7 @@ PPPSTATOBJS = pppstats.o
+ 
+ #CC = gcc
+ COPTS = $(RPM_OPT_FLAGS)
+-COMPILE_FLAGS = -I../include
++COMPILE_FLAGS = -I../include -fPIE
+ LIBS =
+ 
+ INSTALL= install
+@@ -26,7 +26,7 @@ install: pppstats
+ 	$(INSTALL) -c -m 444 pppstats.8 $(MANDIR)
+ 
+ pppstats: $(PPPSTATSRCS)
+-	$(CC) $(CFLAGS) -o pppstats pppstats.c $(LIBS)
++	$(CC) $(CFLAGS) -z now -pie -o pppstats pppstats.c $(LIBS)
+ 
+ clean:
+ 	rm -f pppstats *~ #* core
