@@ -1,7 +1,9 @@
+%global _hardened_build 1
+
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 30%{?dist}
+Release: 31%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -35,10 +37,10 @@ Patch31: ppp-2.4.5-lock.patch
 Patch32: ppp-2.4.5-l2tp-multilink.patch
 Patch33: ppp-2.4.5-radius-config.patch
 Patch34: ppp-2.4.5-crypt.patch
+Patch35: ppp-2.4.5-hardened.patch
 
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: pam-devel, libpcap-devel, openssl-devel
-Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6 systemd-units
+BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd
+Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
 
@@ -88,6 +90,7 @@ This package contains the header files for building plugins for ppp.
 %patch32 -p1 -b .l2tp-multilink
 %patch33 -p1 -b .radius
 %patch34 -p1 -b .crypt
+%patch35 -p1 -b .hardened
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -119,8 +122,8 @@ mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/log/ppp
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/ppp
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lock/ppp
 
-install -d -m 755 $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d
-install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_prefix}/lib/tmpfiles.d/ppp.conf
+install -d -m 755 $RPM_BUILD_ROOT%{_tmpfilesdir}
+install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_tmpfilesdir}/ppp.conf
 
 # Logrotate script
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
@@ -128,6 +131,9 @@ install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
 
 %pre
 getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
+
+%post
+mkdir -p %{_localstatedir}/lock/ppp
 
 %files
 %defattr(-,root,root)
@@ -146,10 +152,9 @@ getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 %{_libdir}/pppd
 %dir %{_sysconfdir}/ppp
 %dir %{_localstatedir}/run/ppp
-%dir %{_localstatedir}/lock/ppp
+%ghost %dir %{_localstatedir}/lock/ppp
 %dir %{_sysconfdir}/logrotate.d
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
-%config %{_prefix}/lib/tmpfiles.d/ppp.conf
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-server
 %config(noreplace) %{_sysconfdir}/ppp/chap-secrets
@@ -157,6 +162,7 @@ getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 %config(noreplace) %{_sysconfdir}/ppp/pap-secrets
 %config(noreplace) %{_sysconfdir}/pam.d/ppp
 %config(noreplace) %{_sysconfdir}/logrotate.d/ppp
+%{_tmpfilesdir}/ppp.conf
 %doc FAQ README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample README.eap-tls
 
 %files devel
@@ -165,6 +171,13 @@ getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 %doc PLUGINS
 
 %changelog
+* Tue Jul 30 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-31
+- don't ship /var/lock/ppp in rpm payload and create it in %post instead
+- fix installation of tmpfiles.d configuration
+- enable hardened build
+- fix bogus dates in changelog
+- compile all binaries with hardening flags
+
 * Thu Jul 04 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-30
 - fix possible NULL pointer dereferencing
 
@@ -387,7 +400,7 @@ getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 * Tue Jun 15 2004 Elliot Lee <sopwith@redhat.com>
 - rebuilt
 
-* Wed May 24 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-2.3
+* Mon May 24 2004 David Woodhouse <dwmw2@redhat.com> 2.4.2-2.3
 - Enable IPv6 support. Disable PIE to avoid bogus Provides:
 
 * Fri May 14 2004 Thomas Woerner <twoerner@redhat.com> 2.4.2-2.2
@@ -509,7 +522,7 @@ getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 * Fri Apr 09 1999 Cristian Gafton <gafton@redhat.com>
 - force pppd use the glibc's logwtmp instead of implementing its own
 
-* Wed Apr 01 1999 Preston Brown <pbrown@redhat.com>
+* Thu Apr 01 1999 Preston Brown <pbrown@redhat.com>
 - version 2.3.7 bugfix release
 
 * Tue Mar 23 1999 Cristian Gafton <gafton@redhat.com>
