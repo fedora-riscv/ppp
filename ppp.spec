@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 31%{?dist}
+Release: 32%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -133,7 +133,7 @@ install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
 getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 
 %post
-mkdir -p %{_localstatedir}/lock/ppp
+mkdir -p %{_localstatedir}/lock/ppp 2>&1 >/dev/null || :
 
 %files
 %defattr(-,root,root)
@@ -171,6 +171,9 @@ mkdir -p %{_localstatedir}/lock/ppp
 %doc PLUGINS
 
 %changelog
+* Thu Aug 01 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-32
+- fix post installation scriptlet
+
 * Tue Jul 30 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-31
 - don't ship /var/lock/ppp in rpm payload and create it in %post instead
 - fix installation of tmpfiles.d configuration
