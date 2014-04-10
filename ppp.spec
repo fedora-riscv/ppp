@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.6
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -127,6 +127,9 @@ install -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
 %doc PLUGINS
 
 %changelog
+* Thu Apr 10 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.6-2
+- rebase to 2.4.6
+
 * Thu Aug 01 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-33
 - fix post installation scriptlet
 
