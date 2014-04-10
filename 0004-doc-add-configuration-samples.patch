@@ -1,7 +1,7 @@
 From d7faeb88f684c8b2ae193b2c5b5b358ac757fcfa Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Fri, 4 Apr 2014 11:39:09 +0200
-Subject: [PATCH] doc: add configuration samples
+Subject: [PATCH 04/25] doc: add configuration samples
 
 ---
  sample/auth-down     |  17 ++++++
@@ -336,3 +336,6 @@ index 0000000..098971b
 +#root		hostname	"*"	-
 +#support	hostname	"*"	-
 +#stats		hostname	"*"	-
+-- 
+1.8.3.1
+

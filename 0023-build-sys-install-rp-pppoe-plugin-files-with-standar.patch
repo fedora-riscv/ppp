@@ -1,7 +1,8 @@
 From 769521a3798fd554ddc7333cb1255cd1b40790e8 Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Thu, 10 Apr 2014 10:00:55 +0200
-Subject: [PATCH] build-sys: install rp-pppoe plugin files with standard perms
+Subject: [PATCH 23/25] build-sys: install rp-pppoe plugin files with standard
+ perms
 
 This is needed to properly generate debuginfo package.
 ---
@@ -26,3 +27,6 @@ index b949716..fa49efb 100644
  
  clean:
  	rm -f *.o *.so pppoe-discovery
+-- 
+1.8.3.1
+

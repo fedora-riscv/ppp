@@ -1,7 +1,7 @@
 From f2c855462ff56be4121409c7e048cd2503fe0ccf Mon Sep 17 00:00:00 2001
 From: Jiri Skala <jskala@fedoraproject.org>
 Date: Mon, 7 Apr 2014 14:26:20 +0200
-Subject: [PATCH] pppd: move pppd database to /var/run/ppp
+Subject: [PATCH 15/25] pppd: move pppd database to /var/run/ppp
 
 Resolves: #560014
 ---
@@ -39,3 +39,6 @@ index bef3160..24e010c 100644
  #endif /* __STDC__ */
  
  #ifdef PLUGIN
+-- 
+1.8.3.1
+

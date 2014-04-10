@@ -1,7 +1,7 @@
 From 82cd789df0f022eb6f3d28646e7a61d1d0715805 Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Mon, 7 Apr 2014 12:23:36 +0200
-Subject: [PATCH] pppd: we don't want to accidentally leak fds
+Subject: [PATCH 12/25] pppd: we don't want to accidentally leak fds
 
 ---
  pppd/auth.c      | 20 ++++++++++----------
@@ -138,3 +138,6 @@ index 72a7727..8a12fa0 100644
      if (route_fd == NULL) {
  	error("can't open routing table %s: %m", path);
  	return 0;
+-- 
+1.8.3.1
+

@@ -1,7 +1,7 @@
 From 1dc033327792ef51cb08e224b8d90e7d8571084d Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Wed, 9 Apr 2014 15:37:53 +0200
-Subject: [PATCH] build-sys: make pppd first and then plugins
+Subject: [PATCH 23/23] build-sys: make pppd first and then plugins
 
 ---
  linux/Makefile.top | 2 +-
@@ -21,3 +21,6 @@ index 9a8945a..12210f2 100644
  	cd pppstats; $(MAKE) $(MFLAGS) all
  	cd pppdump; $(MAKE) $(MFLAGS) all
  
+-- 
+1.8.3.1
+

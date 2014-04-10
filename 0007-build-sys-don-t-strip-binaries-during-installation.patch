@@ -1,7 +1,7 @@
 From b9fb631a493c5f1b490c8e9645eb6ebab4b25cc8 Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Fri, 4 Apr 2014 18:37:00 +0200
-Subject: [PATCH] build-sys: don't strip binaries during installation
+Subject: [PATCH 07/25] build-sys: don't strip binaries during installation
 
 We don't want that when building rpms. rpmbuild does final stripping of binaries
 for us and generetes debuginfo rpm.
@@ -106,3 +106,6 @@ index 42aba73..c5ba3b1 100644
  	$(INSTALL) -c -m 444 pppstats.8 $(MANDIR)
  
  pppstats: $(PPPSTATSRCS)
+-- 
+1.8.3.1
+

@@ -1,7 +1,7 @@
 From 6edc865bd02ab591b9121d4a5f6dc3cdbe5af809 Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Wed, 9 Apr 2014 09:18:24 +0200
-Subject: [PATCH] sys-linux: rework get_first_ethernet()
+Subject: [PATCH 19/25] sys-linux: rework get_first_ethernet()
 
 We can't assume that host has ethernet NIC named "eth0". Rather than guessing we
 better ask udev. We iterate over symlinks symlinks in /sys/class/net and
@@ -378,3 +378,6 @@ index 0690019..ec09c50 100644
          return 0;
      }
      close(skfd);
+-- 
+1.8.3.1
+

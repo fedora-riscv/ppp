@@ -1,7 +1,7 @@
 From b4ef433be936c90e356da7a590b032cdee219a3f Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Fri, 4 Apr 2014 19:06:05 +0200
-Subject: [PATCH] build-sys: don't put connect-errors log to /etc/ppp/
+Subject: [PATCH 11/25] build-sys: don't put connect-errors log to /etc/ppp/
 
 Resolves: #118837
 ---
@@ -72,3 +72,6 @@ index a427cb8..bef3160 100644
  
  #define _PATH_USEROPT	 ".ppprc"
  #define	_PATH_PSEUDONYM	 ".ppp_pseudonym"
+-- 
+1.8.3.1
+

@@ -1,7 +1,7 @@
 From d69eb9a8aa284014dd7dd282813989eda9d84d74 Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Wed, 9 Apr 2014 09:56:09 +0200
-Subject: [PATCH] build-sys: compile pppol2tp plugin with RPM_OPT_FLAGS
+Subject: [PATCH 21/25] build-sys: compile pppol2tp plugin with RPM_OPT_FLAGS
 
 ---
  pppd/plugins/pppol2tp/Makefile.linux | 2 +-
@@ -18,3 +18,6 @@ index 4339566..9a635b8 100644
  CFLAGS	= $(COPTS) -I. -I../.. -I../../../include -fPIC
  LDFLAGS	= -shared
  INSTALL	= install
+-- 
+1.8.3.1
+

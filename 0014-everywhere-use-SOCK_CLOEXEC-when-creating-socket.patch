@@ -1,7 +1,7 @@
 From 2a97ab28ee00586e5f06b3ef3a0e43ea0c7c6499 Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Mon, 7 Apr 2014 14:21:41 +0200
-Subject: [PATCH] everywhere: use SOCK_CLOEXEC when creating socket
+Subject: [PATCH 14/25] everywhere: use SOCK_CLOEXEC when creating socket
 
 ---
  pppd/plugins/pppoatm/pppoatm.c          |  2 +-
@@ -169,3 +169,6 @@ index bc96695..8e76a5d 100644
      if (sock < 0) {
  	error("Can't create socket: %m");
  	return -1;
+-- 
+1.8.3.1
+

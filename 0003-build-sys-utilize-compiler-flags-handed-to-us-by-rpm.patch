@@ -1,7 +1,8 @@
 From d729b06f0ac7a5ebd3648ef60bef0499b59bf82d Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Fri, 4 Apr 2014 11:29:39 +0200
-Subject: [PATCH] build-sys: utilize compiler flags handed to us by rpmbuild
+Subject: [PATCH 03/25] build-sys: utilize compiler flags handed to us by
+ rpmbuild
 
 ---
  chat/Makefile.linux                  | 2 +-
@@ -115,3 +116,6 @@ index cca6f0f..42aba73 100644
  COMPILE_FLAGS = -I../include
  LIBS =
  
+-- 
+1.8.3.1
+

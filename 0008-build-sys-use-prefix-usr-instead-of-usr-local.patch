@@ -1,7 +1,7 @@
 From 343728d5de6e44bd67923503e62eefaad50760a4 Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Fri, 4 Apr 2014 18:47:01 +0200
-Subject: [PATCH] build-sys: use prefix /usr instead of /usr/local
+Subject: [PATCH 08/25] build-sys: use prefix /usr instead of /usr/local
 
 ---
  configure           | 2 +-
@@ -84,3 +84,6 @@ index 0002365..ae3ae50 100755
  #
  # This  script was  written  by  Jim Isaacson  <jcisaac@crl.com>.  It is
  # designed to work  as a script to use the  SecureCARD(tm) device.  This
+-- 
+1.8.3.1
+

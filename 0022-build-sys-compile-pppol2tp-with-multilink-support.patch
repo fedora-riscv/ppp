@@ -1,7 +1,7 @@
 From a0060c5d48ef742bff4fe9ba9c276a5c21795ce8 Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Wed, 9 Apr 2014 09:58:38 +0200
-Subject: [PATCH] build-sys: compile pppol2tp with multilink support
+Subject: [PATCH 22/25] build-sys: compile pppol2tp with multilink support
 
 Resolves: #817013
 ---
@@ -19,3 +19,6 @@ index 9a635b8..9cb316d 100644
  CFLAGS	= $(COPTS) -I. -I../.. -I../../../include -fPIC
  LDFLAGS	= -shared
  INSTALL	= install
+-- 
+1.8.3.1
+

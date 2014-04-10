@@ -1,7 +1,7 @@
 From 044a5b1e5d878c519143b71a44b3d5b0ca91de3b Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Mon, 7 Apr 2014 14:56:56 +0200
-Subject: [PATCH] pppd: rebase EAP-TLS patch v0.994
+Subject: [PATCH 17/25] pppd: rebase EAP-TLS patch v0.994
 
 ---
  README.eap-tls              |  169 +++++++
@@ -3040,3 +3040,6 @@ index 47e4d9a..de271c1 100644
  /* Let a plugin snoop sent and received packets.  Useful for L2TP */
  extern void (*snoop_recv_hook) __P((unsigned char *p, int len));
  extern void (*snoop_send_hook) __P((unsigned char *p, int len));
+-- 
+1.8.3.1
+

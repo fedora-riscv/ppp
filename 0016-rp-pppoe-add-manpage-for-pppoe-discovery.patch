@@ -1,7 +1,7 @@
 From a30efa2cc99a5b6ab220de04cbcc7db38888a17a Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Mon, 7 Apr 2014 14:29:45 +0200
-Subject: [PATCH] rp-pppoe: add manpage for pppoe-discovery
+Subject: [PATCH 16/25] rp-pppoe: add manpage for pppoe-discovery
 
 ---
  pppd/plugins/rp-pppoe/Makefile.linux    |  2 +
@@ -121,3 +121,6 @@ index 0000000..d0a93db
 +based on \fBpppoe\fR by David F. Skoll <dfs@roaringpenguin.com>.
 +.SH SEE ALSO
 +pppoe(8), pppoe-sniff(8)
+-- 
+1.8.3.1
+

@@ -1,7 +1,7 @@
 From 302c1b736cb656c7885a0cba270fd953a672d8a8 Mon Sep 17 00:00:00 2001
 From: Michal Sekletar <msekleta@redhat.com>
 Date: Mon, 7 Apr 2014 13:56:34 +0200
-Subject: [PATCH] everywhere: O_CLOEXEC harder
+Subject: [PATCH 13/25] everywhere: O_CLOEXEC harder
 
 ---
  pppd/eap.c       |  2 +-
@@ -236,3 +236,6 @@ index 29bf970..6051b9a 100644
      if (fd < 0) {
  	error("Couldn't reopen lock file %s: %m", lock_file);
  	lock_file[0] = 0;
+-- 
+1.8.3.1
+

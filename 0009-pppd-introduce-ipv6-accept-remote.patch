@@ -1,7 +1,7 @@
 From abef895f9d144f05a83045136b77277352dc450f Mon Sep 17 00:00:00 2001
 From: David Woodhouse <dwmw2@fedoraproject.org>
 Date: Fri, 4 Apr 2014 18:53:33 +0200
-Subject: [PATCH] pppd: introduce ipv6-accept-remote
+Subject: [PATCH 09/25] pppd: introduce ipv6-accept-remote
 
 ---
  pppd/ipv6cp.c | 5 ++++-
@@ -52,3 +52,6 @@ index cc4568d..8c7552e 100644
      int opt_local;		/* ourtoken set by option */
      int opt_remote;		/* histoken set by option */
      int use_ip;			/* use IP as interface identifier */
+-- 
+1.8.3.1
+
