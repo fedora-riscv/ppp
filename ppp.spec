@@ -2,44 +2,44 @@
 
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
-Version: 2.4.5
-Release: 33%{?dist}
+Version: 2.4.6
+Release: 1%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
-Source1: ppp-2.3.5-pamd.conf
-Source2: ppp.logrotate
-Source3: ppp-tmpfs.conf
-Patch0: ppp-2.4.3-make.patch
-Patch1: ppp-2.3.6-sample.patch
-Patch2: ppp-2.4.2-libutil.patch
-Patch3: ppp-2.4.1-varargs.patch
-Patch4: ppp-2.4.4-lib64.patch
-Patch7: ppp-2.4.2-pie.patch
-Patch8: ppp-2.4.3-fix.patch
-Patch9: ppp-2.4.3-fix64.patch
-Patch11: ppp-2.4.2-change_resolv_conf.patch
-Patch13: ppp-2.4.4-no_strip.patch
-Patch17: ppp-2.4.2-pppoatm-make.patch
-Patch19: ppp-2.4.3-local.patch
-Patch20: ppp-2.4.3-ipv6-accept-remote.patch
-Patch22: ppp-2.4.4-cbcp.patch
-Patch23: ppp-2.4.2-dontwriteetc.patch
-Patch24: ppp-2.4.4-fd_leak.patch
-Patch25: ppp-2.4.5-var_run_ppp.patch
-Patch26: ppp-2.4.5-manpg.patch
-Patch27: ppp-2.4.5-eaptls-mppe-0.99.patch
-Patch28: ppp-2.4.5-ppp_resolv.patch
-Patch29: ppp-2.4.5-man.patch
-Patch30: ppp-2.4.5-eth.patch
-Patch31: ppp-2.4.5-lock.patch
-Patch32: ppp-2.4.5-l2tp-multilink.patch
-Patch33: ppp-2.4.5-radius-config.patch
-Patch34: ppp-2.4.5-crypt.patch
-Patch35: ppp-2.4.5-hardened.patch
+Source1: ppp-pam.conf
+Source2: ppp-logrotate.conf
+Source3: ppp-tmpfiles.conf
 
-BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd
+# Fedora-specific
+Patch0001: 0001-build-sys-use-gcc-as-our-compiler-of-choice.patch
+Patch0002: 0002-build-sys-enable-PAM-support.patch
+Patch0003: 0003-build-sys-utilize-compiler-flags-handed-to-us-by-rpm.patch
+Patch0004: 0004-doc-add-configuration-samples.patch
+Patch0005: 0005-build-sys-don-t-hardcode-LIBDIR-but-set-it-according.patch
+Patch0006: 0006-scritps-use-change_resolv_conf-function.patch
+Patch0007: 0007-build-sys-don-t-strip-binaries-during-installation.patch
+Patch0008: 0008-build-sys-use-prefix-usr-instead-of-usr-local.patch
+Patch0009: 0009-pppd-introduce-ipv6-accept-remote.patch
+Patch0010: 0010-build-sys-enable-CBCP.patch
+Patch0011: 0011-build-sys-don-t-put-connect-errors-log-to-etc-ppp.patch
+Patch0012: 0012-pppd-we-don-t-want-to-accidentally-leak-fds.patch
+Patch0013: 0013-everywhere-O_CLOEXEC-harder.patch
+Patch0014: 0014-everywhere-use-SOCK_CLOEXEC-when-creating-socket.patch
+Patch0015: 0015-pppd-move-pppd-database-to-var-run-ppp.patch
+Patch0016: 0016-rp-pppoe-add-manpage-for-pppoe-discovery.patch
+Patch0017: 0017-pppd-rebase-EAP-TLS-patch-v0.994.patch
+Patch0018: 0018-scritps-fix-ip-up.local-sample.patch
+Patch0019: 0019-sys-linux-rework-get_first_ethernet.patch
+Patch0020: 0020-pppd-put-lock-files-in-var-lock-ppp.patch
+Patch0021: 0021-build-sys-compile-pppol2tp-plugin-with-RPM_OPT_FLAGS.patch
+Patch0022: 0022-build-sys-compile-pppol2tp-with-multilink-support.patch
+Patch0023: 0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
+Patch0024: 0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
+Patch0025: 0025-pppd-install-pppd-binary-using-standard-perms-755.patch
+
+BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd, systemd-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
@@ -59,81 +59,37 @@ Group: Development/Libraries
 This package contains the header files for building plugins for ppp.
 
 %prep
-%setup  -q
-%patch0 -p1 -b .make
-%patch1 -p1 -b .sample
-# patch 2 depends on the -lutil in patch 0
-%patch2 -p1 -b .libutil
-%patch3 -p1 -b .varargs
-# patch 4 depends on the -lutil in patch 0
-%patch4 -p1 -b .lib64
-%patch7 -p1 -b .pie
-%patch8 -p1 -b .fix
-%patch9 -p1 -b .fix64
-%patch11 -p1 -b .change_resolv_conf
-%patch13 -p1 -b .no_strip
-%patch17 -p1 -b .atm-make
-%patch19 -p1 -b .local
-%patch20 -p1 -b .ipv6cp
-%patch22 -p1 -b .cbcp
-%patch23 -p1 -b .dontwriteetc
-%patch24 -p1 -b .fd_leak
-%patch25 -p1 -b .var_run_ppp
-%patch26 -p1 -b .manpg
-%patch27 -p1 -b .eaptls
-%patch28 -p1 -b .ppp_resolv
-%patch29 -p1 -b .man
-# fixes bz#682381 - hardcodes eth0
-%patch30 -p1 -b .eth
-# fixes bz#708260 - SELinux is preventing access on the file LCK..ttyUSB3
-%patch31 -p1 -b .lock
-%patch32 -p1 -b .l2tp-multilink
-%patch33 -p1 -b .radius
-%patch34 -p1 -b .crypt
-%patch35 -p1 -b .hardened
-
-rm -f scripts/*.local
-rm -f scripts/*.change_resolv_conf
-rm -f scripts/*.usepeerdns-var_run_ppp_resolv
-rm -f scripts/*.ppp_resolv
-find . -type f -name "*.sample" | xargs rm -f
-
-rm -f include/linux/if_pppol2tp.h
+%autosetup -N
+%autopatch -p1
 
 %build
-#find . -name 'Makefile*' -print0 | xargs -0 perl -pi.no_strip -e "s: -s : :g"
-RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall"
+export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall"
 %configure
-make
+make -j1
 
 %install
-[ "$RPM_BUILD_ROOT" != "/" ] && rm -rf $RPM_BUILD_ROOT
-export INSTROOT=$RPM_BUILD_ROOT
-make install install-etcppp
+make INSTROOT=%{buildroot} install install-etcppp
 
-chmod -R a+rX scripts
-find scripts -type f | xargs chmod a-x
-chmod 0755 $RPM_BUILD_ROOT/%{_libdir}/pppd/%{version}/*.so
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/pam.d
-install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pam.d/ppp
+# create log files dir
+install -d %{buildroot}%{_localstatedir}/log/ppp
 
-# Provide pointers for people who expect stuff in old places
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/log/ppp
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/ppp
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lock/ppp
+# install pam config
+install -d %{buildroot}%{_sysconfdir}/pam.d
+install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pam.d/ppp
 
-install -d -m 755 $RPM_BUILD_ROOT%{_tmpfilesdir}
-install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_tmpfilesdir}/ppp.conf
+# install logrotate script
+install -d %{buildroot}%{_sysconfdir}/logrotate.d
+install -p %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/ppp
 
-# Logrotate script
-mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
-install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
+# install tmpfiles drop-in
+install -d %{buildroot}%{_tmpfilesdir}
+install -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
 
 %pre
-getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
+/usr/bin/getent group dip >/dev/null 2>&1 || /usr/sbin/groupadd -r -g 40 dip >/dev/null 2>&1 || :
 
 %post
-mkdir -p %{_localstatedir}/lock/ppp 2>&1 >/dev/null || :
+%tmpfiles_create ppp.conf
 
 %files
 %defattr(-,root,root)
@@ -151,8 +107,8 @@ mkdir -p %{_localstatedir}/lock/ppp 2>&1 >/dev/null || :
 %{_mandir}/man8/pppoe-discovery.8*
 %{_libdir}/pppd
 %dir %{_sysconfdir}/ppp
-%dir %{_localstatedir}/run/ppp
-%ghost %dir %{_localstatedir}/lock/ppp
+%ghost %dir /run/ppp
+%ghost %dir /run/lock/ppp
 %dir %{_sysconfdir}/logrotate.d
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
