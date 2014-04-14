@@ -65,7 +65,7 @@ This package contains the header files for building plugins for ppp.
 %build
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall"
 %configure
-make -j1
+make %{?_smp_mflags}
 
 %install
 make INSTROOT=%{buildroot} install install-etcppp
