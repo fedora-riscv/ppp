@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.6
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -69,6 +69,7 @@ make %{?_smp_mflags}
 
 %install
 make INSTROOT=%{buildroot} install install-etcppp
+find scripts -type f | xargs chmod a-x
 
 # create log files dir
 install -d %{buildroot}%{_localstatedir}/log/ppp
@@ -127,6 +128,9 @@ install -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
 %doc PLUGINS
 
 %changelog
+* Mon Apr 14 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.6-3
+- don't require perl and expect (#1086846)
+
 * Thu Apr 10 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.6-2
 - rebase to 2.4.6
 
