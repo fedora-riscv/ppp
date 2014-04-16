@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.6
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -11,6 +11,15 @@ Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
 Source1: ppp-pam.conf
 Source2: ppp-logrotate.conf
 Source3: ppp-tmpfiles.conf
+Source4: ip-down
+Source5: ip-down.ipv6to4
+Source6: ip-up
+Source7: ip-up.ipv6to4
+Source8: ipv6-down
+Source9: ipv6-up
+Source10: ifup-ppp
+Source11: ifdown-ppp
+Source12: ppp-watch.tar.xz
 
 # Fedora-specific
 Patch0001: 0001-build-sys-use-gcc-as-our-compiler-of-choice.patch
@@ -39,8 +48,8 @@ Patch0023: 0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch0024: 0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch0025: 0025-pppd-install-pppd-binary-using-standard-perms-755.patch
 
-BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd, systemd-devel
-Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd
+BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd, systemd-devel, glib2-devel
+Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd, initscripts >= 9.54
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
 
@@ -59,17 +68,21 @@ Group: Development/Libraries
 This package contains the header files for building plugins for ppp.
 
 %prep
-%autosetup -N
+%setup -q
 %autopatch -p1
+
+tar -xJf %{SOURCE12}
 
 %build
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall"
 %configure
 make %{?_smp_mflags}
+make -C ppp-watch %{?_smp_mflags}
 
 %install
 make INSTROOT=%{buildroot} install install-etcppp
 find scripts -type f | xargs chmod a-x
+make ROOT=%{buildroot} -C ppp-watch install
 
 # create log files dir
 install -d %{buildroot}%{_localstatedir}/log/ppp
@@ -86,6 +99,19 @@ install -p %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/ppp
 install -d %{buildroot}%{_tmpfilesdir}
 install -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
 
+# install scripts (previously owned by initscripts package)
+install -d %{buildroot}%{_sysconfdir}/ppp
+install -p %{SOURCE4} %{buildroot}%{_sysconfdir}/ppp/ip-down
+install -p %{SOURCE5} %{buildroot}%{_sysconfdir}/ppp/ip-down.ipv6to4
+install -p %{SOURCE6} %{buildroot}%{_sysconfdir}/ppp/ip-up
+install -p %{SOURCE7} %{buildroot}%{_sysconfdir}/ppp/ip-up.ipv6to4
+install -p %{SOURCE8} %{buildroot}%{_sysconfdir}/ppp/ipv6-down
+install -p %{SOURCE9} %{buildroot}%{_sysconfdir}/ppp/ipv6-up
+
+install -d %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/
+install -p %{SOURCE10} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifup-ppp
+install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdown-ppp
+
 %pre
 /usr/bin/getent group dip >/dev/null 2>&1 || /usr/sbin/groupadd -r -g 40 dip >/dev/null 2>&1 || :
 
@@ -99,6 +125,16 @@ install -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
 %{_sbindir}/pppdump
 %{_sbindir}/pppoe-discovery
 %{_sbindir}/pppstats
+%{_sbindir}/ppp-watch
+%dir %{_sysconfdir}/ppp
+%{_sysconfdir}/ppp/ip-up
+%{_sysconfdir}/ppp/ip-down
+%{_sysconfdir}/ppp/ip-up.ipv6to4
+%{_sysconfdir}/ppp/ip-down.ipv6to4
+%{_sysconfdir}/ppp/ipv6-up
+%{_sysconfdir}/ppp/ipv6-down
+%{_sysconfdir}/sysconfig/network-scripts/ifdown-ppp
+%{_sysconfdir}/sysconfig/network-scripts/ifup-ppp
 %{_mandir}/man8/chat.8*
 %{_mandir}/man8/pppd.8*
 %{_mandir}/man8/pppdump.8*
@@ -106,8 +142,8 @@ install -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
 %{_mandir}/man8/pppd-radius.8*
 %{_mandir}/man8/pppstats.8*
 %{_mandir}/man8/pppoe-discovery.8*
+%{_mandir}/man8/ppp-watch.8*
 %{_libdir}/pppd
-%dir %{_sysconfdir}/ppp
 %ghost %dir /run/ppp
 %ghost %dir /run/lock/ppp
 %dir %{_sysconfdir}/logrotate.d
@@ -128,6 +164,9 @@ install -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
 %doc PLUGINS
 
 %changelog
+* Wed Apr 16 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.6-4
+- move ppp initscripts to ppp package (#1088220)
+
 * Mon Apr 14 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.6-3
 - don't require perl and expect (#1086846)
 
@@ -550,4 +589,3 @@ install -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
 * Tue Mar 25 1997 Erik Troan <ewt@redhat.com>
 - Integrated new patch from David Mosberger
 - Improved description
-
