@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 33%{?dist}
+Release: 34%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -38,6 +38,7 @@ Patch32: ppp-2.4.5-l2tp-multilink.patch
 Patch33: ppp-2.4.5-radius-config.patch
 Patch34: ppp-2.4.5-crypt.patch
 Patch35: ppp-2.4.5-hardened.patch
+Patch36: 0001-pppd-Eliminate-potential-integer-overflow-in-option-.patch
 
 BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd
@@ -91,6 +92,7 @@ This package contains the header files for building plugins for ppp.
 %patch33 -p1 -b .radius
 %patch34 -p1 -b .crypt
 %patch35 -p1 -b .hardened
+%patch36 -p1 -b .cve-2014-3158
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -171,6 +173,9 @@ mkdir -p %{_localstatedir}/lock/ppp 2>&1 >/dev/null || :
 %doc PLUGINS
 
 %changelog
+* Tue Aug 12 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.5-34
+- Fix for CVE-2014-3158
+
 * Thu Aug 01 2013 Michal Sekletar <msekleta@redhat.com> - 2.4.5-33
 - fix post installation scriptlet
 
