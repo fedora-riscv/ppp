@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -99,7 +99,7 @@ install -p %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/ppp
 
 # install tmpfiles drop-in
 install -d %{buildroot}%{_tmpfilesdir}
-install -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
+install -m 644 -p %{SOURCE3} %{buildroot}%{_tmpfilesdir}/ppp.conf
 
 # install scripts (previously owned by initscripts package)
 install -d %{buildroot}%{_sysconfdir}/ppp
@@ -166,6 +166,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Tue Aug 19 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.7-3
+- don't mark tmpfiles dropin as executable (#1131293)
+
 * Sun Aug 17 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.4.7-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_22_Mass_Rebuild
 
