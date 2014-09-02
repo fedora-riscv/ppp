@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -65,6 +65,7 @@ organization over a modem and phone line.
 %package devel
 Summary: Headers for ppp plugin development
 Group: Development/Libraries
+Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
 This package contains the header files for building plugins for ppp.
@@ -166,6 +167,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Tue Sep  2 2014 Peter Robinson <pbrobinson@fedoraproject.org> 2.4.7-4
+- devel package should depend on base package as per guidelines
+
 * Tue Aug 19 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.7-3
 - don't mark tmpfiles dropin as executable (#1131293)
 
