@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -96,7 +96,7 @@ install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/pam.d/ppp
 
 # install logrotate script
 install -d %{buildroot}%{_sysconfdir}/logrotate.d
-install -p %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/ppp
+install -m 644 -p %{SOURCE2} %{buildroot}%{_sysconfdir}/logrotate.d/ppp
 
 # install tmpfiles drop-in
 install -d %{buildroot}%{_tmpfilesdir}
@@ -167,6 +167,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Wed Nov 19 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.7-5
+- don't mark logrotate config as executable (#1164435)
+
 * Tue Sep  2 2014 Peter Robinson <pbrobinson@fedoraproject.org> 2.4.7-4
 - devel package should depend on base package as per guidelines
 
