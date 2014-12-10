@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.5
-Release: 34%{?dist}
+Release: 35%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -32,13 +32,13 @@ Patch26: ppp-2.4.5-manpg.patch
 Patch27: ppp-2.4.5-eaptls-mppe-0.99.patch
 Patch28: ppp-2.4.5-ppp_resolv.patch
 Patch29: ppp-2.4.5-man.patch
-Patch30: ppp-2.4.5-eth.patch
 Patch31: ppp-2.4.5-lock.patch
 Patch32: ppp-2.4.5-l2tp-multilink.patch
 Patch33: ppp-2.4.5-radius-config.patch
 Patch34: ppp-2.4.5-crypt.patch
 Patch35: ppp-2.4.5-hardened.patch
 Patch36: 0001-pppd-Eliminate-potential-integer-overflow-in-option-.patch
+Patch37: 0001-sys-linux-rework-get_first_ethernet.patch
 
 BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd
@@ -84,8 +84,6 @@ This package contains the header files for building plugins for ppp.
 %patch27 -p1 -b .eaptls
 %patch28 -p1 -b .ppp_resolv
 %patch29 -p1 -b .man
-# fixes bz#682381 - hardcodes eth0
-%patch30 -p1 -b .eth
 # fixes bz#708260 - SELinux is preventing access on the file LCK..ttyUSB3
 %patch31 -p1 -b .lock
 %patch32 -p1 -b .l2tp-multilink
@@ -93,6 +91,8 @@ This package contains the header files for building plugins for ppp.
 %patch34 -p1 -b .crypt
 %patch35 -p1 -b .hardened
 %patch36 -p1 -b .cve-2014-3158
+# rewritten fix for bz#682381 - hardcodes eth0
+%patch37 -p1 -b .eth
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -173,6 +173,9 @@ mkdir -p %{_localstatedir}/lock/ppp 2>&1 >/dev/null || :
 %doc PLUGINS
 
 %changelog
+* Tue Dec 09 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.5-35
+- replace patch implementing get_first_ethernet with F21 version (#1062419)
+
 * Tue Aug 12 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.5-34
 - Fix for CVE-2014-3158
 
