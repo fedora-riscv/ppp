@@ -39,6 +39,7 @@ Patch34: ppp-2.4.5-crypt.patch
 Patch35: ppp-2.4.5-hardened.patch
 Patch36: 0001-pppd-Eliminate-potential-integer-overflow-in-option-.patch
 Patch37: 0001-sys-linux-rework-get_first_ethernet.patch
+Patch38: 0001-Fix-logical-expression-in-eap_client_active-macro.patch
 
 BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd
@@ -93,6 +94,7 @@ This package contains the header files for building plugins for ppp.
 %patch36 -p1 -b .cve-2014-3158
 # rewritten fix for bz#682381 - hardcodes eth0
 %patch37 -p1 -b .eth
+%patch38 -p1 -b .eap-client-active
 
 rm -f scripts/*.local
 rm -f scripts/*.change_resolv_conf
@@ -173,6 +175,7 @@ getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
 * Tue Dec 09 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.5-35
 - replace patch implementing get_first_ethernet with F21 version (#1062419)
 - don't ship /var/run/ppp (#1053135)
+- fix logical expression in eap_client_active macro (#1023620)
 
 * Tue Aug 12 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.5-34
 - Fix for CVE-2014-3158
