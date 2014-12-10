@@ -122,7 +122,7 @@ install -m 644 %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/pam.d/ppp
 # Provide pointers for people who expect stuff in old places
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/log/ppp
 mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/ppp
-mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/lock/ppp
+mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/lock/ppp
 
 install -d -m 755 $RPM_BUILD_ROOT%{_tmpfilesdir}
 install -p -m 644 %{SOURCE3} $RPM_BUILD_ROOT%{_tmpfilesdir}/ppp.conf
@@ -133,9 +133,6 @@ install -m 644 %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/ppp
 
 %pre
 getent group dip >/dev/null 2>&1 || groupadd -r -g 40 dip >/dev/null 2>&1 || :
-
-%post
-mkdir -p %{_localstatedir}/lock/ppp 2>&1 >/dev/null || :
 
 %files
 %defattr(-,root,root)
@@ -153,8 +150,8 @@ mkdir -p %{_localstatedir}/lock/ppp 2>&1 >/dev/null || :
 %{_mandir}/man8/pppoe-discovery.8*
 %{_libdir}/pppd
 %dir %{_sysconfdir}/ppp
-%dir %{_localstatedir}/run/ppp
-%ghost %dir %{_localstatedir}/lock/ppp
+%ghost %dir %{_localstatedir}/run/ppp
+%ghost %dir %{_localstatedir}/run/lock/ppp
 %dir %{_sysconfdir}/logrotate.d
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
@@ -175,6 +172,7 @@ mkdir -p %{_localstatedir}/lock/ppp 2>&1 >/dev/null || :
 %changelog
 * Tue Dec 09 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.5-35
 - replace patch implementing get_first_ethernet with F21 version (#1062419)
+- don't ship /var/run/ppp (#1053135)
 
 * Tue Aug 12 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.5-34
 - Fix for CVE-2014-3158
