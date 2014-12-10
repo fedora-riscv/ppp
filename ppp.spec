@@ -41,7 +41,7 @@ Patch36: 0001-pppd-Eliminate-potential-integer-overflow-in-option-.patch
 Patch37: 0001-sys-linux-rework-get_first_ethernet.patch
 Patch38: 0001-Fix-logical-expression-in-eap_client_active-macro.patch
 
-BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd
+BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd, systemd-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
