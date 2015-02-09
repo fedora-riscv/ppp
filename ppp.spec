@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -78,7 +78,7 @@ This package contains the header files for building plugins for ppp.
 tar -xJf %{SOURCE12}
 
 %build
-export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall"
+export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall -fno-strict-aliasing"
 %configure
 make %{?_smp_mflags}
 make -C ppp-watch %{?_smp_mflags}
@@ -168,6 +168,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Mon Feb 09 2015 Michal Sekletar <msekleta@redhat.com> - 2.4.7-7
+- prevent running into issues caused by undefined behavior (pointers of incompatible types aliasing the same object)
+
 * Wed Dec 10 2014 Michal Sekletar <msekleta@redhat.com> - 2.4.7-6
 - fix logical expression in eap_client_active macro (#1023620)
 
