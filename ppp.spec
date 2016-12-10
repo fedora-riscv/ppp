@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -50,6 +50,7 @@ Patch0025:      0025-pppd-install-pppd-binary-using-standard-perms-755.patch
 Patch0026:      0026-Revert-pppd-rebase-EAP-TLS-patch-v0.994.patch
 Patch0027:      0027-pppd-EAP-TLS-patch-v0.997.patch
 Patch0028:      0028-Fix-logical-expression-in-eap_client_active-macro.patch
+Patch0029:      0029-pppoe-include-netinet-in.h-before-linux-in.h.patch
 
 BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd, systemd-devel, glib2-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd, initscripts >= 9.54
@@ -168,6 +169,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Sat Dec 10 2016 Lubomir Rintel <lkundrak@v3.sk> - 2.4.7-10
+- Fix FTBFS
+
 * Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.7-9
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
