@@ -52,7 +52,8 @@ Patch0027:      0027-pppd-EAP-TLS-patch-v0.997.patch
 Patch0028:      0028-Fix-logical-expression-in-eap_client_active-macro.patch
 Patch0029:      0029-pppoe-include-netinet-in.h-before-linux-in.h.patch
 
-BuildRequires: pam-devel, libpcap-devel, openssl-devel, systemd, systemd-devel, glib2-devel
+BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
+BuildRequires: pkgconfig(openssl) < 1.1
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd, initscripts >= 9.54
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
