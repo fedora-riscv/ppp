@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 13%{?dist}
+Release: 14%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -48,12 +48,11 @@ Patch0023:      0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch0024:      0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch0025:      0025-pppd-install-pppd-binary-using-standard-perms-755.patch
 Patch0026:      0026-Revert-pppd-rebase-EAP-TLS-patch-v0.994.patch
-Patch0027:      0027-pppd-EAP-TLS-patch-v0.997.patch
-Patch0028:      0028-Fix-logical-expression-in-eap_client_active-macro.patch
-Patch0029:      0029-pppoe-include-netinet-in.h-before-linux-in.h.patch
+Patch0027:      0027-pppd-EAP-TLS-patch-v0.999.patch
+Patch0028:      0028-pppoe-include-netinet-in.h-before-linux-in.h.patch
 
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
-BuildRequires: pkgconfig(openssl) < 1.1
+BuildRequires: openssl-devel
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd, initscripts >= 9.54
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
@@ -170,6 +169,10 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Mon Aug 21 2017 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-14
+- EAP-TLS patch updated to version 0.999
+- Switched to openssl-1.1
+
 * Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.7-13
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
 
