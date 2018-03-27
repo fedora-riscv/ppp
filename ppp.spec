@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 17%{?dist}
+Release: 18%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -50,6 +50,9 @@ Patch0025:      0025-pppd-install-pppd-binary-using-standard-perms-755.patch
 Patch0026:      0026-Revert-pppd-rebase-EAP-TLS-patch-v0.994.patch
 Patch0027:      0027-pppd-EAP-TLS-patch-v0.999.patch
 Patch0028:      0028-pppoe-include-netinet-in.h-before-linux-in.h.patch
+
+# rhbz#1556132
+Patch0029:      ppp-2.4.7-DES-openssl.patch
 
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
 BuildRequires: openssl-devel
@@ -169,6 +172,10 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Tue Mar 27 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-18
+- Used openssl for the DES instead of the libcrypt / glibc
+  Resolves: rhbz#1556132
+
 * Fri Feb 09 2018 Igor Gnatenko <ignatenkobrain@fedoraproject.org> - 2.4.7-17
 - Escape macros in %%changelog
 
