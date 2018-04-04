@@ -1,0 +1,118 @@
+diff --git a/chat/Makefile.linux b/chat/Makefile.linux
+index 2445637..83114f1 100644
+--- a/chat/Makefile.linux
++++ b/chat/Makefile.linux
+@@ -18,7 +18,7 @@ INSTALL= install
+ all:	chat
+ 
+ chat:	chat.o
+-	$(CC) -o chat chat.o
++	$(CC) $(LDFLAGS) -o chat chat.o
+ 
+ chat.o:	chat.c
+ 	$(CC) -c $(CFLAGS) -o chat.o chat.c
+diff --git a/pppd/plugins/Makefile.linux b/pppd/plugins/Makefile.linux
+index 303833a..04fe876 100644
+--- a/pppd/plugins/Makefile.linux
++++ b/pppd/plugins/Makefile.linux
+@@ -1,7 +1,7 @@
+ #CC	= gcc
+ COPTS	= $(RPM_OPT_FLAGS)
+ CFLAGS	= $(COPTS) -I.. -I../../include -fPIC
+-LDFLAGS	= -shared
++LDFLAGS_SHARED	= -shared
+ INSTALL	= install
+ 
+ # EAP-TLS
+@@ -33,7 +33,7 @@ all:	$(PLUGINS)
+ 	for d in $(SUBDIRS); do $(MAKE) $(MFLAGS) -C $$d all; done
+ 
+ %.so: %.c
+-	$(CC) -o $@ $(LDFLAGS) $(CFLAGS) $^
++	$(CC) -o $@ $(LDFLAGS) $(LDFLAGS_SHARED) $(CFLAGS) $^
+ 
+ VERSION = $(shell awk -F '"' '/VERSION/ { print $$2; }' ../patchlevel.h)
+ 
+diff --git a/pppd/plugins/pppoatm/Makefile.linux b/pppd/plugins/pppoatm/Makefile.linux
+index 4c5826f..1961e0e 100644
+--- a/pppd/plugins/pppoatm/Makefile.linux
++++ b/pppd/plugins/pppoatm/Makefile.linux
+@@ -1,7 +1,7 @@
+ #CC	= gcc
+ COPTS	= $(RPM_OPT_FLAGS)
+ CFLAGS	= $(COPTS) -I../.. -I../../../include -fPIC
+-LDFLAGS	= -shared
++LDFLAGS_SHARED	= -shared
+ INSTALL	= install
+ 
+ #***********************************************************************
+@@ -33,7 +33,7 @@ endif
+ all: $(PLUGIN)
+ 
+ $(PLUGIN): $(PLUGIN_OBJS)
+-	$(CC) $(CFLAGS) -o $@ -shared $^ $(LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(LDFLAGS_SHARED) $^ $(LIBS)
+ 
+ install: all
+ 	$(INSTALL) -d -m 755 $(LIBDIR)
+diff --git a/pppd/plugins/pppol2tp/Makefile.linux b/pppd/plugins/pppol2tp/Makefile.linux
+index 9cb316d..7b23b25 100644
+--- a/pppd/plugins/pppol2tp/Makefile.linux
++++ b/pppd/plugins/pppol2tp/Makefile.linux
+@@ -1,7 +1,7 @@
+ #CC	= gcc
+ COPTS	= $(RPM_OPT_FLAGS) -DHAVE_MULTILINK
+ CFLAGS	= $(COPTS) -I. -I../.. -I../../../include -fPIC
+-LDFLAGS	= -shared
++LDFLAGS_SHARED	= -shared
+ INSTALL	= install
+ 
+ #***********************************************************************
+@@ -16,7 +16,7 @@ PLUGINS := pppol2tp.so openl2tp.so
+ all: $(PLUGINS)
+ 
+ %.so: %.o
+-	$(CC) $(CFLAGS) -o $@ -shared $^ $(LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(LDFLAGS_SHARED) $^ $(LIBS)
+ 
+ install: all
+ 	$(INSTALL) -d -m 755 $(LIBDIR)
+diff --git a/pppd/plugins/rp-pppoe/Makefile.linux b/pppd/plugins/rp-pppoe/Makefile.linux
+index fa49efb..d735c51 100644
+--- a/pppd/plugins/rp-pppoe/Makefile.linux
++++ b/pppd/plugins/rp-pppoe/Makefile.linux
+@@ -31,7 +31,7 @@ CFLAGS=$(COPTS) -I../../../include '-DRP_VERSION="$(RP_VERSION)"'
+ all: rp-pppoe.so pppoe-discovery
+ 
+ pppoe-discovery: pppoe-discovery.o debug.o common.o
+-	$(CC) -o pppoe-discovery pppoe-discovery.o debug.o -ludev
++	$(CC) $(LDFLAGS) -o pppoe-discovery pppoe-discovery.o debug.o -ludev
+ 
+ pppoe-discovery.o: pppoe-discovery.c
+ 	$(CC) $(CFLAGS) -c -o pppoe-discovery.o pppoe-discovery.c
+diff --git a/pppdump/Makefile.linux b/pppdump/Makefile.linux
+index 95c6805..33e5107 100644
+--- a/pppdump/Makefile.linux
++++ b/pppdump/Makefile.linux
+@@ -10,7 +10,7 @@ INSTALL= install
+ all:	pppdump
+ 
+ pppdump: $(OBJS)
+-	$(CC) -o pppdump $(OBJS)
++	$(CC) $(LDFLAGS) -o pppdump $(OBJS)
+ 
+ clean:
+ 	rm -f pppdump $(OBJS) *~
+diff --git a/pppstats/Makefile.linux b/pppstats/Makefile.linux
+index c5ba3b1..eeccf83 100644
+--- a/pppstats/Makefile.linux
++++ b/pppstats/Makefile.linux
+@@ -26,7 +26,7 @@ install: pppstats
+ 	$(INSTALL) -c -m 444 pppstats.8 $(MANDIR)
+ 
+ pppstats: $(PPPSTATSRCS)
+-	$(CC) $(CFLAGS) -o pppstats pppstats.c $(LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) -o pppstats pppstats.c $(LIBS)
+ 
+ clean:
+ 	rm -f pppstats *~ #* core

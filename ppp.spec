@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 18%{?dist}
+Release: 19%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -53,6 +53,8 @@ Patch0028:      0028-pppoe-include-netinet-in.h-before-linux-in.h.patch
 
 # rhbz#1556132
 Patch0029:      ppp-2.4.7-DES-openssl.patch
+# https://github.com/paulusmack/ppp/pull/95
+Patch0030:      ppp-2.4.7-honor-ldflags.patch
 
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
 BuildRequires: openssl-devel
@@ -83,9 +85,10 @@ tar -xJf %{SOURCE12}
 
 %build
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall -fno-strict-aliasing"
+export RPM_LD_FLAGS="$LDFLAGS"
 %configure
-make %{?_smp_mflags}
-make -C ppp-watch %{?_smp_mflags}
+make %{?_smp_mflags} LDFLAGS="%{?build_ldflags}"
+make -C ppp-watch %{?_smp_mflags} LDFLAGS="%{?build_ldflags}"
 
 %install
 make INSTROOT=%{buildroot} install install-etcppp
@@ -172,6 +175,10 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Wed Apr  4 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-19
+- Build with distro's LDFLAGS
+  Resolves: rhbz#1563157
+
 * Tue Mar 27 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-18
 - Used openssl for the DES instead of the libcrypt / glibc
   Resolves: rhbz#1556132
