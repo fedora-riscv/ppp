@@ -77,8 +77,29 @@ index 9cb316d..7b23b25 100644
  
  install: all
  	$(INSTALL) -d -m 755 $(LIBDIR)
+diff --git a/pppd/plugins/radius/Makefile.linux b/pppd/plugins/radius/Makefile.linux
+index 707326b..2150332 100644
+--- a/pppd/plugins/radius/Makefile.linux
++++ b/pppd/plugins/radius/Makefile.linux
+@@ -43,13 +43,13 @@ install: all
+ 	$(INSTALL) -c -m 444 pppd-radattr.8 $(MANDIR)
+ 
+ radius.so: radius.o libradiusclient.a
+-	$(CC) -o radius.so -shared radius.o libradiusclient.a
++	$(CC) $(LDFLAGS) -o radius.so -shared radius.o libradiusclient.a
+ 
+ radattr.so: radattr.o
+-	$(CC) -o radattr.so -shared radattr.o
++	$(CC) $(LDFLAGS) -o radattr.so -shared radattr.o
+ 
+ radrealms.so: radrealms.o
+-	$(CC) -o radrealms.so -shared radrealms.o
++	$(CC) $(LDFLAGS) -o radrealms.so -shared radrealms.o
+ 
+ CLIENTOBJS = avpair.o buildreq.o config.o dict.o ip_util.o \
+ 	clientid.o sendserver.o lock.o util.o md5.o
 diff --git a/pppd/plugins/rp-pppoe/Makefile.linux b/pppd/plugins/rp-pppoe/Makefile.linux
-index fa49efb..d735c51 100644
+index fa49efb..5e06b52 100644
 --- a/pppd/plugins/rp-pppoe/Makefile.linux
 +++ b/pppd/plugins/rp-pppoe/Makefile.linux
 @@ -31,7 +31,7 @@ CFLAGS=$(COPTS) -I../../../include '-DRP_VERSION="$(RP_VERSION)"'
@@ -90,6 +111,15 @@ index fa49efb..d735c51 100644
  
  pppoe-discovery.o: pppoe-discovery.c
  	$(CC) $(CFLAGS) -c -o pppoe-discovery.o pppoe-discovery.c
+@@ -40,7 +40,7 @@ debug.o: debug.c
+ 	$(CC) $(CFLAGS) -c -o debug.o debug.c
+ 
+ rp-pppoe.so: plugin.o discovery.o if.o common.o
+-	$(CC) -o rp-pppoe.so -shared plugin.o discovery.o if.o common.o
++	$(CC) $(LDFLAGS) -o rp-pppoe.so -shared plugin.o discovery.o if.o common.o
+ 
+ install: all
+ 	$(INSTALL) -d -m 755 $(LIBDIR)
 diff --git a/pppdump/Makefile.linux b/pppdump/Makefile.linux
 index 95c6805..33e5107 100644
 --- a/pppdump/Makefile.linux
