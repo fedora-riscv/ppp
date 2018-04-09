@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 20%{?dist}
+Release: 21%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -175,6 +175,10 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Mon Apr  9 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-21
+- Link with -E not to break plugins
+  Resolves: rhbz#1564459
+
 * Fri Apr  6 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-20
 - Also build all DSOs with distro's LDFLAGS
   Related: rhbz#1563157

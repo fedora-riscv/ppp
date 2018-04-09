@@ -11,6 +11,28 @@ index 2445637..83114f1 100644
  
  chat.o:	chat.c
  	$(CC) -c $(CFLAGS) -o chat.o chat.c
+diff --git a/pppd/Makefile.linux b/pppd/Makefile.linux
+index cf11b74..089f164 100644
+--- a/pppd/Makefile.linux
++++ b/pppd/Makefile.linux
+@@ -188,7 +188,7 @@ endif
+ 
+ ifdef PLUGIN
+ CFLAGS	+= -DPLUGIN
+-LDFLAGS	+= -Wl,-E
++LDFLAGS_PLUGIN	+= -Wl,-E
+ LIBS	+= -ldl
+ endif
+ 
+@@ -230,7 +230,7 @@ install: pppd
+ 	$(INSTALL) -c -m 644 pppd.8 $(MANDIR)
+ 
+ pppd: $(PPPDOBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -o pppd $(PPPDOBJS) $(LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(LDFLAGS_PLUGIN) -o pppd $(PPPDOBJS) $(LIBS)
+ 
+ srp-entry:	srp-entry.c
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ srp-entry.c $(LIBS)
 diff --git a/pppd/plugins/Makefile.linux b/pppd/plugins/Makefile.linux
 index 303833a..04fe876 100644
 --- a/pppd/plugins/Makefile.linux
