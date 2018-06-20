@@ -3,7 +3,7 @@
 Summary: The Point-to-Point Protocol daemon
 Name: ppp
 Version: 2.4.7
-Release: 22%{?dist}
+Release: 23%{?dist}
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 Group: System Environment/Daemons
 URL: http://www.samba.org/ppp
@@ -56,7 +56,7 @@ Patch0030:      ppp-2.4.7-honor-ldflags.patch
 
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
 BuildRequires: openssl-devel
-Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd, initscripts >= 9.54
+Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd, network-scripts
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
 
@@ -173,6 +173,10 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Wed Jun 20 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-23
+- Replaced initscripts requirement by the network-scripts
+  Resolves: rhbz#1592384
+
 * Tue Jun  5 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-22
 - Updated EAP-TLS patch to v1.101
   Resolves: CVE-2018-11574
