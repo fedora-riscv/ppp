@@ -1,12 +1,12 @@
 %global _hardened_build 1
 
-Summary: The Point-to-Point Protocol daemon
-Name: ppp
+Name:    ppp
 Version: 2.4.7
-Release: 23%{?dist}
+Release: 24%{?dist}
+Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
-Group: System Environment/Daemons
-URL: http://www.samba.org/ppp
+URL:     http://www.samba.org/ppp
+
 Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
 Source1: ppp-pam.conf
 Source2: ppp-logrotate.conf
@@ -56,6 +56,7 @@ Patch0030:      ppp-2.4.7-honor-ldflags.patch
 
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
 BuildRequires: openssl-devel
+
 Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd, network-scripts
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
@@ -69,7 +70,6 @@ organization over a modem and phone line.
 
 %package devel
 Summary: Headers for ppp plugin development
-Group: Development/Libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %description devel
@@ -128,7 +128,7 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %tmpfiles_create ppp.conf
 
 %files
-%defattr(-,root,root)
+%doc FAQ README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample README.eap-tls
 %{_sbindir}/chat
 %{_sbindir}/pppd
 %{_sbindir}/pppdump
@@ -165,14 +165,15 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %config(noreplace) %{_sysconfdir}/pam.d/ppp
 %config(noreplace) %{_sysconfdir}/logrotate.d/ppp
 %{_tmpfilesdir}/ppp.conf
-%doc FAQ README README.cbcp README.linux README.MPPE README.MSCHAP80 README.MSCHAP81 README.pwfd README.pppoe scripts sample README.eap-tls
 
 %files devel
-%defattr(-,root,root)
 %{_includedir}/pppd
 %doc PLUGINS
 
 %changelog
+* Sat Jun 30 2018 Peter Robinson <pbrobinson@fedoraproject.org> 2.4.7-24
+- Remove group/defattr, minor spec cleanups
+
 * Wed Jun 20 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-23
 - Replaced initscripts requirement by the network-scripts
   Resolves: rhbz#1592384
