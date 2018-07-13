@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.7
-Release: 24%{?dist}
+Release: 25%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -171,6 +171,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.7-25
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Sat Jun 30 2018 Peter Robinson <pbrobinson@fedoraproject.org> 2.4.7-24
 - Remove group/defattr, minor spec cleanups
 
