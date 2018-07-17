@@ -54,6 +54,7 @@ Patch0029:      ppp-2.4.7-DES-openssl.patch
 # https://github.com/paulusmack/ppp/pull/95
 Patch0030:      ppp-2.4.7-honor-ldflags.patch
 
+BuildRequires: gcc
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
 BuildRequires: openssl-devel
 
