@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.7
-Release: 25%{?dist}
+Release: 26%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -58,7 +58,7 @@ BuildRequires: gcc
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
 BuildRequires: openssl-devel
 
-Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd, network-scripts
+Requires: glibc >= 2.0.6, /etc/pam.d/system-auth, libpcap >= 14:0.8.3-6, systemd
 Requires(pre): /usr/bin/getent
 Requires(pre): /usr/sbin/groupadd
 
@@ -68,6 +68,15 @@ documentation for PPP support. The PPP protocol provides a method for
 transmitting datagrams over serial point-to-point links. PPP is
 usually used to dial in to an ISP (Internet Service Provider) or other
 organization over a modem and phone line.
+
+%package -n network-scripts-%{name}
+Summary: PPP legacy network service support
+Requires: network-scripts
+Supplements: (%{name} and network-scripts)
+
+%description -n network-scripts-%{name}
+This provides the ifup and ifdown scripts for use with the legacy network
+service.
 
 %package devel
 Summary: Headers for ppp plugin development
@@ -114,7 +123,7 @@ install -d %{buildroot}%{_sysconfdir}/ppp
 install -p %{SOURCE4} %{buildroot}%{_sysconfdir}/ppp/ip-down
 install -p %{SOURCE5} %{buildroot}%{_sysconfdir}/ppp/ip-down.ipv6to4
 install -p %{SOURCE6} %{buildroot}%{_sysconfdir}/ppp/ip-up
-install -p %{SOURCE7} %{buildroot}%{_sysconfdir}/ppp/ip-up.ipv6to4
+install -p %{SOURCE8} %{buildroot}%{_sysconfdir}/ppp/ip-up.ipv6to4
 install -p %{SOURCE8} %{buildroot}%{_sysconfdir}/ppp/ipv6-down
 install -p %{SOURCE9} %{buildroot}%{_sysconfdir}/ppp/ipv6-up
 
@@ -143,8 +152,6 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %{_sysconfdir}/ppp/ip-down.ipv6to4
 %{_sysconfdir}/ppp/ipv6-up
 %{_sysconfdir}/ppp/ipv6-down
-%{_sysconfdir}/sysconfig/network-scripts/ifdown-ppp
-%{_sysconfdir}/sysconfig/network-scripts/ifup-ppp
 %{_mandir}/man8/chat.8*
 %{_mandir}/man8/pppd.8*
 %{_mandir}/man8/pppdump.8*
@@ -167,11 +174,18 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %config(noreplace) %{_sysconfdir}/logrotate.d/ppp
 %{_tmpfilesdir}/ppp.conf
 
+%files -n network-scripts-%{name}
+%{_sysconfdir}/sysconfig/network-scripts/ifdown-ppp
+%{_sysconfdir}/sysconfig/network-scripts/ifup-ppp
+
 %files devel
 %{_includedir}/pppd
 %doc PLUGINS
 
 %changelog
+* Tue Jul 24 2018 Lubomir Rintel <lkundrak@v3.sk> - 2.4.7-26
+- Split out the network-scripts
+
 * Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.7-25
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
