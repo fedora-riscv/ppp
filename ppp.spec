@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.7
-Release: 27%{?dist}
+Release: 28%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -123,7 +123,7 @@ install -d %{buildroot}%{_sysconfdir}/ppp
 install -p %{SOURCE4} %{buildroot}%{_sysconfdir}/ppp/ip-down
 install -p %{SOURCE5} %{buildroot}%{_sysconfdir}/ppp/ip-down.ipv6to4
 install -p %{SOURCE6} %{buildroot}%{_sysconfdir}/ppp/ip-up
-install -p %{SOURCE8} %{buildroot}%{_sysconfdir}/ppp/ip-up.ipv6to4
+install -p %{SOURCE7} %{buildroot}%{_sysconfdir}/ppp/ip-up.ipv6to4
 install -p %{SOURCE8} %{buildroot}%{_sysconfdir}/ppp/ipv6-down
 install -p %{SOURCE9} %{buildroot}%{_sysconfdir}/ppp/ipv6-up
 
@@ -183,6 +183,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Tue Nov 20 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-28
+- Fixed network scripts related regression caused by release 26
+
 * Mon Nov  5 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-27
 - Updated EAP-TLS patch to v1.102
 
