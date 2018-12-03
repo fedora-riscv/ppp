@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.7
-Release: 28%{?dist}
+Release: 29%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -53,6 +53,7 @@ Patch0028:      0028-pppoe-include-netinet-in.h-before-linux-in.h.patch
 Patch0029:      ppp-2.4.7-DES-openssl.patch
 # https://github.com/paulusmack/ppp/pull/95
 Patch0030:      ppp-2.4.7-honor-ldflags.patch
+Patch0031:      ppp-2.4.7-coverity-scan-fixes.patch
 
 BuildRequires: gcc
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
@@ -183,6 +184,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Mon Dec  3 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-29
+- Fixed some issues found by coverity scan
+
 * Tue Nov 20 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-28
 - Fixed network scripts related regression caused by release 26
 
