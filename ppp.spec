@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.7
-Release: 29%{?dist}
+Release: 30%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -184,6 +184,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Mon Jan 14 2019 Björn Esser <besser82@fedoraproject.org> - 2.4.7-30
+- Rebuilt for libcrypt.so.2 (#1666033)
+
 * Mon Dec  3 2018 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-29
 - Fixed some issues found by coverity scan
 
