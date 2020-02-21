@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.7
-Release: 33%{?dist}
+Release: 34%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -54,6 +54,7 @@ Patch0029:      ppp-2.4.7-DES-openssl.patch
 # https://github.com/paulusmack/ppp/pull/95
 Patch0030:      ppp-2.4.7-honor-ldflags.patch
 Patch0031:      ppp-2.4.7-coverity-scan-fixes.patch
+Patch0032:      ppp-2.4.7-CVE-2020-8597.patch
 
 BuildRequires: gcc
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
@@ -184,6 +185,10 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Fri Feb 21 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-34
+- Fixed buffer overflow in the eap_request and eap_response functions
+  Resolves: CVE-2020-8597
+
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.7-33
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
