@@ -3174,7 +3174,7 @@ diff -Naur ppp-2.4.7/pppd/plugins/Makefile.linux ppp-2.4.7-eaptls-mppe-1.102/ppp
 --- ppp-2.4.7/pppd/plugins/Makefile.linux	2014-08-09 14:31:39.000000000 +0200
 +++ ppp-2.4.7-eaptls-mppe-1.102/pppd/plugins/Makefile.linux	2018-10-30 16:47:59.539263095 +0100
 @@ -4,6 +4,9 @@
- LDFLAGS	= -shared
+ LDFLAGS_SHARED	= -shared
  INSTALL	= install
  
 +# EAP-TLS

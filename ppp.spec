@@ -1,13 +1,13 @@
 %global _hardened_build 1
 
 Name:    ppp
-Version: 2.4.7
-Release: 33%{?dist}
+Version: 2.4.8
+Release: 1%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
 
-Source0: ftp://ftp.samba.org/pub/ppp/ppp-%{version}.tar.gz
+Source0: https://github.com/paulusmack/ppp/archive/ppp-%{version}.tar.gz
 Source1: ppp-pam.conf
 Source2: ppp-logrotate.conf
 Source3: ppp-tmpfiles.conf
@@ -23,37 +23,32 @@ Source12: ppp-watch.tar.xz
 
 # Fedora-specific
 Patch0001:      0001-build-sys-use-gcc-as-our-compiler-of-choice.patch
-Patch0002:      0002-build-sys-enable-PAM-support.patch
-Patch0003:      0003-build-sys-utilize-compiler-flags-handed-to-us-by-rpm.patch
+Patch0002:      ppp-2.4.8-build-sys-enable-PAM-support.patch
+Patch0003:      ppp-2.4.8-build-sys-utilize-compiler-flags-handed-to-us-by-rpm.patch
 Patch0004:      0004-doc-add-configuration-samples.patch
-Patch0005:      0005-build-sys-don-t-hardcode-LIBDIR-but-set-it-according.patch
+Patch0005:      ppp-2.4.8-build-sys-don-t-hardcode-LIBDIR-but-set-it-according.patch
 Patch0006:      0006-scritps-use-change_resolv_conf-function.patch
 Patch0007:      0007-build-sys-don-t-strip-binaries-during-installation.patch
 Patch0008:      0008-build-sys-use-prefix-usr-instead-of-usr-local.patch
-Patch0009:      0009-pppd-introduce-ipv6-accept-remote.patch
+Patch0009:      ppp-2.4.8-pppd-introduce-ipv6-accept-remote.patch
 Patch0010:      0010-build-sys-enable-CBCP.patch
 Patch0011:      0011-build-sys-don-t-put-connect-errors-log-to-etc-ppp.patch
-Patch0012:      0012-pppd-we-don-t-want-to-accidentally-leak-fds.patch
-Patch0013:      0013-everywhere-O_CLOEXEC-harder.patch
+Patch0012:      ppp-2.4.8-pppd-we-don-t-want-to-accidentally-leak-fds.patch
+Patch0013:      ppp-2.4.8-everywhere-O_CLOEXEC-harder.patch
 Patch0014:      0014-everywhere-use-SOCK_CLOEXEC-when-creating-socket.patch
 Patch0015:      0015-pppd-move-pppd-database-to-var-run-ppp.patch
 Patch0016:      0016-rp-pppoe-add-manpage-for-pppoe-discovery.patch
 Patch0018:      0018-scritps-fix-ip-up.local-sample.patch
-Patch0019:      0019-sys-linux-rework-get_first_ethernet.patch
+Patch0019:      ppp-2.4.8-sys-linux-rework-get_first_ethernet.patch
 Patch0020:      0020-pppd-put-lock-files-in-var-lock-ppp.patch
-Patch0021:      0021-build-sys-compile-pppol2tp-plugin-with-RPM_OPT_FLAGS.patch
-Patch0022:      0022-build-sys-compile-pppol2tp-with-multilink-support.patch
+Patch0021:      ppp-2.4.8-build-sys-compile-pppol2tp-plugin-with-RPM_OPT_FLAGS.patch
+Patch0022:      ppp-2.4.8-build-sys-compile-pppol2tp-with-multilink-support.patch
 Patch0023:      0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch0024:      0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
-Patch0025:      0025-pppd-install-pppd-binary-using-standard-perms-755.patch
-Patch0026:      ppp-2.4.7-eaptls-mppe-1.102.patch
-Patch0028:      0028-pppoe-include-netinet-in.h-before-linux-in.h.patch
+Patch0025:      ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
+Patch0026:      ppp-2.4.8-eaptls-mppe-1.102.patch
 
-# rhbz#1556132
-Patch0029:      ppp-2.4.7-DES-openssl.patch
-# https://github.com/paulusmack/ppp/pull/95
-Patch0030:      ppp-2.4.7-honor-ldflags.patch
-Patch0031:      ppp-2.4.7-coverity-scan-fixes.patch
+Patch0032:      ppp-2.4.8-CVE-2020-8597.patch
 
 BuildRequires: gcc
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
@@ -87,7 +82,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 This package contains the header files for building plugins for ppp.
 
 %prep
-%setup -q
+%setup -qn %{name}-%{name}-%{version}
 %autopatch -p1
 
 tar -xJf %{SOURCE12}
@@ -184,6 +179,15 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Fri Feb 21 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-1
+- New version
+- Changed sources to github
+- Dropped 0028-pppoe-include-netinet-in.h-before-linux-in.h,
+  ppp-2.4.7-DES-openssl, ppp-2.4.7-honor-ldflags,
+  ppp-2.4.7-coverity-scan-fixes  patches (all upstreamed)
+- Fixed buffer overflow in the eap_request and eap_response functions
+  Resolves: CVE-2020-8597
+
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.7-33
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
