@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -127,6 +127,10 @@ install -d %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/
 install -p %{SOURCE10} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifup-ppp
 install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdown-ppp
 
+# ghosts
+mkdir -p %{buildroot}%{_rundir}/ppp
+mkdir -p %{buildroot}%{_rundir}/lock/ppp
+
 %pre
 /usr/bin/getent group dip >/dev/null 2>&1 || /usr/sbin/groupadd -r -g 40 dip >/dev/null 2>&1 || :
 
@@ -157,8 +161,8 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %{_mandir}/man8/pppoe-discovery.8*
 %{_mandir}/man8/ppp-watch.8*
 %{_libdir}/pppd
-%ghost %dir /run/ppp
-%ghost %dir /run/lock/ppp
+%ghost %dir %{_rundir}/ppp
+%ghost %dir %{_rundir}/lock/ppp
 %dir %{_sysconfdir}/logrotate.d
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
@@ -179,6 +183,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Wed Feb 26 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-2
+- Fixed ghost directories verification
+
 * Fri Feb 21 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-1
 - New version
 - Changed sources to github
