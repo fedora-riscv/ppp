@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.8
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -91,8 +91,8 @@ tar -xJf %{SOURCE12}
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall -fno-strict-aliasing"
 export RPM_LD_FLAGS="$LDFLAGS"
 %configure
-make %{?_smp_mflags} LDFLAGS="%{?build_ldflags}"
-make -C ppp-watch %{?_smp_mflags} LDFLAGS="%{?build_ldflags}"
+%{make_build} LDFLAGS="%{?build_ldflags}"
+%{make_build} -C ppp-watch LDFLAGS="%{?build_ldflags}"
 
 %install
 make INSTROOT=%{buildroot} install install-etcppp
@@ -183,6 +183,10 @@ mkdir -p %{buildroot}%{_rundir}/lock/ppp
 %doc PLUGINS
 
 %changelog
+* Fri Feb 28 2020 Tom Stellard <tstellar@redhat.com> - 2.4.8-3
+- Use make_build macro
+- https://docs.fedoraproject.org/en-US/packaging-guidelines/#_parallel_make
+
 * Wed Feb 26 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-2
 - Fixed ghost directories verification
 
