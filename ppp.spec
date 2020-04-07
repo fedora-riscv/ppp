@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.7
-Release: 34%{?dist}
+Release: 35%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -46,7 +46,8 @@ Patch0022:      0022-build-sys-compile-pppol2tp-with-multilink-support.patch
 Patch0023:      0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch0024:      0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch0025:      0025-pppd-install-pppd-binary-using-standard-perms-755.patch
-Patch0026:      ppp-2.4.7-eaptls-mppe-1.102.patch
+# https://www.nikhef.nl/~janjust/ppp/ppp-2.4.7-eaptls-mppe-1.300.patch
+Patch0026:      ppp-2.4.7-eaptls-mppe-1.300.patch
 Patch0028:      0028-pppoe-include-netinet-in.h-before-linux-in.h.patch
 
 # rhbz#1556132
@@ -185,6 +186,9 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 %doc PLUGINS
 
 %changelog
+* Tue Apr  7 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-35
+- Updated EAP-TLS patch to v1.300
+
 * Fri Feb 21 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.7-34
 - Fixed buffer overflow in the eap_request and eap_response functions
   Resolves: CVE-2020-8597
