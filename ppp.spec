@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.8
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -46,8 +46,8 @@ Patch0022:      ppp-2.4.8-build-sys-compile-pppol2tp-with-multilink-support.patc
 Patch0023:      0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch0024:      0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch0025:      ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
-# https://www.nikhef.nl/~janjust/ppp/ppp-2.4.8-eaptls-mppe-1.201.patch
-Patch0026:      ppp-2.4.8-eaptls-mppe-1.201.patch
+# https://www.nikhef.nl/~janjust/ppp/ppp-2.4.8-eaptls-mppe-1.300.patch
+Patch0026:      ppp-2.4.8-eaptls-mppe-1.300.patch
 
 Patch0032:      ppp-2.4.8-CVE-2020-8597.patch
 
@@ -184,6 +184,9 @@ mkdir -p %{buildroot}%{_rundir}/lock/ppp
 %doc PLUGINS
 
 %changelog
+* Tue Apr  7 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-5
+- Updated EAP-TLS patch to v1.300
+
 * Mon Apr  6 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-4
 - Updated EAP-TLS patch to v1.201
 
