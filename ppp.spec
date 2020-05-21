@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.8
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -50,6 +50,8 @@ Patch0025:      ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patc
 Patch0026:      ppp-2.4.8-eaptls-mppe-1.300.patch
 
 Patch0032:      ppp-2.4.8-CVE-2020-8597.patch
+# rhbz#1612918, https://github.com/paulusmack/ppp/pull/149
+Patch0033:      ppp-2.4.8-man-fix.patch
 
 BuildRequires: gcc
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
@@ -184,6 +186,9 @@ mkdir -p %{buildroot}%{_rundir}/lock/ppp
 %doc PLUGINS
 
 %changelog
+* Thu May 21 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-6
+- Added missing options to man pages
+
 * Tue Apr  7 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-5
 - Updated EAP-TLS patch to v1.300
 

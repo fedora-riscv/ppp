@@ -1,0 +1,46 @@
+diff --git a/pppdump/pppdump.8 b/pppdump/pppdump.8
+index 4072e68..1116b85 100644
+--- a/pppdump/pppdump.8
++++ b/pppdump/pppdump.8
+@@ -13,6 +13,8 @@ pppdump \- convert PPP record file to readable format
+ ]] [
+ .B \-r
+ ] [
++.B \-a
++] [
+ .B \-m \fImru
+ ] [
+ .I file \fR...
+@@ -54,6 +56,9 @@ Reverses the direction indicators, so that `sent' is printed for
+ bytes or packets received, and `rcvd' is printed for bytes or packets
+ sent.
+ .TP
++.B \-a
++Prints absolute times.
++.TP
+ .B \-m \fImru
+ Use \fImru\fR as the MRU (maximum receive unit) for both directions of
+ the link when checking for over-length PPP packets (with the \fB\-p\fR
+diff --git a/pppstats/pppstats.8 b/pppstats/pppstats.8
+index 4ac101e..cabf4d7 100644
+--- a/pppstats/pppstats.8
++++ b/pppstats/pppstats.8
+@@ -7,6 +7,8 @@ pppstats \- print PPP statistics
+ [
+ .B \-a
+ ] [
++.B \-d
++] [
+ .B \-v
+ ] [
+ .B \-r
+@@ -41,6 +43,9 @@ reports show statistics for the time since the link was initiated.
+ Without this option, the second and subsequent reports show statistics
+ for the time since the last report.
+ .TP
++.B \-d
++Show data rate (kB/s) instead of bytes.
++.TP
+ .B \-c \fIcount
+ Repeat the display
+ .I count
