@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.8
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -52,6 +52,8 @@ Patch0026:      ppp-2.4.8-eaptls-mppe-1.300.patch
 Patch0032:      ppp-2.4.8-CVE-2020-8597.patch
 # rhbz#1612918, https://github.com/paulusmack/ppp/pull/149
 Patch0033:      ppp-2.4.8-man-fix.patch
+# rhbz#1867047, https://github.com/paulusmack/ppp/commit/3cd95baf3f1de1d5a9bc89be0f4c3215ceb5aefe.patch
+Patch0034:      ppp-2.4.8-ws-2019-workaround.patch
 
 BuildRequires: gcc
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
@@ -186,6 +188,10 @@ mkdir -p %{buildroot}%{_rundir}/lock/ppp
 %doc PLUGINS
 
 %changelog
+* Mon Aug 10 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-8
+- Added workaround for Windows Server 2019
+  Resolves: rhbz#1867047
+
 * Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.8-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
