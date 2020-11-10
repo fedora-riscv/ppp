@@ -28,7 +28,7 @@ index 63872eb..8ed56c1 100644
  
 @@ -32,7 +33,7 @@ endif
  
- CC = gcc
+ # CC = gcc
  #
 -COPTS = -Wall $(RPM_OPT_FLAGS)
 +COPTS = -Wall $(RPM_OPT_FLAGS) -DLIBDIR=\""$(LIBDIR)"\"

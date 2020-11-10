@@ -34,7 +34,7 @@ index 5a44d30..63872eb 100644
 +++ b/pppd/Makefile.linux
 @@ -32,8 +32,7 @@ endif
  
- CC = gcc
+ # CC = gcc
  #
 -COPTS = -O2 -pipe -Wall -g
 -LIBS =

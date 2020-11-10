@@ -33,7 +33,7 @@ index 53df4d2..0e8107f 100644
 @@ -32,6 +32,9 @@ include .depend
  endif
  
- CC = gcc
+ # CC = gcc
 +
 +LIBS = -ludev
 +

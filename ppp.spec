@@ -22,7 +22,6 @@ Source11: ifdown-ppp
 Source12: ppp-watch.tar.xz
 
 # Fedora-specific
-Patch0001:      0001-build-sys-use-gcc-as-our-compiler-of-choice.patch
 Patch0002:      ppp-2.4.8-build-sys-enable-PAM-support.patch
 Patch0003:      ppp-2.4.8-build-sys-utilize-compiler-flags-handed-to-us-by-rpm.patch
 Patch0004:      0004-doc-add-configuration-samples.patch
