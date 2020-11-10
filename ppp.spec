@@ -94,8 +94,8 @@ tar -xJf %{SOURCE12}
 %build
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall -fno-strict-aliasing"
 %configure
-%{make_build} LDFLAGS="%{?build_ldflags}"
-%{make_build} -C ppp-watch LDFLAGS="%{?build_ldflags}"
+%{make_build} LDFLAGS="%{?build_ldflags} -pie"
+%{make_build} -C ppp-watch LDFLAGS="%{?build_ldflags} -pie"
 
 %install
 make INSTROOT=%{buildroot} install install-etcppp
