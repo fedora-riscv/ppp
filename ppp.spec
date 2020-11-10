@@ -93,7 +93,6 @@ tar -xJf %{SOURCE12}
 
 %build
 export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall -fno-strict-aliasing"
-export RPM_LD_FLAGS="$LDFLAGS"
 %configure
 %{make_build} LDFLAGS="%{?build_ldflags}"
 %{make_build} -C ppp-watch LDFLAGS="%{?build_ldflags}"
