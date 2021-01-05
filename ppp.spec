@@ -1,8 +1,8 @@
 %global _hardened_build 1
 
 Name:    ppp
-Version: 2.4.8
-Release: 8%{?dist}
+Version: 2.4.9
+Release: 1%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -22,37 +22,22 @@ Source11: ifdown-ppp
 Source12: ppp-watch.tar.xz
 
 # Fedora-specific
-Patch0002:      ppp-2.4.8-build-sys-enable-PAM-support.patch
-Patch0003:      ppp-2.4.8-build-sys-utilize-compiler-flags-handed-to-us-by-rpm.patch
-Patch0004:      0004-doc-add-configuration-samples.patch
-Patch0005:      ppp-2.4.8-build-sys-don-t-hardcode-LIBDIR-but-set-it-according.patch
-Patch0006:      0006-scritps-use-change_resolv_conf-function.patch
-Patch0007:      0007-build-sys-don-t-strip-binaries-during-installation.patch
-Patch0008:      0008-build-sys-use-prefix-usr-instead-of-usr-local.patch
-Patch0009:      ppp-2.4.8-pppd-introduce-ipv6-accept-remote.patch
-Patch0010:      0010-build-sys-enable-CBCP.patch
-Patch0011:      0011-build-sys-don-t-put-connect-errors-log-to-etc-ppp.patch
-Patch0012:      ppp-2.4.8-pppd-we-don-t-want-to-accidentally-leak-fds.patch
-Patch0013:      ppp-2.4.8-everywhere-O_CLOEXEC-harder.patch
-Patch0014:      0014-everywhere-use-SOCK_CLOEXEC-when-creating-socket.patch
-Patch0015:      0015-pppd-move-pppd-database-to-var-run-ppp.patch
-Patch0016:      0016-rp-pppoe-add-manpage-for-pppoe-discovery.patch
-Patch0018:      0018-scritps-fix-ip-up.local-sample.patch
-Patch0019:      ppp-2.4.8-sys-linux-rework-get_first_ethernet.patch
-Patch0020:      0020-pppd-put-lock-files-in-var-lock-ppp.patch
-Patch0021:      ppp-2.4.8-build-sys-compile-pppol2tp-plugin-with-RPM_OPT_FLAGS.patch
-Patch0022:      ppp-2.4.8-build-sys-compile-pppol2tp-with-multilink-support.patch
-Patch0023:      0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
-Patch0024:      0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
-Patch0025:      ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
-# https://www.nikhef.nl/~janjust/ppp/ppp-2.4.8-eaptls-mppe-1.300.patch
-Patch0026:      ppp-2.4.8-eaptls-mppe-1.300.patch
-
-Patch0032:      ppp-2.4.8-CVE-2020-8597.patch
-# rhbz#1612918, https://github.com/paulusmack/ppp/pull/149
-Patch0033:      ppp-2.4.8-man-fix.patch
-# rhbz#1867047, https://github.com/paulusmack/ppp/commit/3cd95baf3f1de1d5a9bc89be0f4c3215ceb5aefe.patch
-Patch0034:      ppp-2.4.8-ws-2019-workaround.patch
+Patch0002:     ppp-2.4.9-config.patch
+Patch0004:     0004-doc-add-configuration-samples.patch
+Patch0005:     ppp-2.4.9-build-sys-don-t-hardcode-LIBDIR-but-set-it-according.patch
+Patch0006:     0006-scritps-use-change_resolv_conf-function.patch
+Patch0011:     0011-build-sys-don-t-put-connect-errors-log-to-etc-ppp.patch
+Patch0012:     ppp-2.4.8-pppd-we-don-t-want-to-accidentally-leak-fds.patch
+Patch0013:     ppp-2.4.9-everywhere-O_CLOEXEC-harder.patch
+Patch0014:     0014-everywhere-use-SOCK_CLOEXEC-when-creating-socket.patch
+Patch0015:     0015-pppd-move-pppd-database-to-var-run-ppp.patch
+Patch0016:     0016-rp-pppoe-add-manpage-for-pppoe-discovery.patch
+Patch0018:     0018-scritps-fix-ip-up.local-sample.patch
+Patch0020:     0020-pppd-put-lock-files-in-var-lock-ppp.patch
+Patch0023:     0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
+Patch0024:     0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
+Patch0025:     ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
+Patch0026:     ppp-2.4.9-configure-cflags-allow-commas.patch
 
 BuildRequires: gcc
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
@@ -92,8 +77,7 @@ This package contains the header files for building plugins for ppp.
 tar -xJf %{SOURCE12}
 
 %build
-export RPM_OPT_FLAGS="$RPM_OPT_FLAGS -fPIC -Wall -fno-strict-aliasing"
-%configure
+%configure --cflags="$RPM_OPT_FLAGS -fPIC -Wall -fno-strict-aliasing"
 %{make_build} LDFLAGS="%{?build_ldflags} -pie"
 %{make_build} -C ppp-watch LDFLAGS="%{?build_ldflags} -pie"
 
@@ -186,6 +170,10 @@ mkdir -p %{buildroot}%{_rundir}/lock/ppp
 %doc PLUGINS
 
 %changelog
+* Tue Jan  5 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.9-1
+- New version
+  Resolves: rhbz#1912617
+
 * Mon Aug 10 2020 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.8-8
 - Added workaround for Windows Server 2019
   Resolves: rhbz#1867047
