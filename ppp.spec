@@ -39,6 +39,7 @@ Patch0024:     0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch0025:     ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
 Patch0026:     ppp-2.4.9-configure-cflags-allow-commas.patch
 
+BuildRequires: make
 BuildRequires: gcc
 BuildRequires: pam-devel, libpcap-devel, systemd, systemd-devel, glib2-devel
 BuildRequires: openssl-devel
