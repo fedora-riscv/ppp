@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.9
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -33,7 +33,6 @@ Patch0014:     0014-everywhere-use-SOCK_CLOEXEC-when-creating-socket.patch
 Patch0015:     0015-pppd-move-pppd-database-to-var-run-ppp.patch
 Patch0016:     0016-rp-pppoe-add-manpage-for-pppoe-discovery.patch
 Patch0018:     0018-scritps-fix-ip-up.local-sample.patch
-Patch0020:     0020-pppd-put-lock-files-in-var-lock-ppp.patch
 Patch0023:     0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch0024:     0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch0025:     ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
@@ -72,8 +71,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 This package contains the header files for building plugins for ppp.
 
 %prep
-%setup -qn %{name}-%{name}-%{version}
-%autopatch -p1
+%autosetup -p1 -n %{name}-%{name}-%{version}
 
 tar -xJf %{SOURCE12}
 
@@ -117,7 +115,6 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 
 # ghosts
 mkdir -p %{buildroot}%{_rundir}/ppp
-mkdir -p %{buildroot}%{_rundir}/lock/ppp
 
 %pre
 /usr/bin/getent group dip >/dev/null 2>&1 || /usr/sbin/groupadd -r -g 40 dip >/dev/null 2>&1 || :
@@ -150,7 +147,6 @@ mkdir -p %{buildroot}%{_rundir}/lock/ppp
 %{_mandir}/man8/ppp-watch.8*
 %{_libdir}/pppd
 %ghost %dir %{_rundir}/ppp
-%ghost %dir %{_rundir}/lock/ppp
 %dir %{_sysconfdir}/logrotate.d
 %attr(700, root, root) %dir %{_localstatedir}/log/ppp
 %config(noreplace) %{_sysconfdir}/ppp/eaptls-client
@@ -171,6 +167,9 @@ mkdir -p %{buildroot}%{_rundir}/lock/ppp
 %doc PLUGINS
 
 %changelog
+* Mon Mar  8 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.9-3
+- Keep lock files in /var/lock (https://github.com/ppp-project/ppp/pull/227)
+
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.9-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
