@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.9
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -167,6 +167,9 @@ mkdir -p %{buildroot}%{_rundir}/ppp
 %doc PLUGINS
 
 %changelog
+* Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.9-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
 * Mon Mar  8 2021 Jaroslav Škarvada <jskarvad@redhat.com> - 2.4.9-3
 - Keep lock files in /var/lock (https://github.com/ppp-project/ppp/pull/227)
 
