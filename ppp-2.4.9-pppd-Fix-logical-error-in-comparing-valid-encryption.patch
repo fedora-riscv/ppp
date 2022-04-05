@@ -1,0 +1,37 @@
+From e609ed8bb62e4648568eaa49fbbc858dfda6d122 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Eivind=20N=C3=A6ss?= <eivnaes@yahoo.com>
+Date: Sun, 14 Mar 2021 16:20:29 -0700
+Subject: [PATCH] pppd: Fix logical error in comparing valid encryption
+ policies (#262)
+
+RFC2548 describes the proper values of the MS-MPPE-Encryption-Policy attribute.
+and it can only hold 2 values: 1 (encryption allowed) and 2 (encryption required).
+
+See
+   https://tools.ietf.org/html/rfc2548, section 2.4.4
+
+The correct comparison should be made with an && and not a ||.
+
+This fixes github issue #218
+
+Signed-off-by: Eivind Naess <eivnaes@yahoo.com>
+---
+ pppd/chap_ms.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pppd/chap_ms.c b/pppd/chap_ms.c
+index e6b84f2..df2dadd 100644
+--- a/pppd/chap_ms.c
++++ b/pppd/chap_ms.c
+@@ -953,7 +953,7 @@ void
+ set_mppe_enc_types(int policy, int types)
+ {
+     /* Early exit for unknown policies. */
+-    if (policy != MPPE_ENC_POL_ENC_ALLOWED ||
++    if (policy != MPPE_ENC_POL_ENC_ALLOWED &&
+ 	policy != MPPE_ENC_POL_ENC_REQUIRED)
+ 	return;
+ 
+-- 
+2.34.1
+

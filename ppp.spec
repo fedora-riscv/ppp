@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.9
-Release: 6%{?dist}
+Release: 7%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -37,6 +37,9 @@ Patch0023:     0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch0024:     0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch0025:     ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
 Patch0026:     ppp-2.4.9-configure-cflags-allow-commas.patch
+Patch0027:     ppp-2.4.9-pppd-eap-Fix-bug-causing-incorrect-response-length-3.patch
+Patch0028:     ppp-2.4.9-pppd-Fix-logical-error-in-comparing-valid-encryption.patch
+Patch0029:     ppp-2.4.9-pppd-Expose-the-MPPE-keys-generated-through-an-API-2.patch
 
 BuildRequires: make
 BuildRequires: gcc
@@ -167,6 +170,9 @@ mkdir -p %{buildroot}%{_rundir}/ppp
 %doc PLUGINS
 
 %changelog
+* Tue Apr 05 2022 Marcin Zajaczkowski <mszpak ATT wp DOTT pl> - 2.4.9-7
+- Backport patches from master for SSTP to connect using EAP-TLS to Azure VnetGWay and Windows RAS server
+
 * Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.9-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
