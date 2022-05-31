@@ -37,8 +37,11 @@ Patch0023:     0023-build-sys-install-rp-pppoe-plugin-files-with-standar.patch
 Patch0024:     0024-build-sys-install-pppoatm-plugin-files-with-standard.patch
 Patch0025:     ppp-2.4.8-pppd-install-pppd-binary-using-standard-perms-755.patch
 Patch0026:     ppp-2.4.9-configure-cflags-allow-commas.patch
+# https://github.com/ppp-project/ppp/commit/d7e62a8499c4032d79e05afbd8fd3efd51c5b148
 Patch0027:     ppp-2.4.9-pppd-eap-Fix-bug-causing-incorrect-response-length-3.patch
+# https://github.com/ppp-project/ppp/commit/e609ed8bb62e4648568eaa49fbbc858dfda6d122
 Patch0028:     ppp-2.4.9-pppd-Fix-logical-error-in-comparing-valid-encryption.patch
+# https://github.com/ppp-project/ppp/pull/267/commits/6bfe06b9428a60eb637d5450d65dd3932fe5a83f
 Patch0029:     ppp-2.4.9-pppd-Expose-the-MPPE-keys-generated-through-an-API-2.patch
 
 BuildRequires: make
