@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.9
-Release: 7%{?dist}
+Release: 8%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -173,6 +173,9 @@ mkdir -p %{buildroot}%{_rundir}/ppp
 %doc PLUGINS
 
 %changelog
+* Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.9-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
 * Tue Apr 05 2022 Marcin Zajaczkowski <mszpak ATT wp DOTT pl> - 2.4.9-7
 - Backport patches from master for SSTP to connect using EAP-TLS to Azure VnetGWay and Windows RAS server
 
