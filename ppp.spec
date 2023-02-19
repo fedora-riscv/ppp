@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.9
-Release: 8%{?dist}
+Release: 8.rv64%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -122,6 +122,12 @@ install -p %{SOURCE11} %{buildroot}%{_sysconfdir}/sysconfig/network-scripts/ifdo
 # ghosts
 mkdir -p %{buildroot}%{_rundir}/ppp
 
+%ifarch riscv64
+# fix lp64d path issue on riscv64
+mv -vf %{buildroot}%{_libdir}/lp64d/* %{buildroot}%{_libdir}
+rm -rf %{buildroot}%{_libdir}/lp64d
+%endif
+
 %pre
 /usr/bin/getent group dip >/dev/null 2>&1 || /usr/sbin/groupadd -r -g 40 dip >/dev/null 2>&1 || :
 
@@ -173,6 +179,9 @@ mkdir -p %{buildroot}%{_rundir}/ppp
 %doc PLUGINS
 
 %changelog
+* Sun Feb 19 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 2.4.9-8.rv64
+- Fix build on riscv64.
+
 * Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.9-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
 
