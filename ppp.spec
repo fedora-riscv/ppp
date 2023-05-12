@@ -2,7 +2,7 @@
 
 Name:    ppp
 Version: 2.4.9
-Release: 8.rv64%{?dist}
+Release: 9.rv64%{?dist}
 Summary: The Point-to-Point Protocol daemon
 License: BSD and LGPLv2+ and GPLv2+ and Public Domain
 URL:     http://www.samba.org/ppp
@@ -179,8 +179,11 @@ rm -rf %{buildroot}%{_libdir}/lp64d
 %doc PLUGINS
 
 %changelog
-* Sun Feb 19 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 2.4.9-8.rv64
+* Sun Feb 19 2023 Liu Yang <Yang.Liu.sn@gmail.com> - 2.4.9-9.rv64
 - Fix build on riscv64.
+
+* Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.9-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
 
 * Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.4.9-8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
